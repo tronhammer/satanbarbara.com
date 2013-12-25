@@ -7,6 +7,7 @@ requirejs.config({
 		"bower": "../lib/bower_components",
 		"require-plugin": "../lib/bower_components/requirejs-plugins/src",
 		"require-plugin-lib": "../lib/bower_components/requirejs-plugins/lib",
+		"jquery-mobile": "../lib/bower_components/jquery-mobile-requirejs/js/jquery.mobile-1.3.2",
 		
 		"text": "../lib/bower_components/requirejs-plugins/lib/text",
 		"json": "../lib/bower_components/requirejs-plugins/src/json",
@@ -46,7 +47,8 @@ require([
 		"app/controllers/app.controller",
 		"app/models/app.model", 
 		"hb!app/views/app.view.tmpl",
-		"less!app/styles/app.style.less"
+		"less!app/styles/app.style.less",
+		"jquery-mobile"
 	], function(global, config, arch, controller, model, view) {
 		console.log("Got them all!", arguments);
 		

@@ -1,0 +1,17 @@
+{
+  "name": "jquery-mobile-requirejs",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "~1.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/totty90/jquery-mobile-requirejs.git"
+  },
+  "gitHead": "8eac209d8f8dfd73584b03440c026dd3c16844b1",
+  "readme": "jquery mobile requirejs\n=======================\n\nIf you want to use it with requirejs AND don't have to worry about when is loaded use this.\n\nIn your main file add this config:\n\n    require.config({\n        map: {\n            '*': {\n                'jquery-mobile-bower': '../bower_components/jquery-mobile-requirejs/js/jquery.mobile-1.3.2',\n            }\n        }\n    }\n\nAnd then:\n\n    require(['jquery-mobile-bower'], function (jqmOpen) {\n        'use strict';\n\n\n        $( document ).on( \"mobileinit\",\n            // Set up the \"mobileinit\" handler before requiring jQuery Mobile's module\n            function() {\n                // Prevents all anchor click handling including the addition of active button state and alternate link bluring.\n                $.mobile.linkBindingEnabled = false;\n\n                // Disabling this will prevent jQuery Mobile from handling hash changes\n                $.mobile.hashListeningEnabled = false;\n            }\n        )\n        // only now jquery mobile is really injected into the jquery.\n        jqmOpen();\n    }\n\nIf you would not use this lib (such as the default jquery mobile or jquery-mobile-bower) you should make an inner require in order to attach the \"mobileinit\" event before the jquery mobile. By wrapping it within a function we can delay the jquery mobile injection.\n",
+  "readmeFilename": "README.md",
+  "_id": "jquery-mobile-requirejs@1.3.2",
+  "description": "jquery mobile requirejs =======================",
+  "commit": "8eac209d8f8dfd73584b03440c026dd3c16844b1"
+}

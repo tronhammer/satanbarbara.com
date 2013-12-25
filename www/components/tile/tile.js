@@ -44,5 +44,10 @@ require([
 			
 			SB.TileController.go( keyMap[ e.keyCode ] );
 		});
+		
+		window.testo = 1;
+		$(window).bind("swiperight", function(e){
+			SB.set("name", ++window.testo);
+		});
 	});
 });
