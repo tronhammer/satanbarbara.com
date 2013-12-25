@@ -1,0 +1,10 @@
+{
+  "generator-ember-less": {
+    "name": "satanbarbara",
+    "emberModelLib": "ember-data",
+    "lessBootstrap": true,
+    "emberBootstrap": true,
+    "lessBootswatch": true,
+    "useRsync": false
+  }
+}
