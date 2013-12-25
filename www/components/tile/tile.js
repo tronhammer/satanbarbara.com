@@ -62,7 +62,7 @@ require([
 			
 			// swipedir contains either "none", "left", "right", "top", or "down"
 			(direction = {"left": "left", "right": "right", "top": "up", "down": "down"}[swipedir]) 
-			&& $("#loading").show() 
+			// && $("#loading").show() 
 			&& SB.TileController.go( direction );
 		});
 		
