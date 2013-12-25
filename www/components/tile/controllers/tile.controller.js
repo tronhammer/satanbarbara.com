@@ -3,8 +3,10 @@ define(function(){
 	return Ember.Controller.extend({
 		"preloading": true,
 		"current": null,
+		"transition": null,
 		"tileMap": null,
 		"queue": [],
+		"transitionLock": [],
 		"loaded": function(){
 			this.set("preloading", false);
 		},
@@ -16,6 +18,19 @@ define(function(){
 			
 			this.set("current", baseTile);
 		},
+		
+		"lock": function(){
+			return (function(self, func){ return function(state){ return func.call(self, state); }; })(this, function(state){
+				var transitionLock = this.get("transitionLock");
+				if (state && transitionLock.indexOf(state) !== -1){
+					transitionLock.removeObject(state);
+					
+				} else if (state) {
+					transitionLock.pushObject(state);
+				}
+				return this.get("transitionLock").length;
+			})
+		}.property(),
 		
 		"assignRightOf": function(targetName, entryName){
 			var preloading = this.get("preloading");
@@ -64,8 +79,13 @@ define(function(){
 		},
 		
 		"go": function(direction){
-			var current = this.get("current");
-			this.set("current", current.get( direction ) );
+			var current = this.get("current"),
+				next = current.get( direction ),
+				transition = next.getTransition( direction );
+			
+			this.set("direction", direction);
+			this.set("transition", transition);
+			this.set("current", next );
 		},
 		
 		"load": function(){
@@ -82,7 +102,6 @@ define(function(){
 		 * Maps tiles
 		 */
 		"map": function(){
-			console.log("MAPPING!");
 			var current = this.get("current");
 			if (current){
 				SB.ApplicationController.set("visible", current.get("view") );

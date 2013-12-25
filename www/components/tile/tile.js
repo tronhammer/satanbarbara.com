@@ -7,10 +7,10 @@ require([
 ], function(config, controller, model, viewModel) {
 	console.log("√ tile component");
 	
+	window.SB.TileModel = model;
 	window.SB.TileController = controller.create({
 		"config": config
 	});
-	window.SB.TileModel = model;
 	window.SB.TileView = viewModel;
 
 	require(config.tiles.map(function(tileName){
@@ -29,12 +29,17 @@ require([
 			importMap[ tiles[i] ] = tile;
 		}
 		
-		controller.set("tileMap", tileMap);
+		window.SB.TileController.set("tileMap", tileMap);
 		
 		window.SB.TileController.base( importMap[ config.default ].get("id") );
 		window.SB.TileController.load();
 		
 		$(window).bind("keydown", function(e){
+			var lock = SB.TileController.get("lock");
+			if (lock()){
+				return console.log("locked!");
+			}
+			
 			var keyMap = {
 				40: "up",
 				38: "down",
@@ -44,14 +49,21 @@ require([
 			
 			var direction = keyMap[ e.keyCode ];
 			if (direction){
+				// $("#loading").show();
 				SB.TileController.go( direction );
 			}
 		});
 		
 		SB.global.swipedetect(document, function(swipedir){
+			var lock = SB.TileController.get("lock");
+			if (lock()){
+				return console.log("locked!");
+			}
+			
 			// swipedir contains either "none", "left", "right", "top", or "down"
-			(direction = {"left": "left", "right":"right", "top": "up", "down": "down"}[swipedir]) && SB.TileController.go( direction );
-			console.log("direction ", direction);
+			(direction = {"left": "left", "right": "right", "top": "up", "down": "down"}[swipedir]) 
+			&& $("#loading").show() 
+			&& SB.TileController.go( direction );
 		});
 		
 	});

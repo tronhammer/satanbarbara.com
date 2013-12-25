@@ -49,7 +49,6 @@ require([
 		"hb!app/views/app.view.tmpl",
 		"less!app/styles/app.style.less"
 	], function(global, config, arch, controller, model, view) {
-		console.log("Got them all!", arguments);
 		
 		window.SB = Ember.Application.create(
 			$.extend({
@@ -65,33 +64,56 @@ require([
 			"elementId": "app",
 			"didInsertElement": function(){
 				this.templateChanged();
-				$("#loading").fadeOut();
+				// $("#loading").fadeOut();
 				return this._super();
 			},
 			
-			"contentId": function(){
+			"contentSelector": function(){
+				var visible = this.get("controller").get("visible");
+				return visible.instance && visible.instance.elementId || "> .content-container"; //"> .ember-view";
+			}.property(),
+			
+			"transition": function(){
 				var tileController = SB.TileController;
 				if (tileController){
 					var current = SB.TileController.get("current");
-					if (current){
-						return "#" + current.get("id");
-					}
+					return current.getTransition();
 				}
 				
-				return "> .ember-view";
+				return;
 			}.property(),
 			
 			"templateChanged": function(){
-				var $content = this.$("> .content"),
-					$newContent = this.$( this.get("contentId") );
-				if ($content && $newContent){
-					$content.hide();
-					$content.replaceWith( $newContent.addClass("content").removeClass("hide tile-view ember-view") );
+				if (this.$()){
+					var tileController = SB.TileController,
+						currentTileView = this.get("controller").get("visible"),
+						$newContent = currentTileView.instance || $( (newInst = currentTileView.create()).template(newInst) ).attr("id", newInst.elementId),
+						$content = this.$("> .content-container");
+					
+					$newContent.addClass("content tile hide");
+					
+					if (tileController && $.isFunction((transition = tileController.get("transition")))){
+						/**
+						 * @todo move this
+						 */ 
+						var lock = tileController.get("lock");
+						if (!lock()){
+							lock("start");
+							transition.call(this, $content, $newContent, lock);
+						} else {
+							return console.log("Locked!");
+						}
+					} else {
+						$content.children().remove().end().append( 
+							$newContent.removeClass("hide tile-view ember-view").show() 
+						);
+					}
+					currentTileView.instance = $newContent;
 				}
-			},
-			"changer": function(){
-				this.rerender();
-			}.observes("controller.visible")
+			}.observes("controller.visible")//,
+			// "changer": function(){
+			// 	// this.rerender();
+			// }
 		});
 		
 		require([

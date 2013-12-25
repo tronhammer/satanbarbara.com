@@ -16,7 +16,6 @@ define([
 	return window.SB.TileModel.create(
 		$.extend({
 			"init": function(){
-				console.log("initializing home controller");
 				window.SB.TileController.assignRightOf("homeTile", this.get("id") );
 			},
 			"view": AboutView
