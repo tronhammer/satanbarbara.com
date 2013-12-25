@@ -46,7 +46,7 @@ require([
 		});
 		
 		window.testo = 1;
-		$(window).bind("swiperight", function(e){
+		$(window).on("swipe", function(e){
 			SB.set("name", ++window.testo);
 		});
 	});
