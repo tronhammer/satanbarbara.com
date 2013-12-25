@@ -50,7 +50,8 @@ require([
 		
 		SB.global.swipedetect(document, function(swipedir){
 			// swipedir contains either "none", "left", "right", "top", or "down"
-			SB.TileController.go( swipedir );
+			(direction = {"left": "left", "right":"right", "top": "up", "down": "down"}[swipedir]) && SB.TileController.go( direction );
+			console.log("direction ", direction);
 		});
 		
 	});
