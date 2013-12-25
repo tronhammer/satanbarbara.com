@@ -47,8 +47,7 @@ require([
 		"app/controllers/app.controller",
 		"app/models/app.model", 
 		"hb!app/views/app.view.tmpl",
-		"less!app/styles/app.style.less",
-		"jquery-mobile"
+		"less!app/styles/app.style.less"
 	], function(global, config, arch, controller, model, view) {
 		console.log("Got them all!", arguments);
 		

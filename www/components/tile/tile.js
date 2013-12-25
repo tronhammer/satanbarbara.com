@@ -42,12 +42,16 @@ require([
 				37: "left"
 			}
 			
-			SB.TileController.go( keyMap[ e.keyCode ] );
+			var direction = keyMap[ e.keyCode ];
+			if (direction){
+				SB.TileController.go( direction );
+			}
 		});
 		
-		window.testo = 1;
-		$(window).on("swipe", function(e){
-			SB.set("name", ++window.testo);
+		SB.global.swipedetect(document, function(swipedir){
+			// swipedir contains either "none", "left", "right", "top", or "down"
+			SB.TileController.go( swipedir );
 		});
+		
 	});
 });
