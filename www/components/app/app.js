@@ -64,6 +64,7 @@ require([
 			"elementId": "app",
 			"didInsertElement": function(){
 				this.templateChanged();
+				$("#loading").fadeOut();
 				return this._super();
 			},
 			

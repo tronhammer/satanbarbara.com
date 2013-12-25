@@ -10,5 +10,7 @@
 	</head>
 	<body>
 		<script data-main="components/app/app.js" src="lib/requirejs/require-2.1.9.min.js"></script>
+		
+		<div id="loading">Loading...</div>
 	</body>
 </html>
