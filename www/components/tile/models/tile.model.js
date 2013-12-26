@@ -59,6 +59,7 @@ define(function(){
 						$newContent.removeClass("hide tile-view ember-view").show() 
 					);
 					lock(0);
+					SB.events.trigger("transitionFinished")
 				},
 				"slide": function($content, $newContent, lock){
 					var direction = SB.TileController.get("direction"),
@@ -98,10 +99,12 @@ define(function(){
 					$oldContent.animate($.extend({"opacity": 0}, intMap["old"][direction]), "slow", function(){
 						$oldContent.remove();
 						lock("animateOld");
+						SB.events.trigger("transitionFinished")
 						
 					});
 					$newContent.animate(intMap["new"]["end"][direction], "slow", function(){
 						lock("animateNew");
+						SB.events.trigger("transitionFinished")
 					});
 					
 					lock("start");

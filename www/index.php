@@ -12,7 +12,7 @@
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	</head>
 	<body>
-		<div id="overlay">Loading...</div>
+		<div id="overlay"></div>
 		<div id="loading">Loading...</div>
 		
 		<script data-main="components/app/app.js" src="lib/requirejs/require-2.1.9.min.js"></script>

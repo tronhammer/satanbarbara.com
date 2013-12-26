@@ -7,7 +7,22 @@ body{
 	margin: 0px;
 }
 
-#overlay,#loading{
+#overlay{
+	display:none;
+	position: fixed;
+	z-index: 10;
+	top: 0;
+	margin: auto 0;
+	background: #000;
+	color: #FFF;
+	height: 100%;
+	width: 100%;
+	background-size: 115%;
+	color: whitesmoke;
+	opacity: 0.2;
+}
+
+#loading{
 	display:none;
 	position: fixed;
 	z-index: 10;

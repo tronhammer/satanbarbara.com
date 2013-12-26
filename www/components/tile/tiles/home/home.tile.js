@@ -4,6 +4,21 @@ define([
 	"less!tile/tiles/home/styles/home.tile.style.less"
 ], function(config, view){
 	console.log("√ Home tile object");
+	var staticProperties = {
+		"parchmentExpand": function(){
+			var tileController = SB.TileController;
+			if (tileController){
+				var lock = tileController.get("lock");
+				if (!lock()){
+					$(".parchment-container").css({"top": -100, "left": -300}).fadeIn()
+					$(".parchment-container").animate({"top":100,"left":0}, 1200);
+					$(".parchment-container .tile-body").animate({"height": 300}, 1800);
+					SB.events.unbind("transitionFinished", tileController.get("tileMap")[ config.id ].parchmentExpand);
+				}
+			}
+		}
+	};
+	
 	var HomeView = window.SB.TileView.extend({
 		"elementId": config.id,
 		"template": view,
@@ -13,9 +28,14 @@ define([
 		}.observes("name")
 	});
 	
-	return window.SB.TileModel.create(
-		$.extend({
-			"view": HomeView
-		}, config)
+	SB.events.bind("transitionFinished", staticProperties.parchmentExpand);
+	
+	return $.extend(
+		window.SB.TileModel.create(
+			$.extend({
+				"view": HomeView
+			}, config)
+		), 
+		staticProperties 
 	);
 });

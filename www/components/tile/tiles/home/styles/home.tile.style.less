@@ -3,18 +3,63 @@
 	background-size: 100%;
 	box-shadow: inset 30px 60px 120px #000;
 	
-	.tile-content{
+	.parchment-container{
 		position: relative;
-		top: 30%;
-		height: 100px;
-		width: 300px;
-		background: #000;
-		border-radius: 15px;
-		box-shadow: inset 2px 2px 20px 5px #222;
-		opacity: 0.8;
-		text-align: center;
-		border: 1px dashed #333;
-		padding-top: 10px;
-		margin: 0 auto;
+		top: 100px;
+		display:none;
+		
+		.tile-content{
+			height: 100px;
+			width: 300px;
+			background: #000;
+			border-radius: 15px;
+			box-shadow: inset 2px 2px 20px 5px #222;
+			opacity: 0.8;
+			text-align: center;
+			border: 1px dashed #333;
+			padding-top: 10px;
+			margin: 0 auto;
+		}
+	
+		.tile-head{
+			background: url(../images/parchment.png) -22px -18px rgba(0,0,0,0);
+			width: 740px;
+			box-shadow: none;
+			border: none;
+			height: 80px;
+			text-shadow: 0px 1px 1px #4d4d4d;
+			color: #222;
+			font-size: 20px;
+			font-family: cursive;
+			padding-top: 13px;
+		}
+	
+		.tile-body{
+			background: url(../images/parchment.png) -22px -105px rgba(0,0,0,0) no-repeat;
+			width: 740px;
+			box-shadow: none;
+			border: none;
+			height: 20px;
+			background-size: 760px 500px;
+			text-shadow: 0px 1px 1px #4d4d4d;
+			color: #222;
+			font-size: 20px;
+			font-family: cursive;
+			padding-top: 13px;
+			text-align: left;
+			
+			.welcome-details{
+				margin-left: 45px;
+			}
+		}
+	
+		.tile-foot{
+			background: url(../images/parchment.png) -22px -450px rgba(0, 0, 0, 0);
+			width: 740px;
+			box-shadow: none;
+			border: none;
+			height: 90px;
+		}
 	}
+
 }

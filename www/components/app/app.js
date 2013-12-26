@@ -52,7 +52,8 @@ require([
 		
 		window.SB = Ember.Application.create(
 			$.extend({
-				"global": global
+				"global": global,
+				"events": $(window)
 			}, config)
 		);
 		
@@ -107,6 +108,7 @@ require([
 						$content.children().remove().end().append( 
 							$newContent.removeClass("hide tile-view ember-view").show() 
 						);
+						SB.events.trigger("transitionFinished");
 					}
 					currentTileView.instance = $newContent;
 				}
