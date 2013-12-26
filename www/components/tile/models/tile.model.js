@@ -69,10 +69,10 @@ define(function(){
 					var intMap = {
 						"new": {
 							"start": {
-								"left": {"left": 1 * newPos },
-								"right": {"left": -1 * newPos },
-								"up": {"top": 1 * newPos},
-								"down": {"top": -1 * newPos}
+								"left": {"left": -1 * newPos, "top": 0 },
+								"right": {"left": 1 * newPos, "top": 0 },
+								"up": {"top": 1 * newPos, "left": 0 },
+								"down": {"top": -1 * newPos, "left": 0 }
 							},
 							"end": {
 								"left": {"left": 0 },
@@ -82,8 +82,8 @@ define(function(){
 							}
 						},
 						"old": {
-							"left": {"left": -1 * oldPos },
-							"right": {"left": 1 * oldPos },
+							"left": {"left": 1 * oldPos },
+							"right": {"left": -1 * oldPos },
 							"up": {"top": -1 * oldPos},
 							"down": {"top": 1 * oldPos}
 						}

@@ -32,18 +32,19 @@ define(function(){
 			})
 		}.property(),
 		
-		"assignRightOf": function(targetName, entryName){
+		"assign": function(direction, targetName, entryName){
+			var oppositeDirection = {"right":"left","left":"right","up":"down","down":"up"}[direction];
 			var preloading = this.get("preloading");
 			var set = function(){
 				var tileMap = this.get("tileMap"),
 					targetTile = tileMap[targetName],
 					entryTile = tileMap[entryName],
-					original = targetTile.get("left");
+					original = targetTile.get(direction);
 				
-				targetTile.set("left", entryTile);
-				entryTile.set("right", targetTile);
-				entryTile.set("left", original);
-				original.set("right", entryTile);
+				targetTile.set(direction, entryTile);
+				entryTile.set(oppositeDirection, targetTile);
+				entryTile.set(direction, original);
+				original.set(oppositeDirection, entryTile);
 			};
 			
 			if (!preloading){
@@ -55,27 +56,20 @@ define(function(){
 			}
 		},
 		
+		"assignRightOf": function(targetName, entryName){
+			this.assign("right", targetName, entryName);
+		},
+		
 		"assignLeftOf": function(targetName, entryName){
-			var preloading = this.get("preloading");
-			var set = function(){
-				var tileMap = this.get("tileMap"),
-					targetTile = tileMap[targetName],
-					entryTile = tileMap[entryName],
-					original = targetTile.get("right");
-				
-				targetTile.set("right", entryTile);
-				entryTile.set("left", targetTile);
-				entryTile.set("right", original);
-				original.set("left", entryTile);
-			};
-			
-			if (!preloading){
-				set.call(this);
-				this.map();
-			} else {
-				var queue = this.get("queue");
-				queue.pushObject(set);
-			}
+			this.assign("left", targetName, entryName);
+		},
+		
+		"assignTopOf": function(targetName, entryName){
+			this.assign("up", targetName, entryName);
+		},
+		
+		"assignBottomOf": function(targetName, entryName){
+			this.assign("down", targetName, entryName);
 		},
 		
 		"go": function(direction){
@@ -94,6 +88,7 @@ define(function(){
 				queue[i].call(this);
 			};
 			
+			this.set("preloading", false);
 			this.map();
 			
 			return true;

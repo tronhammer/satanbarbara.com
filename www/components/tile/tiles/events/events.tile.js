@@ -1,10 +1,10 @@
 define([
-	"json!tile/tiles/about/data/about.tile.config.json",
-	"hb!tile/tiles/about/views/about.tile.view.tmpl",
-	"less!tile/tiles/about/styles/about.tile.style.less"
+	"json!tile/tiles/events/data/events.tile.config.json",
+	"hb!tile/tiles/events/views/events.tile.view.tmpl",
+	"less!tile/tiles/events/styles/events.tile.style.less"
 ], function(config, view){
-	console.log("√ About tile object");
-	var AboutView = window.SB.TileView.extend({
+	console.log("√ Events tile object");
+	var EventsView = window.SB.TileView.extend({
 		"elementId": config.id,
 		"template": view,
 		"nameBinding": "SB.name",
@@ -16,10 +16,10 @@ define([
 	return window.SB.TileModel.create(
 		$.extend({
 			"init": function(){
+				window.SB.TileController.assignTopOf("aboutTile", this.get("id") );
 				window.SB.TileController.assignRightOf("homeTile", this.get("id") );
-				window.SB.TileController.assignBottomOf("homeTile", this.get("id") );
 			},
-			"view": AboutView
+			"view": EventsView
 		}, config)
 	);
 });

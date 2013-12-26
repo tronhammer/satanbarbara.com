@@ -2,6 +2,7 @@
 	"default": "home",
 	"tiles": [
 		"home",
-		"about"
+		"about",
+		"events"
 	]
 }
