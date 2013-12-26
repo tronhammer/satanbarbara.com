@@ -10,9 +10,9 @@ define([
 			if (tileController){
 				var lock = tileController.get("lock");
 				if (!lock()){
-					$(".parchment-container").css({"top": -100, "left": -300}).fadeIn()
+					$(".parchment-container").css({"top": -100, "left": -300}).fadeIn();
 					$(".parchment-container").animate({"top":100,"left":0}, 1200);
-					$(".parchment-container .tile-body").animate({"height": 300}, 1800);
+					$(".parchment-container .tile-body").animate({"height": 350}, 1800);
 					SB.events.unbind("transitionFinished", tileController.get("tileMap")[ config.id ].parchmentExpand);
 				}
 			}

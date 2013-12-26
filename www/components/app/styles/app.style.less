@@ -1,3 +1,17 @@
+.animation (@name, @duration: 300ms, @delay: 0, @ease: ease) {
+	-webkit-animation: @name @duration @delay @ease;
+	-moz-animation:    @name @duration @delay @ease;
+	-ms-animation:     @name @duration @delay @ease;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+}
+
+.animation-contineous (@name, @duration: 300ms, @delay: 0, @ease: ease) {
+	-webkit-animation: @name @duration @delay @ease infinite;
+	-moz-animation:    @name @duration @delay @ease infinite;
+	-ms-animation:     @name @duration @delay @ease infinite;
+}
+
 header{
 	float: right;
 	z-index: 1;
@@ -9,8 +23,11 @@ header{
 		background-size: 100%;
 		z-index: 2;
 		float: right;
-		opacity: .6;
+		position:static;
+		opacity: .4;
 		margin: 30px 40px;
+		
+		.animation(rotate-close-section, .5s);
 		
 		.map-arrow{
 			width: 0;
@@ -18,8 +35,8 @@ header{
 		}
 	}
 	.map:hover{
-		opacity: .9;
 		cursor: pointer;
+		.animation(rotate-open-section, .5s);
 	}
 }
 
@@ -47,9 +64,56 @@ footer{
 	}
 }
 
-
-
 .hide,
 #app > .ember-view{
 	display:none;
 }
+
+
+.rotate-open-mixin-frames () {
+	0% {
+		padding: 30px;
+		top: 0px;
+		left: 0px;
+		opacity: .4;
+	}
+	40% {
+		-webkit-transform: rotate(35deg);
+		-moz-transform: rotate(35deg);
+	}
+	100% {
+		padding: 40px;
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		top: -10px;
+		left: 10px;
+		opacity: .9;
+	}
+}
+
+.rotate-close-mixin-frames () {
+	from {
+		padding: 40px;
+		top: -10px;
+		left: 10px;
+		opacity: .9;
+	}
+	to {
+		padding: 30px;
+		top: 0px;
+		left: 0px;
+		opacity: .6;
+	}
+}
+
+@-webkit-keyframes rotate-open-section {.rotate-open-mixin-frames;} /* Chrome */
+@-moz-keyframes rotate-open-section {.rotate-open-mixin-frames;} /* Firefox */
+@-ms-keyframes rotate-open-section {.rotate-open-mixin-frames;} /* Safari and Chrome */
+@-o-keyframes rotate-open-section {.rotate-open-mixin-frames;} /* Opera */
+@keyframes rotate-open-section {.rotate-open-mixin-frames;}
+
+@-webkit-keyframes rotate-close-section {.rotate-close-mixin-frames;} /* Chrome */
+@-moz-keyframes rotate-close-section {.rotate-close-mixin-frames;} /* Firefox */
+@-ms-keyframes rotate-close-section {.rotate-close-mixin-frames;} /* Safari and Chrome */
+@-o-keyframes rotate-close-section {.rotate-close-mixin-frames;} /* Opera */
+@keyframes rotate-close-section {.rotate-close-mixin-frames;}
