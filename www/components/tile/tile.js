@@ -50,6 +50,12 @@ require([
 			var direction = keyMap[ e.keyCode ];
 			if (direction){
 				// $("#loading").show();
+				var $compass = $(".map-arrow");
+				$compass.addClass("arrow-"+direction).fadeIn(200, function(){ 
+					$compass.fadeOut(200, function(){ 
+						$compass.removeClass("arrow-"+direction); 
+					});
+				});
 				SB.TileController.go( direction );
 			}
 		});
