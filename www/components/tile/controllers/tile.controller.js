@@ -2,21 +2,40 @@ define(function(){
 	console.log("√ tile controller");
 	return Ember.Controller.extend({
 		"preloading": true,
-		"current": null,
+		"_current": null,
+		"current": function(name, data){
+			if (data){
+				console.log("Who is setting current", arguments);
+				this.set("_current");
+			}
+			return data || this.get("_current");
+		}.property(),
 		"transition": null,
 		"tileMap": null,
 		"queue": [],
+		"defaultTransition": "default",
+		"defaultDirection": "left",
+		"_preloadTileName": "home",
+		"preloadTileName": function(name, data){
+			if (data){
+				this.set("_preloadTileName", data);
+			}
+			return window.SB.preloadTileName || data || this.get("_preloadTileName");
+		}.property(), 
 		"transitionLock": [],
 		"loaded": function(){
 			this.set("preloading", false);
 		},
 		"base": function(baseName){
 			var tileMap = this.get("tileMap"),
-				baseTile = tileMap[ baseName ];
+				baseTile = tileMap[ baseName ],
+				current = this.get("current");
 			
-			baseTile.set("locked", true);
+			if (!current){
+				baseTile.set("locked", true);
+				this.updateCurrent( baseTile );
+			}
 			
-			this.set("current", baseTile);
 		},
 		
 		"lock": function(){
@@ -72,6 +91,10 @@ define(function(){
 			this.assign("down", targetName, entryName);
 		},
 		
+		"currentRoutedDeamon": function(){
+			SB.ApplicationController.changeHash( this.get("current").get("id") );
+		}.observes("current"),
+		
 		"go": function(direction){
 			var current = this.get("current"),
 				next = current.get( direction ),
@@ -79,19 +102,51 @@ define(function(){
 			
 			this.set("direction", direction);
 			this.set("transition", transition);
-			this.set("current", next );
+			this.updateCurrent( next );
+		},
+		
+		"jump": function(to, transition, direction){
+			if (typeof to === "string"){
+				to = this.get("tileMap")[ to ];
+				if (!to){
+					return SB.TileController;
+				}
+			}
+			
+			var defaultTransition = this.get("defaultTransition")
+				defaultDirection = this.get("defaultDirection");
+			
+			this.set("direction", direction || defaultDirection);
+			this.set("transition", SB.TileModel.transitions[ transition || defaultTransition ]);
+			this.updateCurrent( to );
+			
+			return SB.TileController;
 		},
 		
 		"load": function(){
-			var queue = this.get("queue");
+			var queue = this.get("queue"),
+				preloadName = this.get("preloadTileName");
 			for (var i=0;i<queue.length; i++){
 				queue[i].call(this);
 			};
 			
+			if (preloadName){
+				this.jump(preloadName);
+				this.set("preloadTileName", "");
+			}
+			
 			this.set("preloading", false);
+			
 			this.map();
 			
 			return true;
+		},
+		
+		"updateCurrent": function(newCurrent){
+			var currentTile = this.get("current");
+			if (!currentTile || newCurrent && currentTile.id != newCurrent.id){
+				this.set("current", newCurrent);
+			}
 		},
 		/**
 		 * Maps tiles

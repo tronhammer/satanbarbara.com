@@ -31,7 +31,7 @@ require([
 		
 		window.SB.TileController.set("tileMap", tileMap);
 		
-		window.SB.TileController.base( importMap[ config.default ].get("id") );
+		window.SB.TileController.base( SB.get("preloadTileName") || importMap[ config.default ].get("id") );
 		window.SB.TileController.load();
 		
 		$(window).bind("keydown", function(e){

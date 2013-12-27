@@ -78,13 +78,24 @@ footer{
 		opacity: .4;
 	}
 	40% {
-		-webkit-transform: rotate(35deg);
-		-moz-transform: rotate(35deg);
+	    -moz-transform:rotate(35deg);
+	    /* Safari and Chrome */
+	    -webkit-transform:rotate(35deg);
+	    /* Opera */
+	    -o-transform:rotate(35deg);
+	    /* IE9 */
+	    -ms-transform:rotate(35deg);
 	}
 	100% {
 		padding: 40px;
-		-webkit-transform: rotate(0deg);
-		-moz-transform: rotate(0deg);
+	    -moz-transform:rotate(0deg);
+	    /* Safari and Chrome */
+	    -webkit-transform:rotate(0deg);
+	    /* Opera */
+	    -o-transform:rotate(0deg);
+	    /* IE9 */
+	    -ms-transform:rotate(0deg);
+		
 		top: -10px;
 		left: 10px;
 		opacity: .9;

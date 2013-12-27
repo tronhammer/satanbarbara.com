@@ -8,8 +8,12 @@ define([
 		"parchmentExpand": function(){
 			var tileController = SB.TileController;
 			if (tileController){
-				var lock = tileController.get("lock");
-				if (!lock()){
+				var currentTile = SB.TileController.get("current"),
+					lock = tileController.get("lock");
+				/**
+				 * @todo make this bringing config back into scope isn't murder
+				 */
+				if (!lock() && SB.ApplicationController.getHash()[0] == config.id){
 					$(".parchment-container").css({"top": -100, "left": -300}).fadeIn();
 					$(".parchment-container").animate({"top":100,"left":0}, 1200);
 					$(".parchment-container .tile-body").animate({"height": 350}, 1800);

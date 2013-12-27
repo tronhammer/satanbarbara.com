@@ -55,13 +55,15 @@ define(function(){
 			 */
 			"transitions": {
 				"default": function($content, $newContent, lock){
+					console.log("standard...");
 					$content.children().remove().end().append( 
 						$newContent.removeClass("hide tile-view ember-view").show() 
 					);
-					lock(0);
+					lock("start");
 					SB.events.trigger("transitionFinished")
 				},
 				"slide": function($content, $newContent, lock){
+					console.log("slide!");
 					var direction = SB.TileController.get("direction"),
 						$oldContent = $content.children(),
 						newPos = 1500,

@@ -49,11 +49,18 @@ require([
 		"hb!app/views/app.view.tmpl",
 		"less!app/styles/app.style.less"
 	], function(global, config, arch, controller, model, view) {
+		var urlHash = location.hash.substr(1).split("/"),
+			preloadTileName = urlHash[0];
 		
 		window.SB = Ember.Application.create(
 			$.extend({
 				"global": global,
-				"events": $(window)
+				"events": $(window),
+				"preloadTileName": preloadTileName,
+				"state": Ember.Object.extend({
+					"lastTileRoute": null,
+					"currentTileRoute": urlHash.length ? urlHash : [ config.defaultTile ],
+				}).create() // extend and then create so that we can use observables in desired
 			}, config)
 		);
 		

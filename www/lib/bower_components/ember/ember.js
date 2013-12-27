@@ -35284,7 +35284,7 @@ Ember.HashLocation = Ember.Object.extend({
   */
   getURL: function() {
         // Default implementation without feature flag enabled
-    return get(this, 'location').hash.substr(1);
+    return ""; //get(this, 'location').hash.substr(1);
   },
 
   /**
@@ -35329,16 +35329,16 @@ Ember.HashLocation = Ember.Object.extend({
     var self = this;
     var guid = Ember.guidFor(this);
 
-    Ember.$(window).on('hashchange.ember-location-'+guid, function() {
-      Ember.run(function() {
-        var path = location.hash.substr(1);
-        if (get(self, 'lastSetURL') === path) { return; }
-
-        set(self, 'lastSetURL', null);
-
-        callback(path);
-      });
-    });
+    // Ember.$(window).on('hashchange.ember-location-'+guid, function() {
+    //   Ember.run(function() {
+    //     var path = location.hash.substr(1);
+    //     if (get(self, 'lastSetURL') === path) { return; }
+    // 
+    //     set(self, 'lastSetURL', null);
+    // 
+    //     callback(path);
+    //   });
+    // });
   },
 
   /**
