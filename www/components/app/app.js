@@ -56,7 +56,7 @@ require([
 			$.extend({
 				"global": global,
 				"events": $(window),
-				"preloadTileName": preloadTileName,
+				"preloadTileName": preloadTileName || config.defaultTile,
 				"state": Ember.Object.extend({
 					"lastTileRoute": null,
 					"currentTileRoute": urlHash.length ? urlHash : [ config.defaultTile ],
