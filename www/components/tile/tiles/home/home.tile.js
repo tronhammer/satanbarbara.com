@@ -13,7 +13,7 @@ define([
 				/**
 				 * @todo make this bringing config back into scope isn't murder
 				 */
-				if (!lock() && SB.ApplicationController.getHash()[0] == config.id){
+				if (!lock() && currentTile.id == config.id){
 					$(".parchment-container").css({"top": -100, "left": -300}).fadeIn();
 					$(".parchment-container").animate({"top":100,"left":0}, 1200);
 					$(".parchment-container .tile-body").animate({"height": 350}, 1800);

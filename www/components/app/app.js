@@ -59,7 +59,7 @@ require([
 				"preloadTileName": preloadTileName || config.defaultTile,
 				"state": Ember.Object.extend({
 					"lastTileRoute": null,
-					"currentTileRoute": urlHash.length ? urlHash : [ config.defaultTile ],
+					"currentTileRoute": urlHash[0] ? urlHash : [ config.defaultTile ],
 				}).create() // extend and then create so that we can use observables in desired
 			}, config)
 		);
