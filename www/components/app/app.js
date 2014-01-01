@@ -12,7 +12,9 @@ window.less = {
 require([
 	"jquery",
 	"handlebars",
-	"ember"
+	"ember",
+	"foundation",
+	"normalize"
 ], function() {
 //#####----@ REQUIRE-EMIT END @----#####//
 	

@@ -29,7 +29,8 @@
 			"*": {
 				"jquery": "bower/jquery/jquery",
 				"handlebars": "bower/handlebars/handlebars",
-				"ember": "bower/ember/ember"
+				"ember": "bower/ember/ember",
+				"foundation": "lib/bower_components/bower-foundation/js/foundation.min.js"
 			}
 		}
 	}
