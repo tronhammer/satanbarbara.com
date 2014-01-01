@@ -5,6 +5,8 @@ require([
 	"tile/models/tile.view.model", 
 	"less!tile/styles/tile.style.less"
 ], function(config, controller, model, viewModel) {
+
+	//#####----@ REQUIRED FUNCTION START @----#####//
 	console.log("√ tile component");
 	
 	window.SB.TileModel = model;
@@ -13,9 +15,19 @@ require([
 	});
 	window.SB.TileView = viewModel;
 
-	require(config.tiles.map(function(tileName){
+	/* require(config.tiles.map(function(tileName){
 		return "tile/tiles/"+tileName+"/"+tileName+".tile";
-	}), function(){
+	} */
+
+	//#####----@ REQUIRE START @----#####//
+	require([
+		"tile/tiles/home/home.tile",
+		"tile/tiles/about/about.tile",
+		"tile/tiles/events/events.tile"
+	], function(){
+	//#####----@ REQUIRE END @----#####//
+	
+		//#####----@ REQUIRED FUNCTION START @----#####//
 		var controller = window.SB.TileController,
 			config = controller.get("config"),
 			tiles = config.tiles,
@@ -24,7 +36,9 @@ require([
 		
 		for (var i=0; i<tiles.length; i++){
 			var tile = arguments[i];
-			// Somewhat inefficient
+			/**
+			 * @todo Somewhat inefficient
+			 */
 			tileMap[ tile.get("id") ] = tile;
 			importMap[ tiles[i] ] = tile;
 		}
@@ -49,7 +63,7 @@ require([
 			
 			var direction = keyMap[ e.keyCode ];
 			if (direction){
-				// $("#loading").show();
+				/* $("#loading").show(); */
 				var $compass = $(".map-arrow");
 				$compass.addClass("arrow-"+direction).fadeIn(200, function(){ 
 					$compass.fadeOut(200, function(){ 
@@ -66,11 +80,13 @@ require([
 				return console.log("locked!");
 			}
 			
-			// swipedir contains either "none", "left", "right", "top", or "down"
 			(direction = {"left": "left", "right": "right", "top": "up", "down": "down"}[swipedir]) 
-			// && $("#loading").show() 
+			/* && $("#loading").show() */
 			&& SB.TileController.go( direction );
 		});
 		
+		//#####----@ REQUIRED FUNCTION END @----#####//
 	});
+	
+	//#####----@ REQUIRED FUNCTION END @----#####//
 });

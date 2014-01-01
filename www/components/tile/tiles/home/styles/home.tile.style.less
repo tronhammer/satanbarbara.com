@@ -1,6 +1,6 @@
 #homeTile{
 	background: url("../images/bg.png") no-repeat 0 0;
-	background-size: 100%;
+	background-size: 100% 100%;
 	box-shadow: inset 30px 60px 120px #000;
 	
 	.parchment-container{
@@ -9,62 +9,58 @@
 		display:none;
 		
 		.tile-content{
-			height: 100px;
-			width: 300px;
-			background: #000;
-			border-radius: 15px;
-			box-shadow: inset 2px 2px 20px 5px #222;
+			width: 55%;
+			border-radius: 0px;
+			
 			opacity: 1;
 			text-align: center;
-			border: 1px dashed #333;
 			padding-top: 10px;
 			margin: 0 auto;
-		}
-	
-		.tile-head{
-			background: url(../images/parchment.png) -22px -18px rgba(0,0,0,0);
-			width: 740px;
+			
 			box-shadow: none;
 			border: none;
-			height: 80px;
-			text-shadow: 0px 1px 1px #4d4d4d;
-			color: #222;
-			font-size: 20px;
 			font-family: cursive;
 			padding-top: 13px;
-		}
-	
-		.tile-body{
-			background: url(../images/parchment.png) -22px -120px rgba(0, 0, 0, 0) no-repeat;
-			width: 740px;
-			box-shadow: none;
-			border: none;
-			height: 20px;
-			background-size: 760px 600px;
+			font-size: 20px;
 			text-shadow: 0px 1px 1px #4d4d4d;
 			color: #222;
-			font-size: 20px;
-			font-family: cursive;
-			padding-top: 13px;
 			
-			.welcome-head{
-				text-align: center;
-				font-weight:bold;
-				font-style:italic; 
-			}
 			
-			.welcome-details{
-				margin-left: 45px;
-				text-align: left;
+			&.tile-head{
+				background: url(../images/parchment.png) -22px -18px rgba(0,0,0,0) no-repeat;
+				background-size: 100% 700px;
+				height: 90px;
 			}
-		}
 	
-		.tile-foot{
-			background: url(../images/parchment.png) -22px -452px rgba(0, 0, 0, 0);
-			width: 740px;
-			box-shadow: none;
-			border: none;
-			height: 100px;
+			&.tile-body{
+				background: url(../images/parchment.png) -22px -120px rgba(0, 0, 0, 0) no-repeat;
+				background-size: 100% 700px;
+				height: 20px;
+				
+				.welcome-head{
+					text-align: center;
+					font-weight:bold;
+					font-style:italic; 
+				}
+			
+				.welcome-details{
+					padding: 0px 45px;
+					text-align: left;
+				}
+			}
+	
+			&.tile-foot{
+				background: url(../images/parchment.png) -22px -480px rgba(0, 0, 0, 0) no-repeat;
+				background-size: 100% 700px;
+				height: 180px;
+				
+				.tile-foot-shadow{
+					box-shadow: 50px -10px 40px 7px #000000;
+					width: 90%;
+					position: relative;
+					left: -35px;
+				}
+			}
 		}
 	}
 

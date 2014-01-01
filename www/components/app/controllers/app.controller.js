@@ -33,10 +33,10 @@ define(function(){
 					return this.set("clearSet", 0);
 				}
 				
-				// location.hash.substr(1).split("&").map(function(keyval){
-				// 	var parsed = keyval.split("="); 
-				// 	vars[ parsed.pop() ] = parsed.join("");
-				// });
+				/* location.hash.substr(1).split("&").map(function(keyval){
+					var parsed = keyval.split("="); 
+					vars[ parsed.pop() ] = parsed.join("");
+				}); */
 				
 				if (SB.TileController){
 					var tile = tileController.get("tileMap")[ vars[0] ];

@@ -2591,5 +2591,6 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
   return __exports__;
 })(__module1__, __module7__, __module8__, __module10__, __module11__);
 
+  window.Handlebars = __module0__;
   return __module0__;
 })();

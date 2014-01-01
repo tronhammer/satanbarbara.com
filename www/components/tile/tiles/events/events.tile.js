@@ -3,6 +3,8 @@ define([
 	"hb!tile/tiles/events/views/events.tile.view.tmpl",
 	"less!tile/tiles/events/styles/events.tile.style.less"
 ], function(config, view){
+
+	//#####----@ REQUIRED FUNCTION START @----#####//
 	console.log("√ Events tile object");
 	var EventsView = window.SB.TileView.extend({
 		"elementId": config.id,
@@ -22,4 +24,6 @@ define([
 			"view": EventsView
 		}, config)
 	);
+	
+	//#####----@ REQUIRED FUNCTION END @----#####//
 });

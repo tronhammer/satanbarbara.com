@@ -3,6 +3,8 @@ define([
 	"hb!tile/tiles/about/views/about.tile.view.tmpl",
 	"less!tile/tiles/about/styles/about.tile.style.less"
 ], function(config, view){
+
+	//#####----@ REQUIRED FUNCTION START @----#####//
 	console.log("√ About tile object");
 	var AboutView = window.SB.TileView.extend({
 		"elementId": config.id,
@@ -22,4 +24,6 @@ define([
 			"view": AboutView
 		}, config)
 	);
+	
+	//#####----@ REQUIRED FUNCTION END @----#####//
 });

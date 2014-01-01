@@ -1,45 +1,29 @@
-requirejs.config({
-	//By default load any module IDs from js/lib
-	"baseUrl": "components",
-	"paths": {
-		"lib": "../lib",
-		
-		"bower": "../lib/bower_components",
-		"require-plugin": "../lib/bower_components/requirejs-plugins/src",
-		"require-plugin-lib": "../lib/bower_components/requirejs-plugins/lib",
-		"jquery-mobile": "../lib/bower_components/jquery-mobile-requirejs/js/jquery.mobile-1.3.2",
-		
-		"text": "../lib/bower_components/requirejs-plugins/lib/text",
-		"json": "../lib/bower_components/requirejs-plugins/src/json",
-		"hb": "../lib/bower_components/requirejs-handlebars/hb",
-		"css": "../lib/bower_components/require-css/css",
-		"less": "../lib/bower_components/require-less/less",
-		"lessc": "../lib/bower_components/require-less/lessc",
-		"normalize": "../lib/bower_components/require-less/normalize"
-	},
-	
-	"map": {
-		"*": {
-			"jquery": "bower/jquery/jquery",
-			"handlebars": "bower/handlebars/handlebars",
-			"ember": "bower/ember/ember"
-		}
-	}
-});
+//#####----@ INTRO FUNCTION START @----#####//
+console.log("This shit shoulda happened first amirite?");
+//#####----@ INTRO FUNCTION END @----#####//
+ 
+requirejs.config(window.SB.arch.requireConfig);
 
 window.less = {
 	"relativeUrls": true
 }
 
-// Start the main app logic.
+//#####----@ REQUIRE-EMIT START @----#####//
 require([
 	"jquery",
-	"ember",
-	"handlebars"
+	"handlebars",
+	"ember"
 ], function() {
+//#####----@ REQUIRE-EMIT END @----#####//
+	
+	//#####----@ REQUIRED FUNCTION START @----#####//
+	
+	console.log("WELL I'LL BE DAMNED")
+	
 	
 	$.extend(Handlebars.helpers, Ember.Handlebars.helpers);
 	
+	//#####----@ REQUIRE START @----#####//
 	require([
 		"lib/app/global",
 		"json!app/data/app.config.json",
@@ -49,20 +33,30 @@ require([
 		"hb!app/views/app.view.tmpl",
 		"less!app/styles/app.style.less"
 	], function(global, config, arch, controller, model, view) {
+	//#####----@ REQUIRE END @----#####//
+	
+		//#####----@ REQUIRED FUNCTION START @----#####//
+		
 		var urlHash = location.hash.substr(1).split("/"),
 			preloadTileName = urlHash[0];
 		
-		window.SB = Ember.Application.create(
+		window.SB = Ember.Application.extend(
 			$.extend({
 				"global": global,
+				"arch": arch,
 				"events": $(window),
 				"preloadTileName": preloadTileName || config.defaultTile,
+				"loadingComplete": false,
 				"state": Ember.Object.extend({
 					"lastTileRoute": null,
 					"currentTileRoute": urlHash[0] ? urlHash : [ config.defaultTile ],
-				}).create() // extend and then create so that we can use observables in desired
+				}).create() /** extend and then create so that we can use observables in desired */,
+				
+				"loaded": function(){
+					console.log("DONE LOADING")
+				}.observes("loadingComplete")
 			}, config)
-		);
+		).create();
 		
 		window.SB.ApplicationController = controller;
 		window.SB.ApplicationModel = model;
@@ -72,13 +66,13 @@ require([
 			"elementId": "app",
 			"didInsertElement": function(){
 				this.templateChanged();
-				// $("#loading").fadeOut();
+				/* $("#loading").fadeOut(); */
 				return this._super();
 			},
 			
 			"contentSelector": function(){
 				var visible = this.get("controller").get("visible");
-				return visible.instance && visible.instance.elementId || "> .content-container"; //"> .ember-view";
+				return visible.instance && visible.instance.elementId || "> .content-container";
 			}.property(),
 			
 			"transition": function(){
@@ -119,14 +113,27 @@ require([
 					}
 					currentTileView.instance = $newContent;
 				}
-			}.observes("controller.visible")//,
-			// "changer": function(){
-			// 	// this.rerender();
-			// }
+			}.observes("controller.visible")
 		});
 		
+		//#####----@ REQUIRE START @----#####//
 		require([
-			"components/tile/tile.js"
-		]);
-	});
+			"tile/tile"
+		], function(){
+		//#####----@ REQUIRE END @----#####//
+		
+			//#####----@ REQUIRED FUNCTION START @----#####//
+			
+			console.log("chicken")
+			
+			//#####----@ REQUIRED FUNCTION END @----#####//
+			
+		});
+		
+		//#####----@ REQUIRED FUNCTION END @----#####//
+		
+	});	
+	
+	//#####----@ REQUIRED FUNCTION END @----#####//
+	
 });

@@ -15,6 +15,21 @@
 		<div id="overlay"></div>
 		<div id="loading">Loading...</div>
 		
-		<script data-main="components/app/app.js" src="lib/requirejs/require-2.1.9.min.js"></script>
+		<script>
+		window.SB = {};
+		window.SB.arch = <?php include("components/app/data/app.arch.json"); ?>;
+		window.SB.config = <?php include("components/app/data/app.config.json"); ?>;
+		</script>
+		<?php
+			if ($_GET["env"] == "dev"){
+				?>
+				<script src="main.compiled.js"></script>
+				<?php
+			} else {
+				?>
+				<script data-main="components/app/app.js" src="lib/requirejs/require-2.1.9.js"></script>
+				<?php 
+			}
+			?>
 	</body>
 </html>

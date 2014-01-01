@@ -1379,6 +1379,8 @@ var requirejs, require, define;
 
                     //Mark all the dependencies as needing to be loaded.
                     context.nextTick(function () {
+						var nm = window._RaNum || (window._RaNum = 0)
+						console.log("Calling: " + (++nm))
                         //Some defines could have been added since the
                         //require call, collect them.
                         intakeDefines();

@@ -1,16 +1,5 @@
-.animation (@name, @duration: 300ms, @delay: 0, @ease: ease) {
-	-webkit-animation: @name @duration @delay @ease;
-	-moz-animation:    @name @duration @delay @ease;
-	-ms-animation:     @name @duration @delay @ease;
-	-webkit-animation-fill-mode: forwards;
-	-moz-animation-fill-mode: forwards;
-}
+@import "./app.mixins.style.less";
 
-.animation-contineous (@name, @duration: 300ms, @delay: 0, @ease: ease) {
-	-webkit-animation: @name @duration @delay @ease infinite;
-	-moz-animation:    @name @duration @delay @ease infinite;
-	-ms-animation:     @name @duration @delay @ease infinite;
-}
 
 header{
 	float: right;
@@ -19,13 +8,25 @@ header{
 	
 	.map{
 		background: url(../images/compass.png) 0 0 no-repeat;
-		padding: 30px;
 		background-size: 100%;
 		z-index: 2;
 		float: right;
 		position:static;
-		opacity: .4;
 		margin: 30px 40px;
+		
+	    -moz-transform:rotate(0deg);
+	    /* Safari and Chrome */
+	    -webkit-transform:rotate(0deg);
+	    /* Opera */
+	    -o-transform:rotate(0deg);
+	    /* IE9 */
+	    -ms-transform:rotate(0deg);
+		transform:rotate(0deg);
+		
+		padding: 30px;
+		top: 0px;
+		left: 0px;
+		opacity: .4;
 		
 		.animation(rotate-close-section, .5s);
 		
@@ -76,6 +77,14 @@ footer{
 		top: 0px;
 		left: 0px;
 		opacity: .4;
+	    -moz-transform:rotate(0deg);
+	    /* Safari and Chrome */
+	    -webkit-transform:rotate(0deg);
+	    /* Opera */
+	    -o-transform:rotate(0deg);
+	    /* IE9 */
+	    -ms-transform:rotate(0deg);
+		transform:rotate(0deg);
 	}
 	40% {
 	    -moz-transform:rotate(35deg);
@@ -85,6 +94,7 @@ footer{
 	    -o-transform:rotate(35deg);
 	    /* IE9 */
 	    -ms-transform:rotate(35deg);
+		transform:rotate(35deg);
 	}
 	100% {
 		padding: 40px;
@@ -95,7 +105,7 @@ footer{
 	    -o-transform:rotate(0deg);
 	    /* IE9 */
 	    -ms-transform:rotate(0deg);
-		
+		transform:rotate(0deg);
 		top: -10px;
 		left: 10px;
 		opacity: .9;
@@ -128,3 +138,65 @@ footer{
 @-ms-keyframes rotate-close-section {.rotate-close-mixin-frames;} /* Safari and Chrome */
 @-o-keyframes rotate-close-section {.rotate-close-mixin-frames;} /* Opera */
 @keyframes rotate-close-section {.rotate-close-mixin-frames;}
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+/* Styles */
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
