@@ -1,5 +1,5 @@
 <?php
-	header("Access-Control-Allow-Origin: ". (empty($_SERVER["HTTPS"]) ? "http" : "https") ."://api.tronnet.me");
+	header("Access-Control-Allow-Origin: ". (empty($_SERVER["HTTPS"]) ? "http" : "https") ."://api.satanbarbara.com");
 	
 	if ($_POST["action"] == "join" && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))
 	{
