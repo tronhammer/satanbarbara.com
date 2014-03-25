@@ -39,8 +39,8 @@
 				)
 			));
 		}
-		
-		if ($_POST["action"] == "getEmails"){
+	} else if (isset($_GET["action"])) {
+		if ($_GET["action"] == "getEmails"){
 			try {
 				$statement = $dbh->prepare("SELECT * FROM `accounts`");
 		
@@ -63,7 +63,6 @@
 				)
 			));
 		}
-		
 	} else {
 		echo json_encode(array(
 			"status" => array(
