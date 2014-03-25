@@ -14,3 +14,13 @@
 		    error_log('Connection failed: ' . $e->getMessage());
 		}
 	}
+	
+	echo json_encode(array(
+		"data" => array(
+			
+		),
+		"status" => array(
+			"code" => 0,
+			"message" => "Success"
+		)
+	))

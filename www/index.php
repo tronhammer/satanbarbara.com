@@ -22,7 +22,7 @@
 						community. Please feel free to send us any suggestions that you feel would improve 
 						your experience*.</p>
 						
-					<div>
+					<div id="emailInputContainer">
 						<input placeholder="email" name="email" id="email"/> <button id="join">Join</button>
 					</div>
 				</div>
@@ -34,12 +34,18 @@
 			$(function(){
 				$("body").delegate("#join", "click", function(){
 					$.ajax({
-						"url": "http://localhost/~apple/satanbarbara.com/api/",
+						"url": "http://api.satanbarbara.com/",
 						"type": "post",
 						"data": {
 							"action": "join",
 							"email": $("#email").val()
 						}
+					}).done(function(){
+						$("#emailInputContainer").children().fadeOut();
+						$("#emailInputContainer").text("Thanks! We'll keep in touch");
+					}).fail(function(){
+						$("#emailInputContainer").children().fadeOut();
+						$("#emailInputContainer").text("There was an error! Try again later.");
 					});
 				});
 			});
