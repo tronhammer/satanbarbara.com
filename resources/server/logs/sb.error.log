@@ -1,3 +1,40 @@
 [Fri Dec 27 12:28:01 2013] [error] [client 68.6.41.184] File does not exist: /var/www/satanbarbara.com/www/favicon.ico
 [Fri Dec 27 12:28:21 2013] [error] [client 68.6.41.184] File does not exist: /var/www/satanbarbara.com/www/favicon.ico
 [Fri Dec 27 12:28:34 2013] [error] [client 68.6.41.184] File does not exist: /var/www/satanbarbara.com/www/favicon.ico
+[Tue Mar 25 05:56:48 2014] [error] [client 68.6.41.184] PHP Notice:  Undefined index: action in /var/www/satanbarbara.com/api/index.php on line 3
+[Tue Mar 25 05:56:48 2014] [error] [client 68.6.41.184] PHP Stack trace:
+[Tue Mar 25 05:56:48 2014] [error] [client 68.6.41.184] PHP   1. {main}() /var/www/satanbarbara.com/api/index.php:0
+[Tue Mar 25 06:00:08 2014] [error] [client 68.6.41.184] try this plz: jon@toast.com, referer: http://satanbarbara.local/www/
+[Tue Mar 25 06:01:39 2014] [error] [client 68.6.41.184] try this plz: jacob@blah.com, referer: http://satanbarbara.local/www/
+[Tue Mar 25 06:02:16 2014] [error] [client 68.6.41.184] try this plz: wat@wat.com, referer: http://satanbarbara.local/www/
+[Tue Mar 25 06:04:47 2014] [error] [client 68.6.41.184] try this plz: asd@asd.com, referer: http://satanbarbara.local/www/
+[Tue Mar 25 06:05:34 2014] [error] [client 68.6.41.184] try this plz: asd@asd.com, referer: http://satanbarbara.local/www/
+[Tue Mar 25 06:10:02 2014] [error] [client 68.6.41.184] PHP Parse error:  syntax error, unexpected $end, expecting ',' or ';' in /var/www/satanbarbara.com/api/index.php on line 26
+[Tue Mar 25 06:21:11 2014] [error] [client 68.6.41.184] PHP Notice:  Undefined index: action in /var/www/satanbarbara.com/api/index.php on line 3
+[Tue Mar 25 06:21:11 2014] [error] [client 68.6.41.184] PHP Stack trace:
+[Tue Mar 25 06:21:11 2014] [error] [client 68.6.41.184] PHP   1. {main}() /var/www/satanbarbara.com/api/index.php:0
+[Tue Mar 25 06:21:15 2014] [error] [client 68.6.41.184] File does not exist: /var/www/satanbarbara.com/www/favicon.ico
+[Tue Mar 25 06:21:21 2014] [error] [client 68.6.41.184] try this plz: johanus@bonus.com, referer: http://satanbarbara.com/
+[Tue Mar 25 06:29:07 2014] [error] [client 68.6.41.184] try this plz: adsf@asdf.com, referer: http://satanbarbara.local/www/
+[Tue Mar 25 06:29:16 2014] [error] [client 68.6.41.184] try this plz: blar@balh.com, referer: http://satanbarbara.com/
+[Tue Mar 25 06:30:08 2014] [error] [client 68.6.41.184] try this plz: asd@asd.com, referer: http://satanbarbara.com/
+[Tue Mar 25 06:30:59 2014] [error] [client 68.6.41.184] try this plz: fgsd@faa.com, referer: http://satanbarbara.com/
+[Tue Mar 25 06:31:37 2014] [error] [client 68.6.41.184] try this plz: asdf@adfg.com, referer: http://satanbarbara.com/
+[Tue Mar 25 06:33:46 2014] [error] [client 68.6.41.184] File does not exist: /var/www/satanbarbara.com/www/favicon.ico
+[Tue Mar 25 06:33:52 2014] [error] [client 68.6.41.184] try this plz: jon@jon.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:34:46 2014] [error] [client 68.6.41.184] try this plz: fack@duck.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:37:57 2014] [error] [client 68.6.41.184] try this plz: bull@shit.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:38:22 2014] [error] [client 68.6.41.184] try this plz: oh@fuck.asom, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:39:12 2014] [error] [client 68.6.41.184] try this plz: asd@asdf.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:43:20 2014] [error] [client 68.6.41.184] try this plz: ass@bithc.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:47:07 2014] [error] [client 68.6.41.184] PHP Notice:  Undefined index: REMOTE_HOST in /var/www/satanbarbara.com/api/index.php on line 2, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:47:07 2014] [error] [client 68.6.41.184] PHP Stack trace:, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:47:07 2014] [error] [client 68.6.41.184] PHP   1. {main}() /var/www/satanbarbara.com/api/index.php:0, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:47:07 2014] [error] [client 68.6.41.184] Goter: , referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:47:07 2014] [error] [client 68.6.41.184] try this plz: adsf@asdf.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:49:59 2014] [error] [client 68.6.41.184] Goter: http://www.satanbarbara.com/, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:49:59 2014] [error] [client 68.6.41.184] try this plz: jon@bon.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:50:53 2014] [error] [client 68.6.41.184] try this plz: eat@shit.die, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:51:29 2014] [error] [client 68.6.41.184] try this plz: eat@shit.die, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:53:19 2014] [error] [client 68.6.41.184] try this plz: wat@wat.com, referer: http://www.satanbarbara.com/
+[Tue Mar 25 06:53:28 2014] [error] [client 68.6.41.184] try this plz: wat@about.now, referer: http://satanbarbara.com/
