@@ -40,11 +40,12 @@
 			));
 		}
 	} else if (isset($_GET["action"])) {
+		
 		if ($_GET["action"] == "getEmails"){
 			try {
 				$statement = $dbh->prepare("SELECT * FROM `accounts`");
 		
-				$statement->execute(array(mysql_real_escape_string($_POST["email"])));
+				$statement->execute();
 			} catch (PDOException $e) {
 				echo json_encode(array(
 					"data" => array(),
