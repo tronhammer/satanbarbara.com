@@ -41,6 +41,19 @@
 		}
 	} else if (isset($_GET["action"])) {
 		
+		try {
+			$dbh = new PDO("mysql:host=localhost;dbname=satanbarbara", "satanbarbara", "iwilldie");
+		} catch (PDOException $e) {
+		    error_log('Connection failed: ' . $e->getMessage());
+			echo json_encode(array(
+				"data" => array(),
+				"status" => array(
+					"code" => 2,
+					"message" => "Connection failed"
+				)
+			));
+		}
+		
 		if ($_GET["action"] == "getEmails"){
 			try {
 				$statement = $dbh->prepare("SELECT * FROM `accounts`");
