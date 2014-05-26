@@ -8,12 +8,12 @@
     DocumentRoot /var/www/satanbarbara.com/www/
 
     <Directory var/www/satanbarbara.com/www> 
-	 AllowOverride All
-	 Options +FollowSymLinks
-	 Order allow,deny 
-	 Allow from all
+        AllowOverride All
+        Options +FollowSymLinks
+        Order allow,deny 
+        Allow from all
 
-         DirectoryIndex index.php index.html
+        DirectoryIndex index.php index.html
     </Directory>
 
     # Custom log file locations

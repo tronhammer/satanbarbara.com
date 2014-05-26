@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+#written by tronhammer, sean murray
+
 import glob
 import os,sys
 import fnmatch
