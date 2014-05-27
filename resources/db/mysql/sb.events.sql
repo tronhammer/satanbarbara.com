@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `satanbarbara`.`events` (
     `id` INT(11) NOT NULL AUTO_INCREMENT, 
     `created` TIMESTAMP NOT NULL DEFAULT NOW(),
+    `creator_id` INT(11) NOT NULL,
     `type_id` INT(11) NOT NULL,
     `title` VARCHAR(255) NOT NULL, 
     `subtitle` VARCHAR(255) NOT NULL DEFAULT "", 
@@ -18,6 +19,10 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`events` (
     `map_uri` VARCHAR(1028) NOT NULL DEFAULT "https://maps.google.com/",
     `ticket_uri` VARCHAR(1028) NOT NULL DEFAULT "not sure",
     `promocode` VARCHAR(128) NOT NULL DEFAULT "",
+    `archived` BOOLEAN NOT NULL DEFAULT 0,
+    `deleted` BOOLEAN NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (`creator_id`) REFERENCES `accounts`(`id`),
 
     FOREIGN KEY (`type_id`) REFERENCES `descriptors`(`id`),
     FOREIGN KEY (`venue_type_id`) REFERENCES `descriptors`(`id`),
@@ -28,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`events` (
 ) ENGINE=`InnoDB` DEFAULT CHARSET=`utf8` COLLATE=`utf8_unicode_ci` AUTO_INCREMENT=1;
 
 INSERT INTO `satanbarbara`.`events` (
+    `creator_id`,
     `title`,
     `location`,
     `ages`,
@@ -40,6 +46,7 @@ INSERT INTO `satanbarbara`.`events` (
     `venue_type_id`,
     `genre_id`
 ) values (
+    1,
     "Test",
     "test place",
     "18",

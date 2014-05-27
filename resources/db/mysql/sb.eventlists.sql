@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`eventlists` (
 	`guests` TEXT NOT NULL DEFAULT "",
     `actstotal` INT(11) NOT NULL DEFAULT 0,
     `gueststotal` INT(11) NOT NULL DEFAULT 0,
+    `deleted` BOOLEAN NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`) 
 ) ENGINE=`InnoDB` DEFAULT CHARSET=`utf8` COLLATE=`utf8_unicode_ci` AUTO_INCREMENT=1;

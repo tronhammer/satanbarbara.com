@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`descriptors` (
     `type` ENUM("base", "genre", "venue", "act", "event", "band") NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
+    `deleted` BOOLEAN NOT NULL DEFAULT 0,
     UNIQUE  INDEX `uname` (`name`, `type`),
     PRIMARY KEY (`id`) 
 ) ENGINE=`InnoDB` DEFAULT CHARSET=`utf8` COLLATE=`utf8_unicode_ci` AUTO_INCREMENT=1;
