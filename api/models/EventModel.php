@@ -1,6 +1,6 @@
 <?php
 
-class EventModel {
+abstract class EventModel {
 
 	static public function Create($data) {
 		$dbh = MySQLConnector::getHandle();

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `satanbarbara`.`accounts` (
     `id` INT(11) NOT NULL AUTO_INCREMENT, 
     `username` VARCHAR(32) NOT NULL,
+    `password` VARCHAR(128) NOT NULL,
     `fname` VARCHAR(128) NOT NULL DEFAULT "Anon", 
     `lname` VARCHAR(128) NOT NULL DEFAULT "Coward",
     `nickname` VARCHAR(64) NOT NULL DEFAULT "",
@@ -20,6 +21,9 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`accounts` (
     `suspended` BOOLEAN NOT NULL DEFAULT 0,
     `banned` BOOLEAN NOT NULL DEFAULT 0,
     `deleted` BOOLEAN NOT NULL DEFAULT 0,
+
+    UNIQUE INDEX `uid` (`username`, `email`),
+
     PRIMARY KEY (`id`) 
 ) ENGINE=`InnoDB` DEFAULT CHARSET=`utf8` COLLATE=`utf8_unicode_ci` AUTO_INCREMENT=1;
 

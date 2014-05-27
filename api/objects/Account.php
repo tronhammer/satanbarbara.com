@@ -1,6 +1,6 @@
 <?php
 
-class Event extends EventModel {
+class Account extends AccountModel {
 	
 	/**@* {Boolean} Denotes if the current object was just created or not (may not exist in database yet!). */
     public $isNew = true;
