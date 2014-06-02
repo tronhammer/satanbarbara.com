@@ -3,7 +3,7 @@
 abstract class EventController {
 	
 	static public function Create() {
-		AJAXResponse::JSON( Event::Create(), 0, "COol");
+		AJAX::Response("json",  Event::Create(), 0, "COol");
 	}
 
 	static public function Get() {

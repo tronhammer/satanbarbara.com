@@ -3,11 +3,33 @@
 abstract class AccountController {
 	
 	static public function Create() {
-		AJAXResponse::JSON( Account::Create(), 0, "even better");
+		AJAX::Response("json",  Account::Create($_POST), 0, "even better");
 	}
 
 	static public function Get() {
+		$return = array();
+		$start = isset($_GET["start"]) ? $_GET["start"] : 0;
+		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
+		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
+		$db = MySQLConnector::getHandle();
+
+		try {
+			$statement = $db->prepare("SELECT `id` FROM `accounts`");
+	
+			$statement->execute();
+
+			$accounts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+			foreach($accounts as $account){
+				$Account = new Account($account);
+				$return[$Account->id] = $Account->GetValues();
+			}
+		} catch (PDOException $e) {
+			return AJAX::Response("json", array(), 2, $e->getMessage());
+		}
+
+		AJAX::Response("json", $return);
 	}
 
 	static public function Update() {
@@ -17,4 +39,11 @@ abstract class AccountController {
 	static public function Delete() {
 
 	}
+
+	static public function Search() {
+
+	}
 }
+
+AJAX::registerGetMethods("Account", array("Get", "Search"));
+AJAX::registerPostMethods("Account", array("Create", "Update", "Delete"));

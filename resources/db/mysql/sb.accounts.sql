@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`accounts` (
     `banned` BOOLEAN NOT NULL DEFAULT 0,
     `deleted` BOOLEAN NOT NULL DEFAULT 0,
 
-    UNIQUE INDEX `uid` (`username`, `email`),
+    UNIQUE INDEX `uid` (`email`, `username`),
 
     PRIMARY KEY (`id`) 
 ) ENGINE=`InnoDB` DEFAULT CHARSET=`utf8` COLLATE=`utf8_unicode_ci` AUTO_INCREMENT=1;

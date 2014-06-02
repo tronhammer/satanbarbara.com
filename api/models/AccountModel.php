@@ -35,26 +35,25 @@ abstract class AccountModel extends BaseModel {
     );
 
     /**@* {Array} Defines which fields are required for an entry. */
-	static protected $required = array("created", "username", "password", "fname", "lname", "email", "start", "end", "data");
+	static protected $required = array("created", "username", "password", "fname", "lname", "email");
 
 	/**
 	 * Class Methods
 	 */
 	static public function Create($data) {
-		$now = date("Y-m-d h:i:s A");
-		
-		$data["created"] = $now;
+		$data["created"] = date("Y-m-d h:i:s A");
 		
 		self::Save($data);
 
-
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
+		return array("good!");
 	}
 
-	static public function Validate($name, $value) {
-
-		switch($name){
-			case "created"
+	static public function Validate($data) {
+		switch($data["name"]){
+			case "created":
+				break;
 		}
+
+		return $data["value"];
 	}
 }

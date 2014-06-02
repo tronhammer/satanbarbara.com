@@ -1,11 +1,11 @@
 <?php
+	error_reporting(-1);
 	header("Access-Control-Allow-Origin: ". trim($_SERVER["HTTP_REFERER"], "/") );
 
 	function SatanBarbaraAutoloader($className){
 		/**
 		 * @todo clean this up
 		 */
-		error_log("checking this yeaahh");
         if (file_exists("components/" . $className . ".php")) {
             include_once("components/" . $className . ".php");
             return;
@@ -26,16 +26,34 @@
 
 	spl_autoload_register("SatanBarbaraAutoloader");
 
-	if (isset($_GET["action"])) { // Some auth may be required
-		$className = $_GET["target"];
-		$controller = $className. "Controller";
-		if (class_exists($className) && class_exists($controller)) {
-			call_user_func($controller."::".$_GET["action"]);
+	try{
+		if (isset($_GET["action"])) { // Some auth may be required
+			$className = $_GET["target"];
+			$action = $_GET["action"];
+			$controller = $className . "Controller";
+			if (class_exists($className) && class_exists($controller)) {
+				if (AJAX::isValidGetMethod($className, $action)){
+					call_user_func($controller."::".$action);
+				} else {
+					AJAX::Response("json", array(), 1, "This action cannot be envoked through the get method!");
+				}
+			}
+		} else if (isset($_POST["action"])) { // Auth always required
+			$className = $_POST["target"];
+			$action = $_POST["action"];
+			$controller = $className. "Controller";
+			if (class_exists($className) && class_exists($controller)) {
+				if (AJAX::isValidPostMethod($className, $action)){
+					call_user_func($controller."::".$action);
+				} else {
+					AJAX::Response("json", array(), 1, "This action cannot be envoked through the post method!");
+				}
+			}
+		} else {
+			AJAX::Response("json", array(), 1, "No action was provided");
 		}
-	} else if (isset($_POST["action"])) { // Auth always required
-
-	} else {
-		AJAXResponse::JSON(array(), 1, "No action was provided");
+	} catch(Exception $e){
+		AJAX::Response("json", array(), 1, $e->getMessage());
 	}
 	
 

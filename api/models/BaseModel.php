@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseModel {
+abstract class BaseModel extends BaseObject {
 
     /**
      * @brief Sets the value of a single specific property.
@@ -21,19 +21,19 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function SetValue($id, $name, $value) {
-        if (is_int($id)) {
+    public function SetValue($name, $value) {
+        if (is_int($this->_id)) {
         	$db = MySQLConnector::getHandle();
 
-            if (isset(parent::$attrs[$name])) {
+            if (isset(static::$attrs[$name])) {
                 $cleanAttrs = self::Sanitize($name, $value);
                 
-                if (is_array($cleanAttrs) && !empty($cleanAttrs)) {
-                    $statement = $db->prepare("UPDATE `". parent::_TABLE ."` SET `". $name ."`=? WHERE `id`=?");
+                if (is_array($cleanAttrs) && !empty($cleanAttrs))  {
+                    $statement = $db->prepare("UPDATE `". static::_TABLE ."` SET `". $name ."`=? WHERE `id`=?");
                     
-                    if (!$statement->execute(array($cleanAttrs[$name], $id))) {
+                    if (!$statement->execute(array($cleanAttrs[$name], $this->_id))) {
                         if ($statement->errorCode() == 23000) {
-                            throw new Exception("Object name already exists in the database!");
+                            throw new Exception("Object name already exists in the database! "  . var_export($statement->errorInfo(), true));
                         } else  {
                             throw new Exception("Couldn't update Object property $name! ". var_export($statement->errorInfo(), true));
                         }
@@ -64,15 +64,15 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function SetValues($id, $data) {
+    public function SetValues($data) {
 
         if (is_array($data)) {
-            if (is_int($id)) {
+            if (is_int($this->_id)) {
             	$db = MySQLConnector::getHandle();
 
                 $cleanAttrs = self::Sanitize($data);
                 if (is_array($cleanAttrs) && !empty($cleanAttrs)) {
-                    $query = "UPDATE `". parent::_TABLE ."` SET";
+                    $query = "UPDATE `". static::_TABLE ."` SET";
                     $names = array_keys($cleanAttrs);
                     $values = array_values($cleanAttrs);
                 
@@ -82,7 +82,7 @@ abstract class BaseModel {
                     }
                 
                     $query .= " WHERE `id`=?";
-                    $values[] = $id;
+                    $values[] = $this->_id;
                 
                     $statement = $db->prepare($query);
 
@@ -126,14 +126,14 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function GetValue($id, $name) {
+    public function GetValue($name) {
 
-        if (isset(parent::$attrs[$name])) {
-            if (is_int($id)) {
+        if (isset(static::$attrs[$name])) {
+            if (is_int($this->_id)) {
             	$db = MySQLConnector::getHandle();
 
-                $statement = $db->prepare("SELECT `". $name ."` FROM `". parent::_TABLE ."` WHERE `id`=?");
-                if (!$statement->execute(array($id))) {
+                $statement = $db->prepare("SELECT `". $name ."` FROM `". static::_TABLE ."` WHERE `id`=?");
+                if (!$statement->execute(array($this->_id))) {
                     throw new Exception("Couldn't get object property $name! ". var_export($statement->errorInfo(), true));
                 }
                 
@@ -168,17 +168,17 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function GetValues($id, $names="*") {
+    public function GetValues($names="*") {
     	$db = MySQLConnector::getHandle();
 
         if ($names == "*" || is_array($names) && empty($names)) {
-            $names = array_keys(parent::$attrs);
+            $names = array_keys(static::$attrs);
         }
         
         if (is_array($names) && !empty($names)) {
             $cleanAttrs = array();
             foreach($names as $pos=>$name) {
-                if (isset(parent::$attrs[$name])) {
+                if (isset(static::$attrs[$name])) {
                     $cleanAttrs[] = $name;
                 } else {
                     /**
@@ -189,8 +189,8 @@ abstract class BaseModel {
             }
             
             if (!empty($cleanAttrs)) {
-                $statement = $db->prepare("SELECT `". implode($cleanAttrs, "`, `") ."` FROM `". parent::_TABLE ."` WHERE `id`=?");
-                if (!$statement->execute(array($id))) {
+                $statement = $db->prepare("SELECT `". implode($cleanAttrs, "`, `") ."` FROM `". static::_TABLE ."` WHERE `id`=?");
+                if (!$statement->execute(array($this->_id))) {
                     throw new Exception("Couldn't get object property $name! ". var_export($statement->errorInfo(), true));
                 }
                 $ret = $statement->fetch(PDO::FETCH_ASSOC);
@@ -220,13 +220,14 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function Save($data) {
+    public function Save($data) {
 
     	$db = MySQLConnector::getHandle();
 
         $cleanAttrs = self::Sanitize($data);
+
         if (is_array($cleanAttrs) && !empty($cleanAttrs)) {
-            $query = "INSERT INTO `". parent::_TABLE ."`";
+            $query = "INSERT INTO `". static::_TABLE ."`";
             $names = array_keys($cleanAttrs);
             $values = array_values($cleanAttrs);
             
@@ -242,7 +243,7 @@ abstract class BaseModel {
 			// error_log(var_export($values, true));
             if (!$statement->execute($values)) {
                 if ($statement->errorCode() == 23000) {
-                    throw new Exception("Object name already exists in the database!");
+                    throw new Exception("Object name already exists in the database!" . var_export($statement->errorInfo(), true));
                 } else {
                     throw new Exception("Couldn't save object to database! ". var_export($statement->errorInfo(), true));
                 }
@@ -269,12 +270,12 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function Delete($id) {
-        if (is_int($id)) {
+    public function Delete() {
+        if (is_int($this->_id)) {
         	$db = MySQLConnector::getHandle();
 
-            $statement = $db->prepare("DELETE FROM `". parent::_TABLE ."` WHERE `id`=?");
-            if (!$statement->execute(array($id))) {
+            $statement = $db->prepare("DELETE FROM `". static::_TABLE ."` WHERE `id`=?");
+            if (!$statement->execute(array($this->_id))) {
                 throw new Exception("Couldn't delete object from database! ". var_export($statement->errorInfo(), true));
             }
         } else {
@@ -298,7 +299,7 @@ abstract class BaseModel {
      * @author <smurray@ontraport.com>
      * @date 01/22/2014
      */
-    static public function Sanitize($name, $value=false)
+    public static function Sanitize($name, $value=false)
     {
         $ret = array();
 
@@ -307,12 +308,16 @@ abstract class BaseModel {
             $data = $name;
             foreach($data as $attrName=>$value)
             {
-                if (isset(parent::$attrs[$attrName]))
+                if (isset(static::$attrs[$attrName]))
                 {
-                    $attrTypeCheck = parent::$attrs[$attrName];
+                    $attrTypeCheck = static::$attrs[$attrName];
                     if (!is_callable($attrTypeCheck) || $attrTypeCheck($value))
                     {
-                        $ret[$attrName] = self::Validate($attrName, $value);
+                        $valData[$attrName] = $value;
+                        $ret[$attrName] = static::Validate(array(
+                            "name" => $attrName,
+                            "value"=>$value
+                        ));
                     }
                     else
                     {
@@ -324,10 +329,10 @@ abstract class BaseModel {
                 }
             }
         }
-        else if (is_string($name) && isset(parent::$attrs[$name]) )
+        else if (is_string($name) && isset(static::$attrs[$name]) )
         {
 
-            $attrTypeCheck = parent::$attrs[$name];
+            $attrTypeCheck = static::$attrs[$name];
             if (!is_callable($attrTypeCheck) || $attrTypeCheck($value))
             {
                 $ret[$name] = $value;
@@ -349,7 +354,7 @@ abstract class BaseModel {
         }
 
 		// If any required fields are missing, fail out.
-		$missingRequiredFields = array_diff( parent::$required, array_keys($ret));
+		$missingRequiredFields = array_diff( static::$required, array_keys($ret));
 		if (count($missingRequiredFields))
 		{
             /**
@@ -361,6 +366,5 @@ abstract class BaseModel {
         return $ret;
     }
 
-    abstract public function Validate();
+    abstract static public function Validate($data);
 }
-
