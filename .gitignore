@@ -1,1 +1,2 @@
 resources/server/logs/*
+resources/db/mysql/db.credentials.json
