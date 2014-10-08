@@ -21,3 +21,5 @@ CREATE TRIGGER `before_insert_event_descriptors`
 
     END;
 |
+
+delimiter ;
