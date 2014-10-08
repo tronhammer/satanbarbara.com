@@ -38,19 +38,26 @@
 	}]);
 
 	module.controller("CalendarController", ["$scope", "$data", function($scope, $data) {
+    $scope.months = {};
 		$scope.buildCalendarData = function(relDate){
 			var	builtMonth = {
         "weeks": [],
+        "days": {},
         "prePos": 0
-      }, table=builtMonth.weeks,day,i=0,prePos,rowPos;
+      }, weeks=builtMonth.weeks,days=builtMonth.days,day,i=0,prePos,rowPos;
 
 			relDate = relDate || new Date();
 
 			var month = (relDate.getMonth()+1),
 				year = relDate.getFullYear();
 
+      if ($scope.months[month+"-"+i+"-"+year]){
+        return $scope.months[month+"-"+i+"-"+year];
+      }
+
 			while (++i){
-				day = new Date(	month+"-"+i+"-"+year);
+        var key = month+"-"+i+"-"+year;
+				day = new Date( key	);
 
 				/**
 				 * Weird bug with js Date where certain months will process 31"st day, even if they 
@@ -65,10 +72,10 @@
 					var weekPos = day.getDay() + 1;
 					
 					if (i == 1){
-						table[i-1] = [];
+						weeks[i-1] = [];
 						builtMonth.prePos = prePos = weekPos-1;
 						for(var ii=1;ii<=prePos;ii++){
-							table[i-1][ii-1] = {
+							weeks[i-1][ii-1] = {
 								"title": "",
 								"number": 0,
 								"description": "",
@@ -83,11 +90,11 @@
 
 					rowPos = parseInt(((prePos-1)+date) / 7) ;
 
-					if (!table[rowPos]){
-						table[rowPos] = [];
+					if (!weeks[rowPos]){
+						weeks[rowPos] = [];
 					}
 
-					table[rowPos][ (prePos+i)<=7? prePos+i-1 : weekPos-1 ] = {
+          days[key] = {
 						"title": date,
 						"number": 0,
 						"description": "",
@@ -99,11 +106,13 @@
 						"date": month+"-"+(date<10?"0"+date:date)+"-"+year
 					};
 
+          weeks[rowPos][ (prePos+i)<=7? prePos+i-1 : weekPos-1 ] = days[key];
+
 				} else {
 					var pos = weekPos;
 
 					for (var iii=pos+1;iii<=7;iii++){
-						table[rowPos][iii-1] = {
+						weeks[rowPos][iii-1] = {
 							"title": "",
 							"number": 0,
 							"description": "",
@@ -117,6 +126,8 @@
 					break;
 				}				 
 			}
+
+      $scope.months[month+"-"+i+"-"+year] = builtMonth;
 
 			return builtMonth;
 		}
@@ -241,10 +252,13 @@
     });
 
     $scope.$on("gotEventData", function(e, data){
-      var events = data.events.all,
-        orderByDate = data.events.sorts.date,
-        month = e.currentScope.month;
+      $scope.events = data.events;
+      
+      var events = $scope.events.all,
+        orderByDate = $scope.events.sorts.date,
+        month = $scope.month;
 
+      month.events = {};
       /**
        * prePos is used to determine the first row buffer offset
        */
@@ -253,16 +267,16 @@
         var dayOfMonth = new Date(date).getDate() - 1;
         var row = parseInt( (dayOfMonth<7?dayOfMonth:dayOfMonth+month.prePos) / 7);
         var col = (dayOfMonth<7?dayOfMonth+1:dayOfMonth+month.prePos) % 7;
-        var day = e.currentScope.month.weeks[row][col];
+        var day = $scope.month.weeks[row][col];
         var $ele = $(".sb-calendar-tile[data-date='"+date+"']");
         
         day.number = eventIds.length;
-        day.events = eventIds.map(function(id){
+        month.events[date] = day.events = eventIds.map(function(id){
           return events[ id ];
         });
       }
 
-      e.currentScope.$apply();
+      $scope.$apply();
     });
 
 		$scope.month = $scope.buildCalendarData();

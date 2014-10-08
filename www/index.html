@@ -153,8 +153,16 @@
           </ons-col>
 
           <ons-col class="sb-calendar-col" width="{{profiles[ profile ].infobox.width}}">
-            <div class="sb-calendar-sidebar-day-events sb-highlight-container" data-date="{{day.date}}">
-              <div class="">blah lah blah</div>
+            <div class="sb-calendar-sidebar-day-events sb-highlight-container">
+              <div class="sb-calendar-sidebar-event-day" ng-repeat="day in month.events">
+                <ons-list-header>{{day[0].date_text}}</ons-list-header>
+                <ons-list class="sb-calendar-sidebar-day-event" ng-repeat="event in day">
+                  <ons-list-header>{{event.title}}</ons-list-header>
+                  <ons-list-item class="sb-calendar-sidebar-event">
+                    <div class="sb-calendar-sidebar-event-title">{{event.description}}</div>
+                  </ons-list-item>
+                </ons-list>
+              </div>
             </div>
           </ons-col>
         </ons-row>
