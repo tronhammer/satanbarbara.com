@@ -19,6 +19,10 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`events` (
     `map_uri` VARCHAR(1028) NOT NULL DEFAULT "https://maps.google.com/",
     `ticket_uri` VARCHAR(1028) NOT NULL DEFAULT "not sure",
     `promocode` VARCHAR(128) NOT NULL DEFAULT "",
+    `acts` TEXT NOT NULL DEFAULT "", 
+    `guests` TEXT NOT NULL DEFAULT "",
+    `actstotal` INT(11) NOT NULL DEFAULT 0,
+    `gueststotal` INT(11) NOT NULL DEFAULT 0,
     `archived` BOOLEAN NOT NULL DEFAULT 0,
     `deleted` BOOLEAN NOT NULL DEFAULT 0,
 

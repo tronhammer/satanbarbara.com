@@ -21,12 +21,3 @@ CREATE TRIGGER `before_insert_event_descriptors`
 
     END;
 |
-
-CREATE TRIGGER `after_insert_event_list`
-    AFTER INSERT ON `satanbarbara`.`events` FOR EACH ROW
-    BEGIN
-        INSERT IGNORE INTO `satanbarbara`.`eventlists` (`event`) VALUES (NEW.id);
-    END;
-|
-
-delimiter ;
