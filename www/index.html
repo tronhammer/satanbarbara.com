@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="utf-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <title>My App</title>  
+  
+  <link rel="stylesheet" href="lib/onsen/css/onsenui.css">  
+  <link rel="stylesheet" href="styles/app.css"/>
+  <link rel="stylesheet" href="styles/onsen-css-components.css">  
+
+  <script src="lib/onsen/js/angular/angular.js"></script>    
+  <script src="lib/onsen/js/onsenui.js"></script>    
+  <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>  
+  <script src="lib/bower_components/tweenjs/build/tween.min.js"></script>  
+  <script src="cordova.js"></script>  
+  <script src="js/app.js"></script>  
+  <script>
+    ons.ready(function() {
+    });
+  </script>
+
+  <style>
+    body{
+      background: rgba(65,65,65,1);
+      color: white;
+    }
+
+    ons-page{
+      margin: 0 auto;
+      min-width: 300px;
+    }
+
+    .content{
+      padding-top: 10px;
+      padding-left: 10px;
+    }
+
+    .content > header{
+      margin-bottom: 10px;
+      margin-left: 10px;
+    }
+
+    .sb-highlight-container{
+      background: rgba(0,127,127,0.3 );
+      box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+      border: 1px solid rgba(127,255,255,0.25);
+      border-radius: 5px;
+    }
+
+    .sb-calendar-row{
+      margin: 0 auto;
+    }
+
+    .sb-calendar-col{
+      height: 100px;
+    }
+
+    .sb-calendar-tile {
+      width: 80%;
+      height: 80%;
+      text-align: center;
+      cursor: default;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .sb-calendar-tile:hover {
+      box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+      border: 1px solid rgba(127,255,255,0.75);
+    }
+
+
+    .sb-calendar-tile .number {
+      position: absolute;
+      top: 5%;
+      right: 20px;
+      font-size: 12px;
+      color: rgba(127,255,255,0.75);
+    }
+
+    .sb-calendar-tile .symbol {
+      position: absolute;
+      top: 35%;
+      left: 0px;
+      right: 0px;
+      font-size: 20px;
+      font-weight: bold;
+      color: rgba(255,255,255,0.75);
+      text-shadow: 0 0 10px rgba(0,255,255,0.95);
+    }
+
+    .sb-calendar-tile .details {
+      position: absolute;
+      bottom: 15px;
+      left: 0px;
+      right: 0px;
+      font-size: 12px;
+      color: rgba(127,255,255,0.75);
+    }
+
+    .sb-calendar-day-events{
+      opacity: 0;
+      position: absolute;
+      padding: 10px;
+    }
+
+    .sb-calendar-sidebar-day-events{
+      height: 560px;
+      float: left;
+      width: 95%;
+    }
+  </style>
+</head>
+
+<body resize-listener ng-controller="AppController">   
+
+  <ons-navigator>
+    <ons-page ng-controller="CalendarController" style="background: {{styles.app.background}};" load-calendar-data>
+
+      <div class="content">
+
+        <header>
+          <select name="monthDateSelector" month-update-listener>
+            <option name="monthDate" value="8-1-2014">August</option>
+            <option name="monthDate" value="9-3-2014">September</option>
+            <option name="monthDate" value="10-1-2014" selected="selected">October</option>
+            <option name="monthDate" value="11-1-2014">November</option>
+            <option name="monthDate" value="12-1-2014">Decemeber</option>
+          </select>
+        </header>
+
+
+        <ons-row>
+          <ons-col width="{{profiles[ profile ].calendar.width}}" class="sb-calendar">
+            <ons-row ng-repeat="week in month.weeks" class="sb-calendar-row" animate-calendar>
+              <ons-col ng-repeat="day in week" class="sb-calendar-col" width="14%">
+                <div class="sb-calendar-tile sb-highlight-container" data-date="{{day.date}}" ng-click="showDetail(day.date)" style="top: {{day.dist.x}}px; left: {{day.dist.y}}px; transform: scale({{day.dist.z}});">
+                  <div class="number">{{day.number}}</div>
+                  <div class="symbol">{{day.title}}</div>
+                  <div class="details">{{day.description}}</div>
+                  <ons-list class="sb-calendar-day-events">
+                    <ons-list-header>Header Text</ons-list-header>
+                    <ons-list-item class="sb-calendar-event" ng-repeat="event in day.events">
+                      <div class="sb-calendar-event-title">{{event.title}}</div>
+                    </ons-list-item>
+                  </ons-list>
+                </div>
+              </ons-col>
+            </ons-row>
+          </ons-col>
+
+          <ons-col class="sb-calendar-col" width="{{profiles[ profile ].infobox.width}}">
+            <div class="sb-calendar-sidebar-day-events sb-highlight-container" data-date="{{day.date}}">
+              <div class="">blah lah blah</div>
+            </div>
+          </ons-col>
+        </ons-row>
+      </div>
+    </ons-page>
+  </ons-navigator>
+
+  <ons-template id="detail.html">
+    <ons-page ng-controller="DetailController">
+
+      <ons-toolbar>
+        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">Details</div>
+      </ons-toolbar>
+
+      <ons-list modifier="inset" style="margin-top: 10px">
+        <ons-list-item class="item">
+          <ons-row>
+            <ons-col width="60px"> 
+              <div class="item-thum"></div>
+            </ons-col>
+            <ons-col>
+              <header>
+                <span class="item-title">{{item.title}}</span>
+                <span class="item-label">{{item.label}}</span>
+              </header>
+              <p class="item-desc">{{item.desc}}</p>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="doSomething()">
+          <ons-icon icon="ion-chatboxes" fixed-width="true" style="color: #ccc"></ons-icon>
+          Add a note
+        </ons-list-item>
+      </ons-list>
+
+      <ons-list style="margin-top: 10px">
+        <ons-list-item class="item" ng-repeat="i in [1,2,3]">
+          <header>
+            <span class="item-title">Lorem ipsum dolor sit amet</span>
+          </header>
+          <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </ons-list-item>
+      </ons-list>
+
+      <br>
+
+    </ons-page>
+  </ons-template>
+
+</body>  
+</html>
