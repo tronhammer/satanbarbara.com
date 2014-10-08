@@ -221,12 +221,20 @@ abstract class BaseModel extends BaseObject {
      * @date 01/22/2014
      */
     public function Save($data) {
+            error_log("well then lets go");
 
     	$db = MySQLConnector::getHandle();
 
-        $cleanAttrs = self::Sanitize($data);
+            error_log("well then lets for more");
+
+        try{
+            $cleanAttrs = self::Sanitize($data);
+
+
+            error_log("well then lets for gold");
 
         if (is_array($cleanAttrs) && !empty($cleanAttrs)) {
+            error_log("well then lets just jump jump");
             $query = "INSERT INTO `". static::_TABLE ."`";
             $names = array_keys($cleanAttrs);
             $values = array_values($cleanAttrs);
@@ -237,6 +245,9 @@ abstract class BaseModel extends BaseObject {
                 // Add property value placeholders
                 $query .= "VALUES (". implode(array_fill(0, count($names), "?"), ", ") . ")";
             }
+
+            error_log($query);
+            error_log(var_export($values, true));
 
             $statement = $db->prepare($query);
 			// error_log($query);
@@ -258,8 +269,12 @@ abstract class BaseModel extends BaseObject {
              */
             throw new Exception("Didn't pass sanitization!");
         }
+
+        } catch(Exception $e){
+            error_log($e->getMessage());
+        }
         
-        return true;
+        return new Event($id);
     }
     
     /**
@@ -362,7 +377,7 @@ abstract class BaseModel extends BaseObject {
              */
 			throw new Exception("Missing required fields: " . var_export($missingRequiredFields, true));
 		}
-        
+
         return $ret;
     }
 

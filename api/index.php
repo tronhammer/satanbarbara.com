@@ -32,12 +32,15 @@
 			$className = $_GET["target"];
 			$action = $_GET["action"];
 			$controller = $className . "Controller";
+
 			if (class_exists($className) && class_exists($controller)) {
 				if (AJAX::isValidGetMethod($className, $action)){
 					call_user_func($controller."::".$action);
 				} else {
 					AJAX::Response("json", array(), 1, "This action cannot be envoked through the get method!");
 				}
+			} else {
+				AJAX::Response("json", array(), 1, "That target doesn't exist!");
 			}
 		} else if (isset($_POST["action"])) { // Auth always required
 			$className = $_POST["target"];
@@ -49,7 +52,9 @@
 				} else {
 					AJAX::Response("json", array(), 1, "This action cannot be envoked through the post method!");
 				}
-			}
+			} else {
+				AJAX::Response("json", array(), 1, "That target doesn't exist!");
+			}	
 		} else {
 			AJAX::Response("json", array(), 1, "No action was provided");
 		}

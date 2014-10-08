@@ -9,9 +9,9 @@ abstract class MySQLConnector {
  	static private $_dbh;
 
 	private static function _connect() {
-		$credentials = json_decode(file_get_contents( dirname(__FILE__) ."/". SELF::$_credentialsPath), true);
+		$credentials = json_decode(file_get_contents( dirname(__FILE__) ."/". MySQLConnector::$_credentialsPath), true);
 		try {
-			$dbh = SELF::$_dbh = new PDO(
+			$dbh = MySQLConnector::$_dbh = new PDO(
 				"mysql:host=". $credentials["creds"]["host"] .";dbname=". $credentials["creds"]["db"], 
 				$credentials["creds"]["username"], 
 				$credentials["creds"]["password"]
@@ -28,6 +28,6 @@ abstract class MySQLConnector {
 	}
 
 	public static function getHandle() {
-		return (!isset(SELF::$_dbh)) ? SELF::_connect() : SELF::$_dbh;
+		return (!isset(MySQLConnector::$_dbh)) ? self::_connect() : self::$_dbh;
 	}
 }

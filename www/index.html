@@ -5,7 +5,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
 
-  <title>My App</title>  
+  <title>My Cal</title>  
   
   <link rel="stylesheet" href="lib/onsen/css/onsenui.css">  
   <link rel="stylesheet" href="styles/app.css"/>
@@ -24,13 +24,26 @@
 
   <style>
     body{
-      background: rgba(65,65,65,1);
+      background: rgba(65,65,65,1) url('media/images/vr.jpg');
       color: white;
     }
 
     ons-page{
       margin: 0 auto;
       min-width: 300px;
+    }
+
+    body ons-list,body ons-list-header,body ons-list-item{
+      background: transparent !important;
+      border-color: transparent !important;
+      color: rgba(127,255,255,0.75) !important;
+    }
+
+    body ons-list-header{
+      color: rgba(127,255,255,0.75) !important;
+      text-shadow: 0 0 10px rgba(0,255,255,0.95) !important;
+      font-size: 20px !important;
+      font-weight: bold !important;
     }
 
     .content{
@@ -65,11 +78,13 @@
       cursor: default;
       position: relative;
       margin: 0 auto;
+      cursor: pointer;
     }
 
     .sb-calendar-tile:hover {
       box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
       border: 1px solid rgba(127,255,255,0.75);
+      cursor: pointer;
     }
 
 
@@ -111,14 +126,33 @@
       height: 560px;
       float: left;
       width: 95%;
+      height: 0px;
+      opacity: 0;
+      padding-top: 10px;
+    }
+
+    .sb-calendar-sidebar-create-event-btn{
+      float: left;
+      top: -50px;
+      margin-left: 10px;
+      background: rgba(0,0,0,0.7);
+      font-weight: bold;
+      color: rgba(255,255,255,0.75);
+      text-shadow: 0 0 10px rgba(0,255,255,0.95); 
+      cursor: pointer;   
+    }
+
+    .sb-calendar-sidebar-create-event-btn:hover{
+      background: rgba(0,0,0,0.9);
+      text-shadow: 0 0 13px rgba(0,255,255,0.95);    
     }
   </style>
 </head>
 
-<body resize-listener ng-controller="AppController">   
+<body global-listener ng-controller="AppController">   
 
   <ons-navigator>
-    <ons-page ng-controller="CalendarController" style="background: {{styles.app.background}};" load-calendar-data>
+    <ons-page ng-controller="CalendarController" style="{{styles.app}}" load-calendar-data>
 
       <div class="content">
 
@@ -153,22 +187,34 @@
           </ons-col>
 
           <ons-col class="sb-calendar-col" width="{{profiles[ profile ].infobox.width}}">
-            <div class="sb-calendar-sidebar-day-events sb-highlight-container">
-              <div class="sb-calendar-sidebar-event-day" ng-repeat="day in month.events">
-                <ons-list-header>{{day[0].date_text}}</ons-list-header>
-                <ons-list class="sb-calendar-sidebar-day-event" ng-repeat="event in day">
-                  <ons-list-header>{{event.title}}</ons-list-header>
-                  <ons-list-item class="sb-calendar-sidebar-event">
-                    <div class="sb-calendar-sidebar-event-title">{{event.description}}</div>
+            <div class="sb-calendar-sidebar-day-events sb-highlight-container" animate-infobar>
+              <div class="sb-calendar-sidebar-event-day">
+                <ons-list class="sb-calendar-sidebar-day-event" ng-repeat="day in month.events">
+                  <ons-list-header>{{day[0].date_text}}</ons-list-header>
+                  <ons-list-item class="sb-calendar-sidebar-event" ng-repeat="event in day">
+                    <div class="sb-calendar-sidebar-event-title">{{event.title}}</div>
                   </ons-list-item>
                 </ons-list>
               </div>
             </div>
+
+            <ons-button ng-click="createEvent.show()" class="sb-calendar-sidebar-create-event-btn">Create Event</ons-button>
           </ons-col>
         </ons-row>
       </div>
     </ons-page>
   </ons-navigator>
+
+  <ons-modal var="createEvent" ng-controller="createEventController" create-event-listener>
+    <ons-icon icon="ion-loading-c" spin="true" style="display: none;"></ons-icon>
+
+    <div class="sb-modal-create-new-container">
+      {{ events.all[1].title}}
+      <ons-row ng-repeat="eventAttr in events.all[1]">
+        <ons-field>{{eventAttr}}</ons-field>
+      </ons-row>
+    </div>
+  </ons-modal>
 
   <ons-template id="detail.html">
     <ons-page ng-controller="DetailController">

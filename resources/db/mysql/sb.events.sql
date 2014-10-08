@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`events` (
     `requirements` TEXT NOT NULL DEFAULT "", 
     `location` VARCHAR(255) NOT NULL,
     `date` DATE NOT NULL,
+    `date_text` VARCHAR(90) NOT NULL,
     `start_time` TIMESTAMP NOT NULL,
     `end_time` TIMESTAMP NOT NULL,
     `ages` ENUM("all", "18", "21", "not sure") NOT NULL,
@@ -24,17 +25,10 @@ CREATE TABLE IF NOT EXISTS `satanbarbara`.`events` (
     `guests` TEXT NOT NULL DEFAULT "",
     `actstotal` INT(11) NOT NULL DEFAULT 0,
     `gueststotal` INT(11) NOT NULL DEFAULT 0,
-    `venue_id` VARCHAR(255) NOT NULL DEFAULT "",
     `moved_id` INT(11) NOT NULL,
     `canceled` BOOLEAN NOT NULL DEFAULT 0,
     `archived` BOOLEAN NOT NULL DEFAULT 0,
     `deleted` BOOLEAN NOT NULL DEFAULT 0,
-
-    FOREIGN KEY (`creator_id`) REFERENCES `accounts`(`id`),
-
-    FOREIGN KEY (`type_id`) REFERENCES `descriptors`(`id`),
-    FOREIGN KEY (`venue_type_id`) REFERENCES `descriptors`(`id`),
-    FOREIGN KEY (`genre_id`) REFERENCES `descriptors`(`id`),
 
     PRIMARY KEY (`id`)
 

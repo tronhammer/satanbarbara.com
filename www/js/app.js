@@ -19,7 +19,7 @@
 					"width": "100%"
 				},
 				"infobox": {
-					"width": "100%"
+					"width": "100%",
 				}
 			}
 		};
@@ -33,6 +33,10 @@
 			$scope.profile =	window.innerWidth < 600 ? "small" : "large";
 			$scope.$apply();
 		});
+
+    $scope.$on("gotEventData", function(e, data){
+      $data.events = data.events;
+    });
 
     $scope.animate();
 	}]);
@@ -103,7 +107,7 @@
 							"y": Math.random()*200 + 300 * [1,-1][ parseInt((Math.random()*2))%2 ],
 							"z": Math.random()* 1.5 + 0.5
 						},
-						"date": month+"-"+(date<10?"0"+date:date)+"-"+year
+						"date": year+"-"+(date<10?"0"+date:date)+"-"+month
 					};
 
           weeks[rowPos][ (prePos+i)<=7? prePos+i-1 : weekPos-1 ] = days[key];
@@ -224,6 +228,27 @@
 			event.currentScope.$broadcast("monthUpdated", event.currentScope.buildCalendarData(date) );
 		});
 
+    $scope.$on("animateInfobar", function(event){
+      var $infobar = $(".sb-calendar-sidebar-day-events");
+      var tweeningObjects = new TWEEN.Tween({
+        "opacity": 0,
+        "height": 0
+      }).to({
+        "opacity": 1,
+        "height": 560
+      }, 3000);
+
+      tweeningObjects.easing( TWEEN.Easing.Back.Out );
+      tweeningObjects.onUpdate(function(){
+        $infobar.css({
+          "opacity": this.opacity,
+          "height": this.height
+        });
+      });
+
+      tweeningObjects.start();
+    });
+
     $scope.$on("animateCalendar", function(event){
         var $tiles = $(".sb-calendar-tile");
         $tiles.each(function(){
@@ -259,16 +284,16 @@
         month = $scope.month;
 
       month.events = {};
+
       /**
        * prePos is used to determine the first row buffer offset
        */
       for(var date in orderByDate){
         var eventIds = orderByDate[date]
-        var dayOfMonth = new Date(date).getDate() - 1;
+        var dayOfMonth = new Date(date +" 00:01:00").getDate() - 1;
         var row = parseInt( (dayOfMonth<7?dayOfMonth:dayOfMonth+month.prePos) / 7);
-        var col = (dayOfMonth<7?dayOfMonth+1:dayOfMonth+month.prePos) % 7;
+        var col = (dayOfMonth<7?dayOfMonth+1:dayOfMonth+month.prePos) % 7 || 6; /** 7%7=0; therefor 7 = 6 */
         var day = $scope.month.weeks[row][col];
-        var $ele = $(".sb-calendar-tile[data-date='"+date+"']");
         
         day.number = eventIds.length;
         month.events[date] = day.events = eventIds.map(function(id){
@@ -282,7 +307,28 @@
 		$scope.month = $scope.buildCalendarData();
 	}]);
 
-	module.directive("resizeListener", function($rootScope) {
+  module.controller("createEventController", ["$scope", "$data", function($scope, $data){
+    $scope.test = "This is better";
+    $scope.events = $data.events;
+
+    $scope.$on("gotEventData", function(e, data){
+      $scope.events = data.events;
+      console.log("This shit should update yeah?");
+      $scope.$apply()
+    })
+  }]);
+
+  module.directive("createEventListener", ["$rootScope", function($rootScope) {
+    return {
+      "link": function($scope, ele, attrs){
+        $(ele).bind("click", function(){
+          createEvent.close();
+          });
+      }
+    }   
+  }]);
+
+	module.directive("globalListener", function($rootScope) {
 		return {
 			"restrict": "A", // attribute
 			"scope": {
@@ -293,6 +339,12 @@
 				$(window).bind("resize", function(){
 					$rootScope.$broadcast("resize");
 				});
+
+        $(window).bind("keyup", function(event){
+          if (event.keyCode == 27){
+            createEvent.hide();
+          }
+        });
 			}
 		};
 	});
@@ -338,9 +390,7 @@
 	module.factory("$data", function() {
 		var data = {
 			"styles": {
-				"app": {
-					"background": "rgba(0,0,0,1);"
-				},
+				"app":  "background: rgba(0,0,0,1)",   //" url('media/images/nightmares-made-flesh.jpg') no-repeat; background-size: 100% 100%;",
 				"calendar":{
 				}
 			}
@@ -349,28 +399,40 @@
 		return data;
 	}); 
 
+  module.directive("animateInfobar", ["$rootScope", function($rootScope) {
+
+    return {
+      "link": function($scope, ele, attrs){
+        $rootScope.$broadcast("animateInfobar");
+      }
+    }   
+  }]);
+
 
   module.factory("$rest", ["$rootScope", function($rootScope) {
     return {
-      "mode": "fixture",
+      "mode": "ajax",
       "modes": {
         "fixture": {
           "uri": "fixtures/",
-          "buildUri": function(action){
-            return this.uri + action+".json"
+          "buildUri": function(data){
+            return this.uri + data.action + data.target+".json"
           }
         },
         "ajax": {
-          "uri": "http://api.tronnet.me/",
-          "buildUri": function(action){
-            return this.uri;
+          "uri": "http://localhost/satanbarbara.com/api/",
+          "buildUri": function(data){
+            return this.uri+"?action="+data.action+"&target="+data.target;
           }
         }
       },
       "getEventData": function(data){
         var mode = this.modes[ this.mode ];
         $.ajax({
-          "url": mode.buildUri("getEvents"),
+          "url": mode.buildUri({
+            "action": "Get",
+            "target": "Event"
+          }),
           "dataType": "json",
           "type": "GET",
           "data": data
@@ -379,6 +441,41 @@
         }).fail(function(){
           console.log("double wat");
         });
+      },
+      "createEvent": function(date){
+        $.ajax({
+          "type": "POST", 
+          "dataType": "json", 
+          "url": "http://localhost/satanbarbara.com/api/", 
+          "data": {
+            "action": "Create",
+            "target": "Event",
+            "creator_id": 3,
+            "type_id": 2,
+            "title": "all the wins...!", 
+            "subtitle": "For maor purposes", 
+            "description": "It could be really cool for a test!", 
+            "location": "1234 sterrat lane, santa barbara, CA 93101",
+            "date_text": "October 6th, 2014 @ 7:30pm",
+            "date": "2014-10-06",
+            "start_time": "2014-10-06 19:30:00",
+            "end_time": "2014-10-06 1:00:00",
+            "ages": "21",
+            "venue": "The Crowded Coffin",
+            "venue_id": 1,
+            "venue_type_id": 1,
+            "price": "$18.50",
+            "requirements": "Nothing",
+            "genre_id": 2,
+            "map_uri": "https://maps.google.com/",
+            "ticket_uri": "not sure",
+            "promocode": "",
+            "acts": "[1,2,3]", 
+            "guests": "[1,2,3]",
+            "actstotal": 3,
+            "gueststotal": 100
+          }
+        }).done(function(r){ console.log("done!", arguments); }).fail(function(){ console.log("failed!", arguments); })
       }
     };
 

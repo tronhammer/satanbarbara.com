@@ -18,10 +18,15 @@ abstract class BaseObject {
     protected $_data = array();
 
     public function __construct($data = array()) {
-
 		if (is_array($data)) {
 			if (is_numeric($data["id"])) {
 				$this->_setID($data["id"]);
+			} else {
+				// unset($data["id"]);
+
+				// if (count($data)){
+				// 	$this->Save($data);				
+				// }
 			}
 		} else if (is_numeric($data)) {
 			$this->_setID($data);

@@ -1,2 +1,3 @@
 resources/server/logs/*
 resources/db/mysql/db.credentials.json
+resources/db/mysql/sb.user.sql
