@@ -1,0 +1,276 @@
+{
+	"name": "Account",
+	"listingKey": "accounts",
+	"domain": "satanbarbara",
+	"version": "1",
+	"meta": {
+		"hookes": {
+			"php": {
+				"format": "mvc"
+			}
+		},
+		"db": {
+			"mysql": {
+				"5.5": {
+					"populate": 1,
+					"id": "id",
+					"indexes": {
+						"uid": ["email", "username"]
+					}
+				}
+			}
+		}
+	},
+	"properties": {
+		"id": {
+			"type": "id",
+			"unique": true,
+			"name": "id",
+			"label": "Unique ID",
+			"description": "Exists as a unique identifier for Account objects in both the database and program layer.",
+			"generator": "db",
+			"required": true,
+			"incremented": true
+		},
+		"created": {
+			"type": "timestamp",
+			"name": "created",
+			"label": "Created",
+			"description": "Time when entry was made in the database.",
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "db",
+			"required": true
+		},
+		"username": {
+			"type": "string",
+			"max": 32,
+			"min": 3,
+			"name": "username",
+			"label": "Username",
+			"description": "Login name for the Account object.",
+			"default": "",
+			"placeholder": "tronhammer",
+			"generator": "user",
+			"required": true
+		}, 
+		"password": {
+			"type": "string",
+			"max": 128,
+			"min": 6,
+			"name": "password",
+			"label": "Password",
+			"description": "Case sensitive password for authenticating the Account object.",
+			"default": "",
+			"placeholder": "666SatanForPrez",
+			"generator": "user",
+			"required": true
+		},
+		"fname": {
+			"type": "string",
+			"max": 128,
+			"min": 3,
+			"name": "fname",
+			"label": "First Name",
+			"description": "",
+			"default": "",
+			"placeholder": "Tron",
+			"generator": "user",
+			"required": true
+		},
+		"lname": {
+			"type": "string",
+			"max": 128,
+			"min": 3,
+			"name": "lname",
+			"label": "Last Name",
+			"description": "",
+			"default": "",
+			"placeholder": "Hammer",
+			"generator": "user"
+		},
+		"nickname": {
+			"type": "string",
+			"max": 64,
+			"min": 3,
+			"name": "nickname",
+			"label": "Nickname",
+			"description": "",
+			"default": "",
+			"placeholder": "TRONHAMBURGER",
+			"generator": "user"
+		},
+		"tagline": {
+			"type": "string",
+			"max": 128,
+			"min": 3,
+			"name": "tagline",
+			"label": "Tagline",
+			"description": "",
+			"default": "",
+			"placeholder": "I've eaten uglier women than you for breakfast.",
+			"generator": "user"
+		},
+		"email": {
+			"type": "string",
+			"max": 255,
+			"min": 9,
+			"name": "email",
+			"label": "Email",
+			"description": "",
+			"default": "",
+			"placeholder": "tron@tronnet.me",
+			"generator": "user"
+		},
+		"description": {
+			"type": "string",
+			"max": 4000,
+			"name": "description",
+			"label": "Description",
+			"description": "",
+			"default": "",
+			"placeholder": "I'm freaken tron man! Get with it.",
+			"generator": "user"
+		},
+		"privilege_level": {
+			"type": "option",
+			"name": "privilege_level",
+			"label": "Privilege Level",
+			"description": "",
+			"generator": "system",
+			"default": "user",
+			"required": true,
+			"options": {
+				"admin": {
+					"type": "string",
+					"name": "admin",
+					"label": "Administrator",
+					"description": "",
+					"position": 0
+				},
+				"moderator": {
+					"type": "string",
+					"name": "moderator",
+					"label": "Moderator",
+					"description": "",
+					"position": 1
+				},
+				"user": {
+					"type": "string",
+					"name": "user",
+					"label": "User",
+					"description": "",
+					"position": 2
+				},
+				"proxy": {
+					"type": "string",
+					"name": "na",
+					"label": "Not Sure",
+					"description": "",
+					"position": 3
+				},
+				"root": {
+					"type": "string",
+					"name": "root",
+					"label": "Root",
+					"description": "",
+					"position": 4
+				},
+				"deamon": {
+					"type": "string",
+					"name": "deamon",
+					"label": "Deamon",
+					"description": "",
+					"position": 5
+				},
+				"client": {
+					"type": "string",
+					"name": "client",
+					"label": "Client",
+					"description": "",
+					"position": 6
+				}
+			}
+		},
+		"last_login": {
+			"type": "timestamp",
+			"name": "last_login",
+			"label": "Last logged in",
+			"description": "",
+			"default": 0,
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "system"
+		},
+		"last_active": {
+			"type": "timestamp",
+			"name": "last_active",
+			"label": "Last active",
+			"description": "",
+			"default": 0,
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "system"
+		},
+		"last_activated": {
+			"type": "timestamp",
+			"name": "last_activated",
+			"label": "Activated",
+			"description": "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
+			"default": 0,
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "system"
+		},
+		"last_modified": {
+			"type": "timestamp",
+			"name": "last_modified",
+			"label": "Last modified",
+			"description": "",
+			"default": "",
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "system"
+		},
+		"activated": {
+			"type": "boolean",
+			"name": "activated",
+			"label": "Activated",
+			"description": "",
+			"default": 0,
+			"placeholder": "1",
+			"generator": "system"
+		},
+		"suspended": {
+			"type": "boolean",
+			"name": "suspended",
+			"label": "Suspended",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		},
+		"banned": {
+			"type": "boolean",
+			"name": "banned",
+			"label": "Banned",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		},
+		"archived": {
+			"type": "boolean",
+			"name": "archived",
+			"label": "Archived",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		},
+		"deleted": {
+			"type": "boolean",
+			"name": "deleted",
+			"label": "Deleted",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		}
+	}
+}

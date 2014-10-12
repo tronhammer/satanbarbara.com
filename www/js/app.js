@@ -307,22 +307,68 @@
 		$scope.month = $scope.buildCalendarData();
 	}]);
 
-  module.controller("createEventController", ["$scope", "$data", function($scope, $data){
-    $scope.test = "This is better";
-    $scope.events = $data.events;
+  module.controller("CreateEventController", ["$scope", "$data", "$rest", function($scope, $data, $rest){
+    $scope.create = function(){
+      var eventData = {},
+        venueData = {},
+        bands = [];
 
-    $scope.$on("gotEventData", function(e, data){
-      $scope.events = data.events;
-      console.log("This shit should update yeah?");
-      $scope.$apply()
-    })
+      for (var fieldName in $scope.eventDefinitions){
+        if (fieldName.substr(0,1) != "$"){
+          eventData[fieldName] = $("[name='"+fieldName+"']").val();
+        }
+      }
+
+      for (var fieldName in $scope.venueDefinitions){
+        if (fieldName.substr(0,1) != "$"){
+          venueData[fieldName] = $("[name='"+fieldName+"']").val();
+        }
+      }
+
+      bands = $("[name='bandnames']").val().split(",");
+
+      
+
+    }
+
+    $scope.$on("gotObjectSchema", function(e, data){
+      var eventAttrs = {},
+        venueAttrs = {},
+        bandAttrs = {};
+
+      for (var attrName in data.schema.Event){
+        var attr = data.schema.Event[attrName];
+        if (attr.generator == "user"){
+          eventAttrs[attrName] = attr;
+        }
+      }
+
+      for (var attrName in data.schema.Venue){
+        var attr = data.schema.Venue[attrName];
+        if (attr.generator == "user"){
+          venueAttrs[attrName] = attr;
+        }
+      }
+
+      $scope.eventDefinitions = eventAttrs;
+      $scope.venueDefinitions = venueAttrs;
+      $scope.bandNames = {
+        "type": "string",
+        "name": "bandnames",
+        "label": "Bands",
+        "placeholder": "Death, Entombed, Edge Of Sanity",
+        "required": true
+      };
+    });
+
+    $rest.getObjectSchema({"type": "Event"})
   }]);
 
   module.directive("createEventListener", ["$rootScope", function($rootScope) {
     return {
       "link": function($scope, ele, attrs){
         $(ele).bind("click", function(){
-          createEvent.close();
+            // createEvent.hide();
           });
       }
     }   
@@ -390,7 +436,7 @@
 	module.factory("$data", function() {
 		var data = {
 			"styles": {
-				"app":  "background: rgba(0,0,0,1)",   //" url('media/images/nightmares-made-flesh.jpg') no-repeat; background-size: 100% 100%;",
+				"app":  "background: rgba(0,0,0,1) url('media/images/nightmares-made-flesh.jpg') no-repeat; background-size: 100% 100%;",
 				"calendar":{
 				}
 			}
@@ -416,7 +462,7 @@
         "fixture": {
           "uri": "fixtures/",
           "buildUri": function(data){
-            return this.uri + data.action + data.target+".json"
+            return this.uri + data.action + data.target+ (data.type&&"Type"+data.type||"")+".json"
           }
         },
         "ajax": {
@@ -442,7 +488,23 @@
           console.log("double wat");
         });
       },
-      "createEvent": function(date){
+      "getObjectSchema": function(data){
+        var mode = this.modes["fixture"];
+        $.ajax({
+          "url": mode.buildUri({
+            "action": "Get",
+            "target": "ObjectSchema"
+          }),
+          "dataType": "json",
+          "type": "GET",
+          "data": data
+        }).success(function(response){
+          $rootScope.$broadcast("gotObjectSchema", response.data);
+        }).fail(function(){
+          console.log("double wat");
+        });
+      },
+      "createEvent": function(data){
         $.ajax({
           "type": "POST", 
           "dataType": "json", 
@@ -480,4 +542,125 @@
     };
 
   }]);
+
+
+  /**
+   * Testing Template Expanded Directives
+   */
+  
+  module.directive('sbModalExit', function() {
+    return {
+      "restrict": "E",
+      "scope": {
+        "hide": "&"
+      },
+      "templateUrl": "modalExit.tmpl",
+      "link": function(scope,ele,attrs){
+        $(ele).bind("click", scope.hide).delegate(".sb-modal-close", "click", scope.hide);
+      }
+    };
+  });
+
+  module.directive('sbFieldString', function() {
+    return {
+      "restrict": "E",
+      "scope": {
+        "field": "="
+      },
+      "templateUrl": "fieldString.tmpl"
+    };
+  });
+
+  module.directive('sbFieldText', function() {
+    return {
+      "restrict": "E",
+      "scope": {
+        "field": "="
+      },
+      "templateUrl": "fieldText.tmpl"
+    };
+  });
+
+  module.directive('sbFieldDropdown', function() {
+    return {
+      "restrict": "E",
+      "scope": {
+        "field": "="
+      },
+      "templateUrl": "fieldDropdown.tmpl",
+      "link": function(scope,ele,attrs){
+          scope.selected = function(opt){
+            return this.field.default == opt.name ? "selected" : "";
+          }
+      }
+    };
+  });
+
+  module.directive('sbFieldDate', function() {
+    return {
+      "restrict": "E",
+      "scope": {
+        "field": "="
+      },
+      "templateUrl": "fieldDate.tmpl",
+      "link": function(scope,ele,attrs){
+          var today = new Date();
+
+          /**
+          * Expands Single Character Numerics so that they always have at least 2 numeric characters,
+          * the first being a 0  in the event it is a single digit numeric.
+          * 
+          * @param  {[type]} char [description]
+          * @return {[type]}      [description]
+          */
+          var escn = function(char){
+            return (char+"").length == 1 ? "0"+char : char;
+          }
+
+          scope.today = today.getFullYear()+"-"+escn(today.getMonth())+"-"+escn(today.getDate());
+
+          $(ele).find(".sb-field-input").bind("blur", function(){
+            if (new Date($(this).val()) == "Invalid Date"){
+              $(this).addClass("sb-field-not-valid");
+            }
+          }).bind("focus", function(){
+            $(this).removeClass("sb-field-not-valid")
+          });
+      }
+    };
+  });
+
+  module.directive('sbFieldTime', function() {
+    return {
+      "restrict": "E",
+      "scope": {
+        "field": "="
+      },
+      "templateUrl": "fieldTime.tmpl",
+      "link": function(scope,ele,attrs){
+          var today = new Date();
+          
+          /**
+          * Expands Single Character Numerics so that they always have at least 2 numeric characters,
+          * the first being a 0  in the event it is a single digit numeric.
+          * 
+          * @param  {[type]} char [description]
+          * @return {[type]}      [description]
+          */
+          var escn = function(char){
+            return (char+"").length == 1 ? "0"+char : char;
+          }
+
+          scope.now = today.getFullYear()+"-"+escn(today.getMonth())+"-"+escn(today.getDate())+" "+escn(today.getHours())+":"+escn(today.getMinutes())+":"+escn(today.getSeconds());
+
+          $(ele).find(".sb-field-input").bind("blur", function(){
+            if (new Date($(this).val()) == "Invalid Date"){
+              $(this).addClass("sb-field-not-valid");
+            }
+          }).bind("focus", function(){
+            $(this).removeClass("sb-field-not-valid")
+          });
+      }
+    };
+  });
 })();

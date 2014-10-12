@@ -1,0 +1,7 @@
+%for entry in populates:
+LOCK TABLES `${db["name"]}`.`${populates[ entry ]["table"]}` WRITE;
+/*!40000 ALTER TABLE `${populates[ entry ]["table"]}` DISABLE KEYS */;
+	INSERT INTO `${db["name"]}`.`${populates[ entry ]["table"]}` (`${"`, `".join(populates[ entry ]["names"])}`) VALUES ("${"\", \"".join(populates[ entry ]["values"])}");
+/*!40000 ALTER TABLE `${populates[ entry ]["table"]}` ENABLE KEYS */;
+UNLOCK TABLES;
+%endfor

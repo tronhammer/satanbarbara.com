@@ -1,0 +1,343 @@
+{
+	"data": {
+		"schema": {
+			"Event": {
+				"id": {
+					"type": "id",
+					"unique": true,
+					"name": "id",
+					"label": "Creator ID",
+					"description": "",
+					"generator": "db"
+				},
+				"title": {
+					"type": "string",
+					"max": 255,
+					"min": 3,
+					"name": "title",
+					"label": "Title",
+					"description": "",
+					"default": "",
+					"placeholder": "SBCMT Bible Burning",
+					"generator": "user",
+					"required": true
+				}, 
+				"subtitle": {
+					"type": "string",
+					"max": 90,
+					"name": "subtitle",
+					"label": "Subtitle",
+					"description": "",
+					"default": "",
+					"placeholder": "B-Y-O-Bible",
+					"generator": "user"
+				}, 
+				"description": {
+					"type": "string",
+					"max": 4000,
+					"name": "description",
+					"label": "Description",
+					"description": "",
+					"default": "",
+					"placeholder": "This is gonna be hot!",
+					"generator": "user"
+				},
+				"date_text": {
+					"type": "string",
+					"max": 35,
+					"name": "date_text",
+					"label": "Date Full Text",
+					"description": "",
+					"generator": "system"
+				},
+				"date": {
+					"type": "date",
+					"name": "date",
+					"label": "Event Date",
+					"default": "now",
+					"placeholder": "2014-12-27",
+					"description": "",
+					"generator": "user",
+					"required": true
+				},
+				"start_time": {
+					"type": "timestamp",
+					"name": "start_time",
+					"label": "Start Time",
+					"description": "",
+					"placeholder": "2014-12-27 5:30pm",
+					"generator": "user",
+					"required": true
+				},
+				"end_time": {
+					"type": "timestamp",
+					"name": "end_time",
+					"label": "End Time",
+					"description": "",
+					"placeholder": "2014-12-28 3:30am",
+					"generator": "user",
+					"required": true
+				},
+				"ages": {
+					"type": "option",
+					"name": "ages",
+					"label": "Ages",
+					"description": "",
+					"generator": "user",
+					"default": "na",
+					"required": true,
+					"options": {
+						"all": {
+							"type": "string",
+							"name": "all",
+							"label": "All",
+							"description": "",
+							"position": 0
+						},
+						"18": {
+							"type": "string",
+							"name": "18",
+							"label": "18+",
+							"description": "",
+							"position": 1
+						},
+						"21": {
+							"type": "string",
+							"name": "21",
+							"label": "21+",
+							"description": "",
+							"position": 2
+						},
+						"na": {
+							"type": "string",
+							"name": "na",
+							"label": "Not Sure",
+							"description": "",
+							"position": 35
+						}
+					}
+				},
+				"price": {
+					"type": "string",
+					"name": "price",
+					"label": "Event Price",
+					"description": "",
+					"default": "",
+					"placeholder": "$5",
+					"generator": "user",
+					"required": true
+				},
+				"requirements": {
+					"type": "string",
+					"max": 4000,
+					"name": "requirements",
+					"label": "Requirements",
+					"description": "",
+					"placeholder": "At least 1 bible.",
+					"default": "",
+					"generator": "user"
+				},
+				"ticket_uri": {
+					"type": "string",
+					"max": 255,
+					"name": "ticket_uri",
+					"label": "Ticket URL",
+					"description": "",
+					"default": "",
+					"placeholder": "http://",
+					"generator": "user"
+				},
+				"flyer_uri": {
+					"type": "string",
+					"max": 255,
+					"name": "flyer_uri",
+					"label": "Flyer",
+					"description": "",
+					"default": "",
+					"placeholder": "http://",
+					"generator": "user"
+				},
+				"promocode": {
+					"type": "string",
+					"max": 64,
+					"name": "promocode",
+					"label": "Promocode",
+					"placeholder": "IKICKASSFORTHELORD",
+					"description": "",
+					"generator": "user"
+				}
+			},
+			"Venue": {
+				"id": {
+					"type": "id",
+					"unique": true,
+					"name": "id",
+					"label": "Unique ID",
+					"description": "",
+					"generator": "db"
+				},
+				"name": {
+					"type": "string",
+					"max": 255,
+					"min": 3,
+					"name": "name",
+					"label": "Name",
+					"description": "",
+					"default": "",
+					"placeholder": "",
+					"generator": "user",
+					"required": true
+				}, 
+				"slogan": {
+					"type": "string",
+					"max": 90,
+					"name": "slogan",
+					"label": "Slogan",
+					"description": "",
+					"default": "",
+					"placeholder": "",
+					"generator": "user"
+				}, 
+				"description": {
+					"type": "string",
+					"max": 4000,
+					"name": "description",
+					"label": "Description",
+					"description": "",
+					"default": "",
+					"placeholder": "",
+					"generator": "user"
+				},
+				"address": {
+					"type": "string",
+					"max": 255,
+					"name": "address",
+					"label": "Address",
+					"description": "",
+					"generator": "user",
+					"required": true
+				},
+				"city": {
+					"type": "string",
+					"max": 90,
+					"name": "city",
+					"label": "City",
+					"description": "",
+					"generator": "user",
+					"required": true
+				},
+				"state": {
+					"type": "string",
+					"max": 2,
+					"name": "state",
+					"label": "State",
+					"description": "",
+					"generator": "user",
+					"required": true
+				},
+				"zip": {
+					"type": "string",
+					"max": 12,
+					"min": 5,
+					"name": "zip",
+					"label": "Postal Code",
+					"description": "",
+					"generator": "user",
+					"required": true
+				},
+				"capacity": {
+					"type": "integer",
+					"name": "capacity",
+					"label": "Capacity",
+					"description": "",
+					"generator": "user"
+				},
+				"requirements": {
+					"type": "string",
+					"max": 4000,
+					"name": "requirements",
+					"label": "Requirements",
+					"description": "",
+					"placeholder": "At least 1 bible.",
+					"default": "",
+					"generator": "user"
+				},
+				"uri": {
+					"type": "string",
+					"max": 255,
+					"name": "uri",
+					"label": "Website",
+					"description": "",
+					"default": "",
+					"placeholder": "http://",
+					"generator": "user"
+				}
+			},
+			"Band": {
+				"id": {
+					"type": "id",
+					"unique": true,
+					"name": "id",
+					"label": "Unique ID",
+					"description": "",
+					"generator": "db"
+				},
+				"name": {
+					"type": "string",
+					"max": 255,
+					"min": 3,
+					"name": "title",
+					"label": "Title",
+					"description": "",
+					"default": "",
+					"placeholder": "",
+					"generator": "user",
+					"required": true
+				},
+				"origin": {
+					"type": "string",
+					"max": 255,
+					"min": 3,
+					"name": "origin",
+					"label": "Origin",
+					"description": "",
+					"default": "",
+					"placeholder": "",
+					"generator": "user"
+				},
+				"active": {
+					"type": "option",
+					"name": "active",
+					"label": "Active",
+					"description": "",
+					"default": "yes",
+					"generator": "user",
+					"options": {
+						"yes": {
+							"type": "string",
+							"name": "yes",
+							"label": "Yes",
+							"description": "",
+							"position": 0
+						},
+						"no": {
+							"type": "string",
+							"name": "no",
+							"label": "No",
+							"description": "",
+							"position": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	"status": {
+		"code": 0,
+		"message": {
+			"name": "message",
+			"label": "",
+			"validationMethod": "Success!"
+		}
+	}
+}

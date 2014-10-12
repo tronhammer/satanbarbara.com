@@ -12,3 +12,22 @@ Ubuntu 12.04 64bit
  * PHP5
  * MySQL
 
+
+
+TODO
+=====
+
+ * Setup task runner files for front end builds
+  * Grunt
+  * Cake
+  * Gulp
+  * Broccoli
+  * Browserify
+ * Setup deployment files
+  * Puppet
+  * Chef
+  * VagrantFile
+  * Ansible
+  * Salt
+ * Add localization
+ * Implement schema files

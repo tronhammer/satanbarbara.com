@@ -1,264 +1,456 @@
 <!doctype html>
 <html lang="en" ng-app="app">
 <head>
-  <meta charset="utf-8">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
+	<meta charset="utf-8">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
 
-  <title>My Cal</title>  
-  
-  <link rel="stylesheet" href="lib/onsen/css/onsenui.css">  
-  <link rel="stylesheet" href="styles/app.css"/>
-  <link rel="stylesheet" href="styles/onsen-css-components.css">  
+	<title>My Cal</title>	
+	
+	<link rel="stylesheet" href="lib/onsen/css/onsenui.css">	
+	<link rel="stylesheet" href="styles/app.css"/>
+	<link rel="stylesheet" href="styles/onsen-css-components.css">	
 
-  <script src="lib/onsen/js/angular/angular.js"></script>    
-  <script src="lib/onsen/js/onsenui.js"></script>    
-  <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>  
-  <script src="lib/bower_components/tweenjs/build/tween.min.js"></script>  
-  <script src="cordova.js"></script>  
-  <script src="js/app.js"></script>  
-  <script>
-    ons.ready(function() {
-    });
-  </script>
+	<script src="lib/onsen/js/angular/angular.js"></script>	
+	<script src="lib/onsen/js/onsenui.js"></script>	
+	<script src="lib/bower_components/jquery/dist/jquery.min.js"></script>	
+	<script src="lib/bower_components/tweenjs/build/tween.min.js"></script>	
+	<script src="cordova.js"></script>	
+	<script src="js/app.js"></script>	
+	<script>
+	ons.ready(function() {
+	});
+	</script>
 
-  <style>
-    body{
-      background: rgba(65,65,65,1) url('media/images/vr.jpg');
-      color: white;
+	<style>
+	body{
+		background: rgba(65,65,65,1) url('media/images/vr.jpg');
+		color: white;
+	}
+
+	ons-page{
+		margin: 0 auto;
+		min-width: 300px;
+	}
+
+	body ons-list,body ons-list-header,body ons-list-item{
+		background: transparent !important;
+		border-color: transparent !important;
+		color: rgba(127,255,255,0.75) !important;
+	}
+
+	body ons-list-header{
+		color: rgba(127,255,255,0.75) !important;
+		text-shadow: 0 0 10px rgba(0,255,255,0.95) !important;
+		font-size: 20px !important;
+		font-weight: bold !important;
+	}
+
+	.content{
+		padding-top: 10px;
+		padding-left: 10px;
+	}
+
+	.content > header{
+		margin-bottom: 10px;
+		margin-left: 10px;
+	}
+
+	.sb-highlight-container{
+		background: rgba(0,127,127,0.3 );
+		box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+		border: 1px solid rgba(127,255,255,0.25);
+		border-radius: 5px;
+	}
+
+	.sb-calendar-row{
+		margin: 0 auto;
+	}
+
+	.sb-calendar-col{
+		height: 100px;
+	}
+
+	.sb-calendar-tile {
+		width: 80%;
+		height: 80%;
+		text-align: center;
+		cursor: default;
+		position: relative;
+		margin: 0 auto;
+		cursor: pointer;
+	}
+
+	.sb-calendar-tile:hover {
+		box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+		border: 1px solid rgba(127,255,255,0.75);
+		cursor: pointer;
+	}
+
+
+	.sb-calendar-tile .number {
+		position: absolute;
+		top: 5%;
+		right: 20px;
+		font-size: 12px;
+		color: rgba(127,255,255,0.75);
+	}
+
+	.sb-calendar-tile .symbol {
+		position: absolute;
+		top: 35%;
+		left: 0px;
+		right: 0px;
+		font-size: 20px;
+		font-weight: bold;
+		color: rgba(255,255,255,0.75);
+		text-shadow: 0 0 10px rgba(0,255,255,0.95);
+	}
+
+	.sb-calendar-tile .details {
+		position: absolute;
+		bottom: 15px;
+		left: 0px;
+		right: 0px;
+		font-size: 12px;
+		color: rgba(127,255,255,0.75);
+	}
+
+	.sb-calendar-day-events{
+		opacity: 0;
+		position: absolute;
+		padding: 10px;
+	}
+
+	.sb-calendar-sidebar-day-events{
+		height: 560px;
+		float: left;
+		width: 95%;
+		height: 0px;
+		opacity: 0;
+		padding-top: 10px;
+	}
+
+	.sb-calendar-sidebar-create-event-btn{
+		float: left;
+		top: -50px;
+		margin-left: 10px;
+		background: rgba(255,255,255,0.3);
+		font-weight: bold;
+		color: rgba(255,255,255,0.75);
+		text-shadow: 0 0 10px rgba(0,255,255,0.95);
+		cursor: pointer;
+		box-shadow: -7px 7px 90px 12px rgba(0,127,127,0.5);
+	}
+
+	.sb-calendar-sidebar-create-event-btn:hover{
+		background: rgba(0,127,127,0.7);
+		text-shadow: 0 0 13px rgba(0,255,255,0.95);	
+	}
+
+	.sb-modal-close{
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		cursor: pointer;
+		color: rgba(0,127,127,0.8);
+		-webkit-transition: color .2s linear, -webkit-transform .2s ease-in-out;
+	}
+
+	.sb-modal-close:hover{
+		-webkit-transform: scale(0.9);
+		color: rgba(0,255,255,0.9);
+	}
+
+    .sb-modal-create-new-container h1{
+        color: white;
+        text-shadow: 0px -1px 0px #374683;
     }
 
-    ons-page{
-      margin: 0 auto;
-      min-width: 300px;
+    .sb-modal-create-new-event-primary-details,.sb-modal-create-new-event-date-details{
+        border-right: 1px solid rgba(0,127,127,0.7);
+        border-bottom: 1px solid rgba(0,127,127,0.7);
     }
 
-    body ons-list,body ons-list-header,body ons-list-item{
-      background: transparent !important;
-      border-color: transparent !important;
-      color: rgba(127,255,255,0.75) !important;
+    .sb-modal-create-new-event-venue-details{
+        border-bottom: 1px solid rgba(0,127,127,0.7);
     }
 
-    body ons-list-header{
-      color: rgba(127,255,255,0.75) !important;
-      text-shadow: 0 0 10px rgba(0,255,255,0.95) !important;
-      font-size: 20px !important;
-      font-weight: bold !important;
+    .sb-field-container{
+        text-align: left;
+        margin: 20px;
     }
 
-    .content{
-      padding-top: 10px;
-      padding-left: 10px;
+	.sb-field-label{
+        font-weight: bold;
+        color: rgba(255,255,255,0.75);
+        text-shadow: 0 0 10px rgba(0,255,255,0.95); 
+	}
+
+	.sb-field-input{
+		background: transparent;
+		border: 0px;
+		border-bottom: 1px solid rgba(0,127,127,0.7);
+		border-radius: 5px;
+		padding-left: 5px;
+		border-left: 1px solid rgba(0,127,127,0.7);
+		height: 25px;
+		font-size: 16px;
+		margin-top: 5px;
+        color: rgba(255,255,255,0.8);
+        width: 90%;
+        box-shadow: 0px 0px 60px 1px rgba(127,0,0,0)
+        -webkit-transition: background 1s, box-shadow 1s;
+        transition: background 1s, box-shadow 1s;
+	}
+
+    .sb-field-input.sb-field-text{
+        height: 150px;
+        width: 90%;
+        border-right: 1px solid rgba(0,127,127,0.7);
     }
 
-    .content > header{
-      margin-bottom: 10px;
-      margin-left: 10px;
+    .sb-field-input.sb-field-dropdown{
+        color: rgba(0,127,127,0.7);
     }
 
-    .sb-highlight-container{
-      background: rgba(0,127,127,0.3 );
-      box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
-      border: 1px solid rgba(127,255,255,0.25);
-      border-radius: 5px;
+    .sb-field-input.sb-field-dropdown option{
+        background-color: transparent;
     }
 
-    .sb-calendar-row{
-      margin: 0 auto;
+    .sb-field-input.sb-field-not-valid{
+        background: rgba(127,0,0,0.4);
+        box-shadow: 0px 0px 15px 1px rgba(127,0,0,0.7);
     }
-
-    .sb-calendar-col{
-      height: 100px;
-    }
-
-    .sb-calendar-tile {
-      width: 80%;
-      height: 80%;
-      text-align: center;
-      cursor: default;
-      position: relative;
-      margin: 0 auto;
-      cursor: pointer;
-    }
-
-    .sb-calendar-tile:hover {
-      box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
-      border: 1px solid rgba(127,255,255,0.75);
-      cursor: pointer;
-    }
-
-
-    .sb-calendar-tile .number {
-      position: absolute;
-      top: 5%;
-      right: 20px;
-      font-size: 12px;
-      color: rgba(127,255,255,0.75);
-    }
-
-    .sb-calendar-tile .symbol {
-      position: absolute;
-      top: 35%;
-      left: 0px;
-      right: 0px;
-      font-size: 20px;
-      font-weight: bold;
-      color: rgba(255,255,255,0.75);
-      text-shadow: 0 0 10px rgba(0,255,255,0.95);
-    }
-
-    .sb-calendar-tile .details {
-      position: absolute;
-      bottom: 15px;
-      left: 0px;
-      right: 0px;
-      font-size: 12px;
-      color: rgba(127,255,255,0.75);
-    }
-
-    .sb-calendar-day-events{
-      opacity: 0;
-      position: absolute;
-      padding: 10px;
-    }
-
-    .sb-calendar-sidebar-day-events{
-      height: 560px;
-      float: left;
-      width: 95%;
-      height: 0px;
-      opacity: 0;
-      padding-top: 10px;
-    }
-
-    .sb-calendar-sidebar-create-event-btn{
-      float: left;
-      top: -50px;
-      margin-left: 10px;
-      background: rgba(0,0,0,0.7);
-      font-weight: bold;
-      color: rgba(255,255,255,0.75);
-      text-shadow: 0 0 10px rgba(0,255,255,0.95); 
-      cursor: pointer;   
-    }
-
-    .sb-calendar-sidebar-create-event-btn:hover{
-      background: rgba(0,0,0,0.9);
-      text-shadow: 0 0 13px rgba(0,255,255,0.95);    
-    }
-  </style>
+	</style>
 </head>
 
-<body global-listener ng-controller="AppController">   
+<body global-listener ng-controller="AppController">
 
-  <ons-navigator>
-    <ons-page ng-controller="CalendarController" style="{{styles.app}}" load-calendar-data>
+	<ons-navigator>
+	<ons-page ng-controller="CalendarController" style="{{styles.app}}" load-calendar-data>
 
-      <div class="content">
+		<div class="content">
 
-        <header>
-          <select name="monthDateSelector" month-update-listener>
-            <option name="monthDate" value="8-1-2014">August</option>
-            <option name="monthDate" value="9-3-2014">September</option>
-            <option name="monthDate" value="10-1-2014" selected="selected">October</option>
-            <option name="monthDate" value="11-1-2014">November</option>
-            <option name="monthDate" value="12-1-2014">Decemeber</option>
-          </select>
-        </header>
+		<header>
+			<select name="monthDateSelector" month-update-listener>
+			<option name="monthDate" value="8-1-2014">August</option>
+			<option name="monthDate" value="9-3-2014">September</option>
+			<option name="monthDate" value="10-1-2014" selected="selected">October</option>
+			<option name="monthDate" value="11-1-2014">November</option>
+			<option name="monthDate" value="12-1-2014">Decemeber</option>
+			</select>
+		</header>
 
 
-        <ons-row>
-          <ons-col width="{{profiles[ profile ].calendar.width}}" class="sb-calendar">
-            <ons-row ng-repeat="week in month.weeks" class="sb-calendar-row" animate-calendar>
-              <ons-col ng-repeat="day in week" class="sb-calendar-col" width="14%">
-                <div class="sb-calendar-tile sb-highlight-container" data-date="{{day.date}}" ng-click="showDetail(day.date)" style="top: {{day.dist.x}}px; left: {{day.dist.y}}px; transform: scale({{day.dist.z}});">
-                  <div class="number">{{day.number}}</div>
-                  <div class="symbol">{{day.title}}</div>
-                  <div class="details">{{day.description}}</div>
-                  <ons-list class="sb-calendar-day-events">
-                    <ons-list-header>Header Text</ons-list-header>
-                    <ons-list-item class="sb-calendar-event" ng-repeat="event in day.events">
-                      <div class="sb-calendar-event-title">{{event.title}}</div>
-                    </ons-list-item>
-                  </ons-list>
-                </div>
-              </ons-col>
+		<ons-row>
+			<ons-col width="{{profiles[ profile ].calendar.width}}" class="sb-calendar">
+			<ons-row ng-repeat="week in month.weeks" class="sb-calendar-row" animate-calendar>
+				<ons-col ng-repeat="day in week" class="sb-calendar-col" width="14%">
+				<div class="sb-calendar-tile sb-highlight-container" data-date="{{day.date}}" ng-click="showDetail(day.date)" style="top: {{day.dist.x}}px; left: {{day.dist.y}}px; transform: scale({{day.dist.z}});">
+					<div class="number">{{day.number}}</div>
+					<div class="symbol">{{day.title}}</div>
+					<div class="details">{{day.description}}</div>
+					<ons-list class="sb-calendar-day-events">
+					<ons-list-header>Header Text</ons-list-header>
+					<ons-list-item class="sb-calendar-event" ng-repeat="event in day.events">
+						<div class="sb-calendar-event-title">{{event.title}}</div>
+					</ons-list-item>
+					</ons-list>
+				</div>
+				</ons-col>
+			</ons-row>
+			</ons-col>
+
+			<ons-col class="sb-calendar-col" width="{{profiles[ profile ].infobox.width}}">
+			<div class="sb-calendar-sidebar-day-events sb-highlight-container" animate-infobar>
+				<div class="sb-calendar-sidebar-event-day">
+				<ons-list class="sb-calendar-sidebar-day-event" ng-repeat="day in month.events">
+					<ons-list-header>{{day[0].date_text}}</ons-list-header>
+					<ons-list-item class="sb-calendar-sidebar-event" ng-repeat="event in day">
+					<div class="sb-calendar-sidebar-event-title">{{event.title}}</div>
+					</ons-list-item>
+				</ons-list>
+				</div>
+			</div>
+
+			<ons-button ng-click="createEvent.show()" class="sb-calendar-sidebar-create-event-btn">Create Event</ons-button>
+			</ons-col>
+		</ons-row>
+		</div>
+	</ons-page>
+	</ons-navigator>
+
+	<!-- MODALS -->
+
+	<ons-modal var="createEvent" ng-controller="CreateEventController" create-event-listener>
+    	<ons-icon icon="ion-loading-c" spin="true" style="display: none;"></ons-icon>
+
+    	<sb-modal-exit></sb-modal-exit>
+
+    	<div class="sb-modal-create-new-container">
+            <ons-row>
+                <ons-col width="100%" class="sb-modal-create-new-event-header">
+                    <header>
+                        <h1>Create New Event</h1>
+                    </header>
+                </ons-col>
             </ons-row>
-          </ons-col>
+            <ons-row>
+                <ons-col width="100%" class="sb-modal-create-new-event-primary-details">
+                    <sb-field-string field="eventDefinitions['title']"></sb-field-string>
+                </ons-col>
+            </ons-row>
+            <ons-row>
+                <ons-col width="30%" class="sb-modal-create-new-event-primary-details">
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="eventDefinitions['subtitle']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="bandNames"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="eventDefinitions['flyer_uri']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
 
-          <ons-col class="sb-calendar-col" width="{{profiles[ profile ].infobox.width}}">
-            <div class="sb-calendar-sidebar-day-events sb-highlight-container" animate-infobar>
-              <div class="sb-calendar-sidebar-event-day">
-                <ons-list class="sb-calendar-sidebar-day-event" ng-repeat="day in month.events">
-                  <ons-list-header>{{day[0].date_text}}</ons-list-header>
-                  <ons-list-item class="sb-calendar-sidebar-event" ng-repeat="event in day">
-                    <div class="sb-calendar-sidebar-event-title">{{event.title}}</div>
-                  </ons-list-item>
-                </ons-list>
-              </div>
-            </div>
+                </ons-col>
+                <ons-col width="30%" class="sb-modal-create-new-event-date-details">
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="venueDefinitions['address']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="35%">
+                            <sb-field-string field="venueDefinitions['city']"></sb-field-string>
+                        </ons-col>
+                        <ons-col width="20%">
+                            <sb-field-string field="venueDefinitions['state']"></sb-field-string>
+                        </ons-col>
+                        <ons-col width="25%">
+                            <sb-field-string field="venueDefinitions['zip']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-time field="eventDefinitions['start_time']"></sb-field-time>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-time field="eventDefinitions['end_time']"></sb-field-time>
+                        </ons-col>
+                    </ons-row>
+                </ons-col>
+                <ons-col width="30%" class="sb-modal-create-new-event-venue-details">
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="eventDefinitions['price']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="eventDefinitions['ticket_uri']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-string field="eventDefinitions['promocode']"></sb-field-string>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="100%">
+                            <sb-field-dropdown field="eventDefinitions['ages']"></sb-field-dropdown>
+                        </ons-col>
+                    </ons-row>
+                </ons-col>
+            </ons-row>
+            <ons-row>
+                <ons-col width="100%">
+                    <sb-field-text field="eventDefinitions['description']"></sb-field-text>
+                </ons-col>
+            </ons-row>
+            <ons-row>
+                <ons-col width="100%">
+                    <sb-field-text field="eventDefinitions['requirements']"></sb-field-text>
+                </ons-col>
+            </ons-row>
+            <ons-row>
+                <ons-col width="100%">
+                    <ons-button align="right" ng-click="hide()">Cancel</ons-button>
+                    <ons-button align="right" ng-click="create()">Create</ons-button>
+                </ons-col>
+            </ons-row>
+    	</div>
+	</ons-modal>
 
-            <ons-button ng-click="createEvent.show()" class="sb-calendar-sidebar-create-event-btn">Create Event</ons-button>
-          </ons-col>
+
+	<!-- TEMPLATES -->
+	<ons-template id="modalExit.tmpl">
+    	<ons-icon icon="ion-arrow-shrink sb-modal-close"></ons-icon>
+	</ons-template>
+
+    <ons-template id="fieldString.tmpl">
+        <ons-row data-id="{{field.name}}" data-type="{{field.type}}" class="sb-field-container sb-field-string" title="{{field.description}}">
+            <ons-col width="100%" class="sb-field-label-container">
+                <ons-field class="sb-field-label">{{field.label}}</ons-field>
+            </ons-col>
+            <ons-col width="100%" class="sb-field-input-container">
+                <input name="{{field.name}}" placeholder="{{field.placeholder}}" width="300" data-validation="{{field.type}}" data-required="{{field.required}}" class="sb-field-input sb-field-string"/>
+            </ons-col>
         </ons-row>
-      </div>
-    </ons-page>
-  </ons-navigator>
+    </ons-template>
 
-  <ons-modal var="createEvent" ng-controller="createEventController" create-event-listener>
-    <ons-icon icon="ion-loading-c" spin="true" style="display: none;"></ons-icon>
-
-    <div class="sb-modal-create-new-container">
-      {{ events.all[1].title}}
-      <ons-row ng-repeat="eventAttr in events.all[1]">
-        <ons-field>{{eventAttr}}</ons-field>
-      </ons-row>
-    </div>
-  </ons-modal>
-
-  <ons-template id="detail.html">
-    <ons-page ng-controller="DetailController">
-
-      <ons-toolbar>
-        <div class="left"><ons-back-button>Back</ons-back-button></div>
-        <div class="center">Details</div>
-      </ons-toolbar>
-
-      <ons-list modifier="inset" style="margin-top: 10px">
-        <ons-list-item class="item">
-          <ons-row>
-            <ons-col width="60px"> 
-              <div class="item-thum"></div>
+    <ons-template id="fieldText.tmpl">
+        <ons-row data-id="{{field.name}}" data-type="{{field.type}}" class="sb-field-container sb-field-text" title="{{field.description}}">
+            <ons-col width="100%" class="sb-field-label-container">
+                <ons-field class="sb-field-label">{{field.label}}</ons-field>
             </ons-col>
-            <ons-col>
-              <header>
-                <span class="item-title">{{item.title}}</span>
-                <span class="item-label">{{item.label}}</span>
-              </header>
-              <p class="item-desc">{{item.desc}}</p>
+            <ons-col width="100%" class="sb-field-input-container">
+                <textarea name="{{field.name}}" placeholder="{{field.placeholder}}" data-validation="{{field.type}}" data-required="{{field.required}}" class="sb-field-input sb-field-text"></textarea>
             </ons-col>
-          </ons-row>
-        </ons-list-item>
+        </ons-row>
+    </ons-template>
 
-        <ons-list-item modifier="chevron" ng-click="doSomething()">
-          <ons-icon icon="ion-chatboxes" fixed-width="true" style="color: #ccc"></ons-icon>
-          Add a note
-        </ons-list-item>
-      </ons-list>
+    <ons-template id="fieldDropdown.tmpl">
+        <ons-row data-id="{{field.name}}" data-type="{{field.type}}" class="sb-field-container sb-field-dropdown" title="{{field.description}}">
+            <ons-col width="100%" class="sb-field-label-container">
+                <ons-field class="sb-field-label">{{field.label}}</ons-field>
+            </ons-col>
+            <ons-col width="100%" class="sb-field-input-container">
+                <select name="{{field.name}}" data-validation="{{field.type}}" data-required="{{field.required}}" class="sb-field-input sb-field-dropdown">
+                    <option ng-repeat="option in field.options" value="{{option.name}}" selected="{{selected(option)}}">{{option.label}}</option>
+                </select>
+            </ons-col>
+        </ons-row>
+    </ons-template>
 
-      <ons-list style="margin-top: 10px">
-        <ons-list-item class="item" ng-repeat="i in [1,2,3]">
-          <header>
-            <span class="item-title">Lorem ipsum dolor sit amet</span>
-          </header>
-          <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </ons-list-item>
-      </ons-list>
+    <ons-template id="fieldDate.tmpl">
+        <ons-row data-id="{{field.name}}" data-type="{{field.type}}" class="sb-field-container sb-field-date" title="{{field.description}}">
+            <ons-col width="100%" class="sb-field-label-container">
+                <ons-field class="sb-field-label">{{field.label}}</ons-field>
+            </ons-col>
+            <ons-col width="100%" class="sb-field-input-container">
+                <input name="{{field.name}}" placeholder="{{today}}" width="300" data-validation="{{field.type}}" data-required="{{field.required}}" class="sb-field-input sb-field-date"/>
+            </ons-col>
+        </ons-row>
+    </ons-template>
 
-      <br>
-
-    </ons-page>
-  </ons-template>
-
-</body>  
+    <ons-template id="fieldTime.tmpl">
+        <ons-row data-id="{{field.name}}" data-type="{{field.type}}" class="sb-field-container sb-field-time" title="{{field.description}}">
+            <ons-col width="100%" class="sb-field-label-container">
+                <ons-field class="sb-field-label">{{field.label}}</ons-field>
+            </ons-col>
+            <ons-col width="100%" class="sb-field-input-container">
+                <input name="{{field.name}}" placeholder="{{now}}" width="300" data-validation="{{field.type}}" data-required="{{field.required}}" class="sb-field-input sb-field-time"/>
+            </ons-col>
+        </ons-row>
+    </ons-template>
+</body>	
 </html>

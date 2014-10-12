@@ -1,0 +1,24 @@
+{
+	"name": "satanbarbara",
+	"description": "",
+	"label": "Satan Barbara",
+	"version": "1",
+	"meta": {
+		"hookes": {
+			"php": {
+				"format": "mvc"
+			}
+		},
+		"db": {
+			"mysql": {
+				"5.5": {
+					"engine": "InnoDB",
+					"comments": true,
+					"charset": "utf8",
+					"collate": "utf8_unicode_ci",
+					"incrementAmount": 1
+				}
+			}
+		}
+	}
+}

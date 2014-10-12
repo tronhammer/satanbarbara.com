@@ -1,0 +1,16 @@
+DROP DATABASE IF EXISTS `${name}`;
+
+GRANT USAGE ON *.* TO `${credentials["username"]}`@`${credentials["host"]}`;
+
+DROP USER `${credentials["username"]}`@`${credentials["host"]}`;
+
+CREATE DATABASE `${name}` COLLATE = `${meta["collate"]}`;
+
+CREATE USER '${credentials["username"]}'@'${credentials["host"]}' IDENTIFIED BY '${credentials["password"]}';
+
+GRANT USAGE ON `${name}`.* TO '${credentials["username"]}'@'${credentials["host"]}' IDENTIFIED BY '${credentials["password"]}';
+
+GRANT ALL PRIVILEGES ON `${name}`.* TO '${credentials["username"]}'@'${credentials["host"]}' IDENTIFIED BY '${credentials["password"]}';
+
+USE `${name}`
+

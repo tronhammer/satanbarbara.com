@@ -1,0 +1,56 @@
+<%
+	fields = {
+		"string": stringEntry,
+		"id": idEntry,
+		"date": dateEntry,
+		"timestamp": timeEntry,
+		"integer": integerEntry,
+		"boolean": booleanEntry,
+		"option": optionEntry,
+		"index": indexEntry,
+		"reference": referenceEntry
+	}
+%>
+
+DROP TABLE IF EXISTS `${listingKey}`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `${db["name"]}`.`${listingKey}` (
+%for property in properties:
+	`${property["name"]}` ${fields[ property["type"] ]( property )}${" COMMENT \""+property["description"]+"\"" if property.get("description") else ""},
+%endfor
+
+%if meta.get("references"):
+	%for referenceName in meta["references"]:
+    	${fields["reference"](meta["references"][ referenceName ])},
+	%endfor
+%endif
+
+%if meta.get("indexes"):
+	%for index in list(meta["indexes"]):
+    	${fields["index"](index, meta["indexes"][ index ])},
+	%endfor
+%endif
+
+	PRIMARY KEY (`${meta["id"]}`)
+) ENGINE=`${config["engine"]}` DEFAULT CHARSET=`${config["charset"]}` COLLATE=`${config["collate"]}` AUTO_INCREMENT=${config["incrementAmount"]};
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+<%def name="idEntry(property)">INT(${property["max"] if property.get("max") else 12}) NOT NULL${" AUTO_INCREMENT" if property.get("required") else ""}</%def>
+
+<%def name="stringEntry(property)">VARCHAR(${property["max"] if property.get("max") else 255}) NOT NULL${" DEFAULT \""+property["default"]+"\"" if property.get("default") else ""}</%def>
+
+<%def name="integerEntry(property)">INT(${property["max"] if property.get("max") else 12}) NOT NULL${" DEFAULT \""+property["default"]+"\"" if property.get("default") else ""}</%def>
+
+<%def name="booleanEntry(property)">BOOLEAN NOT NULL${" DEFAULT \""+property["default"]+"\"" if property.get("default") else ""}</%def>
+
+<%def name="dateEntry(property)">DATE NOT NULL${" DEFAULT \""+property["default"]+"\"" if property.get("default") else ""}${" ON UPDATE "+property["update"] if property.get("update") else ""}</%def>
+
+<%def name="timeEntry(property)">TIMESTAMP NOT NULL${" DEFAULT "+property["default"] if property.get("default") else ""}${" ON UPDATE "+property["update"] if property.get("update") else ""}</%def>
+
+<%def name="optionEntry(property)">ENUM(${"\"" + "\", \"".join([(option) for option in property["options"]]) + "\""}) NOT NULL${" DEFAULT \""+property["default"]+"\"" if property.get("default") else ""}</%def>
+
+<%def name="indexEntry(name, indexes)">UNIQUE INDEX `${name}` (${"`" + "`, `".join(indexes) +"`"})</%def>
+
+<%def name="referenceEntry(property)">FOREIGN KEY (`${property["name"]}`) REFERENCES `${property["table"]}`(`id`)</%def>

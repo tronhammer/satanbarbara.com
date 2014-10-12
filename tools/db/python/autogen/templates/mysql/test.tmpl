@@ -1,0 +1,14 @@
+<%
+	first = 1
+%>
+
+%for a in b:
+	%if first == 1:
+		<%
+			first = 0
+		%>
+	%else:
+,
+	%endif
+	${a}
+%endfor

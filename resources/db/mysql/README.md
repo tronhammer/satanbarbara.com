@@ -1,3 +1,8 @@
+WARNING
+=======
+
+These files should be not be edited as they are created by the autogen program. Instead, edit the object schema files and then re-run the autogen.
+
 First
 =====
 

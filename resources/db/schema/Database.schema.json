@@ -1,0 +1,28 @@
+{
+	"name": "satanbarbara",
+	"description": "",
+	"label": "Satan Barbara",
+	"version": "1",
+	"meta": {
+		"hookes": {
+			"php": {
+				"format": "mvc"
+			}
+		},
+		"db": {
+			"mysql": {
+				"version": "5.5",
+				"credentials": {
+					"username": "sbproxy",
+					"password": "mdk29fc7zg16d51b",
+					"host": "localhost"
+				},
+				"engine": "InnoDB",
+				"comments": true,
+				"charset": "utf8",
+				"collate": "utf8_unicode_ci",
+				"incrementAmount": 1
+			}
+		}
+	}
+}

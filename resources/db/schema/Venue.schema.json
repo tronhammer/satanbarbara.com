@@ -1,0 +1,179 @@
+{
+	"name": "Venue",
+	"listingKey": "venues",
+	"domain": "satanbarbara",
+	"version": "1",
+	"meta": {
+		"hookes": {
+			"php": {
+				"format": "mvc"
+			}
+		},
+		"db": {
+			"mysql": {
+				"5.5": {
+					"populate": 1,
+					"id": "id",
+					"indexes": {
+						"uid": ["name", "address", "city", "state", "zip"],
+						"vid": ["address", "city", "state", "zip"]
+					},
+					"junction": {
+						"venueCreator": "Account",
+						"venueOwner": "Account",
+						"venueTag": "Descriptor"
+					}
+				}
+			}
+		}
+	},
+	"properties": {
+		"id": {
+			"type": "id",
+			"unique": true,
+			"name": "id",
+			"label": "Unique ID",
+			"description": "",
+			"generator": "db",
+			"required": true,
+			"incremented": true
+		},
+		"created": {
+			"type": "timestamp",
+			"name": "created",
+			"label": "Created",
+			"description": "Time when entry was made.",
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "db",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"max": 255,
+			"min": 3,
+			"name": "name",
+			"label": "Name",
+			"description": "",
+			"default": "",
+			"placeholder": "CrowdedCoffin",
+			"generator": "user",
+			"required": true
+		}, 
+		"slogan": {
+			"type": "string",
+			"max": 90,
+			"name": "slogan",
+			"label": "Slogan",
+			"description": "",
+			"default": "",
+			"placeholder": "Fuck it",
+			"generator": "user"
+		}, 
+		"description": {
+			"type": "string",
+			"max": 4000,
+			"name": "description",
+			"label": "Description",
+			"description": "",
+			"default": "",
+			"placeholder": "Where you go to get your freak on.",
+			"generator": "user"
+		},
+		"address": {
+			"type": "string",
+			"max": 255,
+			"name": "address",
+			"label": "Address",
+			"description": "",
+			"placeholder": "666 Hell-yeah",
+			"generator": "user",
+			"required": true
+		},
+		"city": {
+			"type": "string",
+			"max": 90,
+			"name": "city",
+			"label": "City",
+			"description": "",
+			"placeholder": "Satan Barbara",
+			"generator": "user",
+			"required": true
+		},
+		"state": {
+			"type": "string",
+			"max": 2,
+			"name": "state",
+			"label": "State",
+			"description": "",
+			"placeholder": "CA",
+			"generator": "user",
+			"required": true
+		},
+		"zip": {
+			"type": "string",
+			"max": 12,
+			"min": 5,
+			"name": "zip",
+			"label": "Postal Code",
+			"description": "",
+			"placeholder": "93101",
+			"generator": "user",
+			"required": true
+		},
+		"capacity": {
+			"type": "integer",
+			"name": "capacity",
+			"label": "Capacity",
+			"description": "400",
+			"placeholder": "400",
+			"generator": "user"
+		},
+		"requirements": {
+			"type": "string",
+			"max": 4000,
+			"name": "requirements",
+			"label": "Requirements",
+			"description": "",
+			"placeholder": "At least 1 bible.",
+			"default": "",
+			"generator": "user"
+		},
+		"uri": {
+			"type": "string",
+			"max": 255,
+			"name": "uri",
+			"label": "Website",
+			"description": "",
+			"default": "",
+			"placeholder": "http://",
+			"generator": "user"
+		},
+		"last_modified": {
+			"type": "timestamp",
+			"name": "last_modified",
+			"label": "Last modified",
+			"description": "",
+			"default": "",
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "system"
+		},
+		"archived": {
+			"type": "boolean",
+			"name": "archived",
+			"label": "Archived",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		},
+		"deleted": {
+			"type": "boolean",
+			"name": "deleted",
+			"label": "Deleted",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		}
+	}
+}

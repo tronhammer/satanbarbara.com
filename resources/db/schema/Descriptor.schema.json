@@ -1,0 +1,86 @@
+{
+	"name": "Descriptor",
+	"listingKey": "descriptors",
+	"domain": "satanbarbara",
+	"version": "1",
+	"meta": {
+		"hookes": {
+			"php": {
+				"format": "mvc"
+			}
+		},
+		"db": {
+			"mysql": {
+				"5.5": {
+					"populate": 1,
+					"id": "id",
+					"indexes": {
+						"uid": ["name"]
+					}
+				}
+			}
+		}
+	},
+	"properties": {
+		"id": {
+			"type": "id",
+			"unique": true,
+			"name": "id",
+			"label": "Unique ID",
+			"description": "",
+			"generator": "db",
+			"required": true,
+			"incremented": true
+		},
+		"created": {
+			"type": "timestamp",
+			"name": "created",
+			"label": "Created",
+			"description": "Time when entry was made.",
+			"placeholder": "2014-11-25 04:34:00 pm",
+			"generator": "db",
+			"required": true
+		},
+		"name": {
+			"type": "string",
+			"max": 255,
+			"min": 3,
+			"name": "name",
+			"label": "Name",
+			"description": "",
+			"default": "",
+			"placeholder": "awesome",
+			"generator": "user",
+			"required": true,
+			"unique": true
+		}, 
+		"description": {
+			"type": "string",
+			"max": 4000,
+			"name": "description",
+			"label": "Description",
+			"description": "",
+			"default": "",
+			"placeholder": "SO awesome!",
+			"generator": "user"
+		},
+		"archived": {
+			"type": "boolean",
+			"name": "archived",
+			"label": "Archived",
+			"description": "",
+			"default": 0,
+			"placeholder": "0",
+			"generator": "system"
+		},
+		"deleted": {
+			"type": "boolean",
+			"name": "deleted",
+			"label": "Deleted",
+			"description": "0",
+			"default": 0,
+			"placeholder": "",
+			"generator": "system"
+		}
+	}
+}

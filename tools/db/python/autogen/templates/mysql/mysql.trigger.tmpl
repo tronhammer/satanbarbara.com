@@ -1,0 +1,19 @@
+delimiter |
+
+CREATE TRIGGER `before_insert_event_descriptors`
+    AFTER INSERT ON `${db["name"]}`.`${from["table"]}` FOR EACH ROW
+    BEGIN
+
+        INSERT  IGNORE INTO `${db["name"]}`.`${to["table"]}` (`name`, `to`, `from`)
+        	SELECT
+    		    "event",
+    		    (SELECT `name` FROM `${from["table"]}` WHERE `id`=NEW.type_id);
+
+        INSERT IGNORE INTO `${db["name"]}`.`${to["table"]}` (`type`, `name`)
+    	    SELECT
+    		    "venue",
+   		    	(SELECT `name` FROM `${from["table"]}` WHERE `id`=NEW.venue_type_id);
+    END;
+|
+
+delimiter ;
