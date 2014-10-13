@@ -9,21 +9,40 @@ abstract class ${ObjectName}Model extends BaseModel {
     const _TABLE = "${listingKey}";
 
     /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
-    static protected $attrs = array(
+    static protected $attrs = json_decode(
 
-    ${properties}
+    "${properties}"
     
     );
 
     /**@* {Array} Defines which fields are required for an entry. */
 	static protected $required = array(
-
-		${", ".join([(properties[ propName ]["name"]) for propName in properties])}
+<%
+	first = 1
+%>
+%for propName in properties:
+	%if properties[ propName ].get("required"):
+		${", " if first != 1 else ""}"${properties[ propName ]["name"]}"
+<%
+	first = 0
+%>
+	%endif
+%endfor
 	);
 
 	static protected $userSettable = array(
 
-		${", ".join([(properties[ propName ]["name"] if properties[ propName ].get("required") else "") for propName in properties])}
+<%
+	first = 1
+%>
+%for propName in properties:
+	%if properties[ propName ]["generator"] == "user":
+		${", " if first != 1 else ""}"${properties[ propName ]["name"]}"
+<%
+	first = 0
+%>
+	%endif
+%endfor
 	);
 
 	/**
