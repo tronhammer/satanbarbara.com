@@ -361,7 +361,7 @@
       };
     });
 
-    $rest.getObjectSchema({"type": "Event"})
+    $rest.getObjectSchema({"types": "Event,Band,Venue"})
   }]);
 
   module.directive("createEventListener", ["$rootScope", function($rootScope) {
@@ -489,7 +489,7 @@
         });
       },
       "getObjectSchema": function(data){
-        var mode = this.modes["fixture"];
+        var mode = this.modes[ this.mode ];
         $.ajax({
           "url": mode.buildUri({
             "action": "Get",

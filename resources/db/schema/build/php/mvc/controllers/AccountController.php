@@ -3,7 +3,9 @@
 abstract class AccountController {
 	
 	static public function Create() {
-		AJAX::Response("json",  Account::Create($_POST));
+		$Account = new Account($_REQUEST);
+		$Account->Save();
+		AJAX::Response("json",  array("saved" => $Account->isPersistent()));
 	}
 
 	static public function Get() {
@@ -12,22 +14,26 @@ abstract class AccountController {
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
-		$db = MySQLConnector::getHandle();
+		if ($_GET["ids"]){
+			$accounts = explode(",", $_GET["ids"]);
+		} else {
+			$db = MySQLConnector::getHandle();
+			try {
+				$statement = $db->prepare("SELECT `id` FROM `accounts`");
+		
+				$statement->execute();
 
-		try {
-			$statement = $db->prepare("SELECT `id` FROM `accounts`");
-	
-			$statement->execute();
-
-			$accounts = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-			foreach($accounts as $accounts){
-				$Account = new Account($accounts);
-				$return[$Account->id] = $Account->GetValues();
+				$accounts = $statement->fetchAll(PDO::FETCH_ASSOC);
+			} catch (PDOException $e) {
+				return AJAX::Response("json", array(), 2, $e->getMessage());
 			}
-		} catch (PDOException $e) {
-			return AJAX::Response("json", array(), 2, $e->getMessage());
 		}
+
+		foreach($accounts as $AccountID){
+			$Account = new Account($AccountID);
+			$return[(string) $Account->GetID()] = $Account->GetValues(array("type"=>"visible"));
+		}
+
 
 		AJAX::Response("json", $return);
 	}
@@ -43,7 +49,12 @@ abstract class AccountController {
 	static public function Search() {
 
 	}
+
+
+	static public function Schema() {
+		AJAX::Response("json",  AccountModel::GetSchema());
+	}
 }
 
-AJAX::registerGetMethods("Account", array("Get", "Search"));
+AJAX::registerGetMethods("Account", array("Get", "Create", "Search", "Schema"));
 AJAX::registerPostMethods("Account", array("Create", "Update", "Delete"));

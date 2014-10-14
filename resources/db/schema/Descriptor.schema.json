@@ -29,7 +29,6 @@
 			"label": "Unique ID",
 			"description": "",
 			"generator": "db",
-			"required": true,
 			"incremented": true
 		},
 		"created": {
@@ -71,7 +70,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"deleted": {
 			"type": "boolean",
@@ -80,7 +80,8 @@
 			"description": "0",
 			"default": 0,
 			"placeholder": "",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		}
 	}
 }

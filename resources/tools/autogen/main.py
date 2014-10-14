@@ -35,6 +35,19 @@ class Logging:
 	def p(self, msg):
 		print msg
 
+def JSONObjToPHPObj(attrVal, depth):
+	depth = int(depth)+1
+	if type(attrVal) == type({}):
+		tabSpacing = "    "*depth
+		tabCloseSpacing = "    "*(depth-1)
+		return "array(\n%s%s\n%s)" % (
+			tabSpacing, 
+			(",\n"+tabSpacing).join( [('"%s" => %s' % (attrName, JSONObjToPHPObj(attrVal[attrName], depth)) ) for attrName in attrVal]),
+			tabCloseSpacing
+		)
+
+	return '"'+str(attrVal)+'"'
+
 if __name__ == "__main__":
 
 	ll = Logging()
@@ -81,6 +94,7 @@ if __name__ == "__main__":
 	filenames.remove("Database.schema.json")
 
 	for filename in filenames:
+		ll.p("Reading config file: " + filename)
 		ObjectSchema = json.loads(open(filename, "r").read());
 		ObjectName = ObjectSchema["name"]
 
@@ -119,7 +133,7 @@ if __name__ == "__main__":
 		builtFile = open("build/"+ db +"/sb."+ObjectSchema["listingKey"]+".sql", "w");
 		builtFile.write(build)
 
-		ll.p("Rending controller file...")
+		ll.p("Rending %s controller file..." % (ObjectName))
 
 		controllerBuild = controllerTemplate.render(
 			ObjectName=ObjectName,
@@ -129,10 +143,11 @@ if __name__ == "__main__":
 		builtControllerFile = open("build/"+ codelang +"/"+ framework +"/controllers/"+ObjectName+"Controller.php", "w");
 		builtControllerFile.write(controllerBuild)
 
-		ll.p("Rending model file...")
+		ll.p("Rending %s model file..." % (ObjectName))
 
 		modelBuild = modelTemplate.render(
 			ObjectName=ObjectName,
+			JSONObjToPHPObj=JSONObjToPHPObj,
 			listingKey=ObjectSchema["listingKey"],
 			db=DatabaseSchema,
 			properties=ObjectSchema["properties"]
@@ -141,7 +156,7 @@ if __name__ == "__main__":
 		builtModelFile = open("build/"+ codelang +"/"+ framework +"/models/"+ObjectName+"Model.php", "w");
 		builtModelFile.write(modelBuild)
 
-		ll.p("Rending object file...")
+		ll.p("Rending %s object file..." % (ObjectName))
 
 		objectBuild = objectTemplate.render(
 			ObjectName=ObjectName
@@ -223,3 +238,10 @@ if __name__ == "__main__":
 
 	fullBuildFile = open("build/"+ db +"/sb.build.sql", "w")
 	fullBuildFile.write( fullBuild )
+
+	open("build/"+ codelang +"/"+ framework +"/models/BaseModel.php", "w").write(
+		Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".model.base.tmpl").render()
+	)
+	open("build/"+ codelang +"/"+ framework +"/objects/BaseObject.php", "w").write(
+		Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".object.base.tmpl").render()
+	)

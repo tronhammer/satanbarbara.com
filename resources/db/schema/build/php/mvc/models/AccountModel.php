@@ -9,10 +9,263 @@ abstract class AccountModel extends BaseModel {
     const _TABLE = "accounts";
 
     /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
-    static protected $attrs = json_decode(
-
-    "{u'username': {u'description': u'Login name for the Account object.', u'generator': u'user', u'min': 3, u'default': u'', u'max': 32, u'required': True, u'label': u'Username', u'placeholder': u'tronhammer', u'type': u'string', u'name': u'username'}, u'archived': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Archived', u'placeholder': u'0', u'name': u'archived'}, u'description': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 4000, u'label': u'Description', u'placeholder': u"I'm freaken tron man! Get with it.", u'type': u'string', u'name': u'description'}, u'last_active': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'timestamp', u'label': u'Last active', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'last_active'}, u'created': {u'description': u'Time when entry was made in the database.', u'generator': u'db', u'type': u'timestamp', u'required': True, u'label': u'Created', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'created'}, u'deleted': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Deleted', u'placeholder': u'0', u'name': u'deleted'}, u'tagline': {u'description': u'', u'generator': u'user', u'min': 3, u'default': u'', u'max': 128, u'label': u'Tagline', u'placeholder': u"I've eaten uglier women than you for breakfast.", u'type': u'string', u'name': u'tagline'}, u'banned': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Banned', u'placeholder': u'0', u'name': u'banned'}, u'activated': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Activated', u'placeholder': u'1', u'name': u'activated'}, u'suspended': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Suspended', u'placeholder': u'0', u'name': u'suspended'}, u'email': {u'description': u'', u'generator': u'user', u'min': 9, u'default': u'', u'max': 255, u'label': u'Email', u'placeholder': u'tron@tronnet.me', u'type': u'string', u'name': u'email'}, u'lname': {u'description': u'', u'generator': u'user', u'min': 3, u'default': u'', u'max': 128, u'label': u'Last Name', u'placeholder': u'Hammer', u'type': u'string', u'name': u'lname'}, u'privilege_level': {u'description': u'', u'generator': u'system', u'default': u'user', u'required': True, u'label': u'Privilege Level', u'type': u'option', u'options': {u'admin': {u'position': 0, u'description': u'', u'type': u'string', u'name': u'admin', u'label': u'Administrator'}, u'moderator': {u'position': 1, u'description': u'', u'type': u'string', u'name': u'moderator', u'label': u'Moderator'}, u'client': {u'position': 6, u'description': u'', u'type': u'string', u'name': u'client', u'label': u'Client'}, u'user': {u'position': 2, u'description': u'', u'type': u'string', u'name': u'user', u'label': u'User'}, u'deamon': {u'position': 5, u'description': u'', u'type': u'string', u'name': u'deamon', u'label': u'Deamon'}, u'root': {u'position': 4, u'description': u'', u'type': u'string', u'name': u'root', u'label': u'Root'}, u'proxy': {u'position': 3, u'description': u'', u'type': u'string', u'name': u'na', u'label': u'Not Sure'}}, u'name': u'privilege_level'}, u'last_activated': {u'description': u'Last time the band was reactivated after having been marked as suspended or disbanded/hiatus', u'generator': u'system', u'default': 0, u'type': u'timestamp', u'label': u'Activated', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'last_activated'}, u'last_modified': {u'description': u'', u'generator': u'system', u'default': u'', u'type': u'timestamp', u'label': u'Last modified', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'last_modified'}, u'last_login': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'timestamp', u'label': u'Last logged in', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'last_login'}, u'fname': {u'description': u'', u'generator': u'user', u'min': 3, u'default': u'', u'max': 128, u'required': True, u'label': u'First Name', u'placeholder': u'Tron', u'type': u'string', u'name': u'fname'}, u'password': {u'description': u'Case sensitive password for authenticating the Account object.', u'generator': u'user', u'min': 6, u'default': u'', u'max': 128, u'required': True, u'label': u'Password', u'placeholder': u'666SatanForPrez', u'type': u'string', u'name': u'password'}, u'nickname': {u'description': u'', u'generator': u'user', u'min': 3, u'default': u'', u'max': 64, u'label': u'Nickname', u'placeholder': u'TRONHAMBURGER', u'type': u'string', u'name': u'nickname'}, u'id': {u'description': u'Exists as a unique identifier for Account objects in both the database and program layer.', u'generator': u'db', u'incremented': True, u'required': True, u'label': u'Unique ID', u'unique': True, u'type': u'id', u'name': u'id'}}"
-    
+    static protected $attrs = array(
+        "username" => array(
+            "description" => "Login name for the Account object.",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "32",
+            "required" => "True",
+            "label" => "Username",
+            "placeholder" => "tronhammer",
+            "type" => "string",
+            "name" => "username"
+        ),
+        "archived" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Archived",
+            "restricted" => "True",
+            "placeholder" => "0",
+            "name" => "archived"
+        ),
+        "description" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "4000",
+            "label" => "Description",
+            "placeholder" => "I'm freaken tron man! Get with it.",
+            "type" => "string",
+            "name" => "description"
+        ),
+        "last_active" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "timestamp",
+            "label" => "Last active",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "last_active"
+        ),
+        "created" => array(
+            "description" => "Time when entry was made in the database.",
+            "generator" => "db",
+            "type" => "timestamp",
+            "label" => "Created",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "created"
+        ),
+        "deleted" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Deleted",
+            "restricted" => "True",
+            "placeholder" => "0",
+            "name" => "deleted"
+        ),
+        "tagline" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "128",
+            "label" => "Tagline",
+            "placeholder" => "I've eaten uglier women than you for breakfast.",
+            "type" => "string",
+            "name" => "tagline"
+        ),
+        "banned" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Banned",
+            "restricted" => "True",
+            "placeholder" => "0",
+            "name" => "banned"
+        ),
+        "activated" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Activated",
+            "restricted" => "True",
+            "placeholder" => "1",
+            "name" => "activated"
+        ),
+        "suspended" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Suspended",
+            "restricted" => "True",
+            "placeholder" => "0",
+            "name" => "suspended"
+        ),
+        "email" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "9",
+            "default" => "",
+            "max" => "255",
+            "required" => "True",
+            "label" => "Email",
+            "placeholder" => "tron@tronnet.me",
+            "type" => "string",
+            "name" => "email"
+        ),
+        "lname" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "128",
+            "label" => "Last Name",
+            "placeholder" => "Hammer",
+            "type" => "string",
+            "name" => "lname"
+        ),
+        "privilege_level" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "user",
+            "label" => "Privilege Level",
+            "type" => "option",
+            "options" => array(
+                "admin" => array(
+                    "position" => "0",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "admin",
+                    "label" => "Administrator"
+                ),
+                "moderator" => array(
+                    "position" => "1",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "moderator",
+                    "label" => "Moderator"
+                ),
+                "client" => array(
+                    "position" => "6",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "client",
+                    "label" => "Client"
+                ),
+                "user" => array(
+                    "position" => "2",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "user",
+                    "label" => "User"
+                ),
+                "deamon" => array(
+                    "position" => "5",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "deamon",
+                    "label" => "Deamon"
+                ),
+                "root" => array(
+                    "position" => "4",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "root",
+                    "label" => "Root"
+                ),
+                "proxy" => array(
+                    "position" => "3",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "na",
+                    "label" => "Not Sure"
+                )
+            ),
+            "name" => "privilege_level"
+        ),
+        "last_activated" => array(
+            "description" => "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "timestamp",
+            "label" => "Activated",
+            "restricted" => "True",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "last_activated"
+        ),
+        "last_modified" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "",
+            "type" => "timestamp",
+            "label" => "Last modified",
+            "restricted" => "True",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "last_modified"
+        ),
+        "last_login" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "timestamp",
+            "label" => "Last logged in",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "last_login"
+        ),
+        "fname" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "128",
+            "required" => "True",
+            "label" => "First Name",
+            "placeholder" => "Tron",
+            "type" => "string",
+            "name" => "fname"
+        ),
+        "password" => array(
+            "description" => "Case sensitive password for authenticating the Account object.",
+            "generator" => "user",
+            "min" => "6",
+            "default" => "",
+            "max" => "128",
+            "required" => "True",
+            "label" => "Password",
+            "placeholder" => "666SatanForPrez",
+            "restricted" => "True",
+            "type" => "string",
+            "name" => "password"
+        ),
+        "nickname" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "64",
+            "label" => "Nickname",
+            "placeholder" => "TRONHAMBURGER",
+            "type" => "string",
+            "name" => "nickname"
+        ),
+        "id" => array(
+            "description" => "Exists as a unique identifier for Account objects in both the database and program layer.",
+            "generator" => "db",
+            "incremented" => "True",
+            "label" => "Unique ID",
+            "unique" => "True",
+            "type" => "id",
+            "name" => "id"
+        )
     );
 
     /**@* {Array} Defines which fields are required for an entry. */
@@ -20,20 +273,15 @@ abstract class AccountModel extends BaseModel {
 
 		"username"
 
-		, "created"
-
-		, "privilege_level"
+		, "email"
 
 		, "fname"
 
 		, "password"
 
-		, "id"
-
 	);
 
 	static protected $userSettable = array(
-
 
 		"username"
 
@@ -50,6 +298,34 @@ abstract class AccountModel extends BaseModel {
 		, "password"
 
 		, "nickname"
+
+	);
+
+	static protected $userVisible = array(
+
+		"username"
+
+		, "description"
+
+		, "last_active"
+
+		, "created"
+
+		, "tagline"
+
+		, "email"
+
+		, "lname"
+
+		, "privilege_level"
+
+		, "last_login"
+
+		, "fname"
+
+		, "nickname"
+
+		, "id"
 
 	);
 

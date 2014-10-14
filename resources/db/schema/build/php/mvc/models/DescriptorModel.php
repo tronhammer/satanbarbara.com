@@ -9,27 +9,92 @@ abstract class DescriptorModel extends BaseModel {
     const _TABLE = "descriptors";
 
     /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
-    static protected $attrs = json_decode(
-
-    "{u'archived': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Archived', u'placeholder': u'0', u'name': u'archived'}, u'description': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 4000, u'label': u'Description', u'placeholder': u'SO awesome!', u'type': u'string', u'name': u'description'}, u'created': {u'description': u'Time when entry was made.', u'generator': u'db', u'type': u'timestamp', u'required': True, u'label': u'Created', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'created'}, u'deleted': {u'description': u'0', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Deleted', u'placeholder': u'', u'name': u'deleted'}, u'id': {u'description': u'', u'generator': u'db', u'incremented': True, u'required': True, u'label': u'Unique ID', u'unique': True, u'type': u'id', u'name': u'id'}, u'name': {u'description': u'', u'generator': u'user', u'min': 3, u'default': u'', u'max': 255, u'required': True, u'label': u'Name', u'placeholder': u'awesome', u'unique': True, u'type': u'string', u'name': u'name'}}"
-    
+    static protected $attrs = array(
+        "archived" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Archived",
+            "restricted" => "True",
+            "placeholder" => "0",
+            "name" => "archived"
+        ),
+        "description" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "4000",
+            "label" => "Description",
+            "placeholder" => "SO awesome!",
+            "type" => "string",
+            "name" => "description"
+        ),
+        "created" => array(
+            "description" => "Time when entry was made.",
+            "generator" => "db",
+            "type" => "timestamp",
+            "required" => "True",
+            "label" => "Created",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "created"
+        ),
+        "deleted" => array(
+            "description" => "0",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Deleted",
+            "restricted" => "True",
+            "placeholder" => "",
+            "name" => "deleted"
+        ),
+        "id" => array(
+            "description" => "",
+            "generator" => "db",
+            "incremented" => "True",
+            "label" => "Unique ID",
+            "unique" => "True",
+            "type" => "id",
+            "name" => "id"
+        ),
+        "name" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "255",
+            "required" => "True",
+            "label" => "Name",
+            "placeholder" => "awesome",
+            "unique" => "True",
+            "type" => "string",
+            "name" => "name"
+        )
     );
 
     /**@* {Array} Defines which fields are required for an entry. */
 	static protected $required = array(
 
-		"created"
-
-		, "id"
-
-		, "name"
+		"name"
 
 	);
 
 	static protected $userSettable = array(
 
+		"description"
+
+		, "name"
+
+	);
+
+	static protected $userVisible = array(
 
 		"description"
+
+		, "created"
+
+		, "id"
 
 		, "name"
 

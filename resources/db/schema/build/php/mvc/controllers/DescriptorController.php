@@ -3,7 +3,9 @@
 abstract class DescriptorController {
 	
 	static public function Create() {
-		AJAX::Response("json",  Descriptor::Create($_POST));
+		$Descriptor = new Descriptor($_REQUEST);
+		$Descriptor->Save();
+		AJAX::Response("json",  array("saved" => $Descriptor->isPersistent()));
 	}
 
 	static public function Get() {
@@ -12,22 +14,26 @@ abstract class DescriptorController {
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
-		$db = MySQLConnector::getHandle();
+		if ($_GET["ids"]){
+			$descriptors = explode(",", $_GET["ids"]);
+		} else {
+			$db = MySQLConnector::getHandle();
+			try {
+				$statement = $db->prepare("SELECT `id` FROM `descriptors`");
+		
+				$statement->execute();
 
-		try {
-			$statement = $db->prepare("SELECT `id` FROM `descriptors`");
-	
-			$statement->execute();
-
-			$descriptors = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-			foreach($descriptors as $descriptors){
-				$Descriptor = new Descriptor($descriptors);
-				$return[$Descriptor->id] = $Descriptor->GetValues();
+				$descriptors = $statement->fetchAll(PDO::FETCH_ASSOC);
+			} catch (PDOException $e) {
+				return AJAX::Response("json", array(), 2, $e->getMessage());
 			}
-		} catch (PDOException $e) {
-			return AJAX::Response("json", array(), 2, $e->getMessage());
 		}
+
+		foreach($descriptors as $DescriptorID){
+			$Descriptor = new Descriptor($DescriptorID);
+			$return[(string) $Descriptor->GetID()] = $Descriptor->GetValues(array("type"=>"visible"));
+		}
+
 
 		AJAX::Response("json", $return);
 	}
@@ -43,7 +49,12 @@ abstract class DescriptorController {
 	static public function Search() {
 
 	}
+
+
+	static public function Schema() {
+		AJAX::Response("json",  DescriptorModel::GetSchema());
+	}
 }
 
-AJAX::registerGetMethods("Descriptor", array("Get", "Search"));
+AJAX::registerGetMethods("Descriptor", array("Get", "Create", "Search", "Schema"));
 AJAX::registerPostMethods("Descriptor", array("Create", "Update", "Delete"));

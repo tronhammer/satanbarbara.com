@@ -199,7 +199,10 @@ abstract class BaseModel extends BaseObject {
 
 		if (is_array($data)){
 			$this->SetValues($data);	
-		};
+		}
+
+		
+		error_log( var_export( $this->_data, true));
 
 		if (self::CheckRequirements($this->_data)){
 			/**

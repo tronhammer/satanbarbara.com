@@ -33,7 +33,7 @@
 			$action = $_GET["action"];
 			$controller = $className . "Controller";
 
-			if (class_exists($className) && class_exists($controller)) {
+			if (class_exists($controller)) {
 				if (AJAX::isValidGetMethod($className, $action)){
 					call_user_func($controller."::".$action);
 				} else {
@@ -46,7 +46,7 @@
 			$className = $_POST["target"];
 			$action = $_POST["action"];
 			$controller = $className. "Controller";
-			if (class_exists($className) && class_exists($controller)) {
+			if (class_exists($controller)) {
 				if (AJAX::isValidPostMethod($className, $action)){
 					call_user_func($controller."::".$action);
 				} else {

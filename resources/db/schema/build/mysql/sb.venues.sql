@@ -16,7 +16,7 @@ CREATE TABLE `satanbarbara`.`venues` (
 	`last_modified` TIMESTAMP NOT NULL,
 	`address` VARCHAR(255) NOT NULL,
 	`capacity` INT(12) NOT NULL COMMENT "400",
-	`id` INT(12) NOT NULL AUTO_INCREMENT,
+	`id` INT(12) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 
 

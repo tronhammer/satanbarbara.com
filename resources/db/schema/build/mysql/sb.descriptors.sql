@@ -7,7 +7,7 @@ CREATE TABLE `satanbarbara`.`descriptors` (
 	`description` VARCHAR(4000) NOT NULL,
 	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
 	`deleted` BOOLEAN NOT NULL COMMENT "0",
-	`id` INT(12) NOT NULL AUTO_INCREMENT,
+	`id` INT(12) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 
 

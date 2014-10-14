@@ -3,7 +3,9 @@
 abstract class EventController {
 	
 	static public function Create() {
-		AJAX::Response("json",  Event::Create($_POST));
+		$Event = new Event($_REQUEST);
+		$Event->Save();
+		AJAX::Response("json",  array("saved" => $Event->isPersistent()));
 	}
 
 	static public function Get() {
@@ -12,22 +14,26 @@ abstract class EventController {
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
-		$db = MySQLConnector::getHandle();
+		if ($_GET["ids"]){
+			$events = explode(",", $_GET["ids"]);
+		} else {
+			$db = MySQLConnector::getHandle();
+			try {
+				$statement = $db->prepare("SELECT `id` FROM `events`");
+		
+				$statement->execute();
 
-		try {
-			$statement = $db->prepare("SELECT `id` FROM `events`");
-	
-			$statement->execute();
-
-			$events = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-			foreach($events as $events){
-				$Event = new Event($events);
-				$return[$Event->id] = $Event->GetValues();
+				$events = $statement->fetchAll(PDO::FETCH_ASSOC);
+			} catch (PDOException $e) {
+				return AJAX::Response("json", array(), 2, $e->getMessage());
 			}
-		} catch (PDOException $e) {
-			return AJAX::Response("json", array(), 2, $e->getMessage());
 		}
+
+		foreach($events as $EventID){
+			$Event = new Event($EventID);
+			$return[(string) $Event->GetID()] = $Event->GetValues(array("type"=>"visible"));
+		}
+
 
 		AJAX::Response("json", $return);
 	}
@@ -43,7 +49,12 @@ abstract class EventController {
 	static public function Search() {
 
 	}
+
+
+	static public function Schema() {
+		AJAX::Response("json",  EventModel::GetSchema());
+	}
 }
 
-AJAX::registerGetMethods("Event", array("Get", "Search"));
+AJAX::registerGetMethods("Event", array("Get", "Create", "Search", "Schema"));
 AJAX::registerPostMethods("Event", array("Create", "Update", "Delete"));

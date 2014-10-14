@@ -35,7 +35,6 @@
 			"label": "Unique ID",
 			"description": "",
 			"generator": "db",
-			"required": true,
 			"incremented": true
 		},
 		"created": {
@@ -44,8 +43,7 @@
 			"label": "Created",
 			"description": "Time when entry was made.",
 			"placeholder": "2014-11-25 04:34:00 pm",
-			"generator": "db",
-			"required": true
+			"generator": "db"
 		},
 		"name": {
 			"type": "string",
@@ -155,7 +153,8 @@
 			"description": "",
 			"default": "",
 			"placeholder": "2014-11-25 04:34:00 pm",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"archived": {
 			"type": "boolean",
@@ -164,7 +163,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"deleted": {
 			"type": "boolean",
@@ -173,7 +173,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		}
 	}
 }

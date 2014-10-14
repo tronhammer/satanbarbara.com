@@ -9,10 +9,217 @@ abstract class EventModel extends BaseModel {
     const _TABLE = "events";
 
     /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
-    static protected $attrs = json_decode(
-
-    "{u'archived': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Archived', u'placeholder': u'0', u'name': u'archived'}, u'promocode': {u'description': u'', u'generator': u'user', u'max': 64, u'label': u'Promocode', u'placeholder': u'IKICKASSFORTHELORD', u'type': u'string', u'name': u'promocode'}, u'subtitle': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 90, u'label': u'Subtitle', u'placeholder': u'B-Y-O-Bible', u'type': u'string', u'name': u'subtitle'}, u'description': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 4000, u'label': u'Description', u'placeholder': u'This is gonna be hot!', u'type': u'string', u'name': u'description'}, u'title': {u'description': u'', u'generator': u'user', u'min': 3, u'default': u'', u'max': 255, u'required': True, u'label': u'Title', u'placeholder': u'SBCMT Bible Burning', u'type': u'string', u'name': u'title'}, u'deleted': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Deleted', u'placeholder': u'0', u'name': u'deleted'}, u'ticket_uri': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 255, u'label': u'Ticket URL', u'placeholder': u'http://', u'type': u'string', u'name': u'ticket_uri'}, u'start_time': {u'description': u'', u'generator': u'user', u'type': u'timestamp', u'required': True, u'label': u'Start Time', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'start_time'}, u'created': {u'description': u'Time when entry was made.', u'generator': u'db', u'type': u'timestamp', u'required': True, u'label': u'Created', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'created'}, u'ages': {u'description': u'', u'generator': u'user', u'default': u'na', u'required': True, u'label': u'Ages', u'type': u'option', u'options': {u'18': {u'position': 1, u'description': u'', u'type': u'string', u'name': u'18', u'label': u'18+'}, u'all': {u'position': 0, u'description': u'', u'type': u'string', u'name': u'all', u'label': u'All'}, u'21': {u'position': 2, u'description': u'', u'type': u'string', u'name': u'21', u'label': u'21+'}, u'na': {u'position': 35, u'description': u'', u'type': u'string', u'name': u'na', u'label': u'Not Sure'}}, u'name': u'ages'}, u'price': {u'description': u'', u'generator': u'user', u'default': u'', u'type': u'string', u'required': True, u'label': u'Event Price', u'placeholder': u'$5', u'name': u'price'}, u'canceled': {u'description': u'', u'generator': u'system', u'default': 0, u'type': u'boolean', u'label': u'Canceled', u'placeholder': u'0', u'name': u'canceled'}, u'last_modified': {u'description': u'', u'generator': u'system', u'default': u'', u'type': u'timestamp', u'label': u'Last modified', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'last_modified'}, u'end_time': {u'description': u'', u'generator': u'user', u'type': u'timestamp', u'required': True, u'label': u'End Time', u'placeholder': u'2014-11-25 04:34:00 pm', u'name': u'end_time'}, u'date': {u'description': u'', u'generator': u'user', u'default': u'', u'type': u'date', u'required': True, u'label': u'Event Date', u'placeholder': u'2014-12-27', u'name': u'date'}, u'requirements': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 4000, u'label': u'Requirements', u'placeholder': u'At least 1 bible.', u'type': u'string', u'name': u'requirements'}, u'flyer_uri': {u'description': u'', u'generator': u'user', u'default': u'', u'max': 255, u'label': u'Flyer', u'placeholder': u'http://', u'type': u'string', u'name': u'flyer_uri'}, u'id': {u'description': u'', u'generator': u'db', u'incremented': True, u'required': True, u'label': u'Unique ID', u'unique': True, u'type': u'id', u'name': u'id'}, u'date_text': {u'description': u'2014-11-25 04:34:00 pm', u'generator': u'system', u'max': 35, u'label': u'Date Full Text', u'placeholder': u'2014-11-25 04:34:00 pm', u'type': u'string', u'name': u'date_text'}}"
-    
+    static protected $attrs = array(
+        "archived" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Archived",
+            "placeholder" => "0",
+            "name" => "archived"
+        ),
+        "promocode" => array(
+            "description" => "",
+            "generator" => "user",
+            "max" => "64",
+            "label" => "Promocode",
+            "placeholder" => "IKICKASSFORTHELORD",
+            "type" => "string",
+            "name" => "promocode"
+        ),
+        "subtitle" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "90",
+            "label" => "Subtitle",
+            "placeholder" => "B-Y-O-Bible",
+            "type" => "string",
+            "name" => "subtitle"
+        ),
+        "description" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "4000",
+            "label" => "Description",
+            "placeholder" => "This is gonna be hot!",
+            "type" => "string",
+            "name" => "description"
+        ),
+        "title" => array(
+            "description" => "",
+            "generator" => "user",
+            "min" => "3",
+            "default" => "",
+            "max" => "255",
+            "required" => "True",
+            "label" => "Title",
+            "placeholder" => "SBCMT Bible Burning",
+            "type" => "string",
+            "name" => "title"
+        ),
+        "deleted" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Deleted",
+            "placeholder" => "0",
+            "name" => "deleted"
+        ),
+        "ticket_uri" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "255",
+            "label" => "Ticket URL",
+            "placeholder" => "http://",
+            "type" => "string",
+            "name" => "ticket_uri"
+        ),
+        "start_time" => array(
+            "description" => "",
+            "generator" => "user",
+            "type" => "timestamp",
+            "required" => "True",
+            "label" => "Start Time",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "start_time"
+        ),
+        "created" => array(
+            "description" => "Time when entry was made.",
+            "generator" => "db",
+            "type" => "timestamp",
+            "label" => "Created",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "created"
+        ),
+        "ages" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "na",
+            "label" => "Ages",
+            "type" => "option",
+            "options" => array(
+                "18" => array(
+                    "position" => "1",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "18",
+                    "label" => "18+"
+                ),
+                "all" => array(
+                    "position" => "0",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "all",
+                    "label" => "All"
+                ),
+                "21" => array(
+                    "position" => "2",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "21",
+                    "label" => "21+"
+                ),
+                "na" => array(
+                    "position" => "35",
+                    "description" => "",
+                    "type" => "string",
+                    "name" => "na",
+                    "label" => "Not Sure"
+                )
+            ),
+            "name" => "ages"
+        ),
+        "price" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "type" => "string",
+            "required" => "True",
+            "label" => "Event Price",
+            "placeholder" => "$5",
+            "name" => "price"
+        ),
+        "canceled" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "type" => "boolean",
+            "label" => "Canceled",
+            "placeholder" => "0",
+            "name" => "canceled"
+        ),
+        "last_modified" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "",
+            "type" => "timestamp",
+            "label" => "Last modified",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "last_modified"
+        ),
+        "end_time" => array(
+            "description" => "",
+            "generator" => "user",
+            "type" => "timestamp",
+            "required" => "True",
+            "label" => "End Time",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "name" => "end_time"
+        ),
+        "date" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "type" => "date",
+            "required" => "True",
+            "label" => "Event Date",
+            "placeholder" => "2014-12-27",
+            "name" => "date"
+        ),
+        "requirements" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "4000",
+            "label" => "Requirements",
+            "placeholder" => "At least 1 bible.",
+            "type" => "string",
+            "name" => "requirements"
+        ),
+        "flyer_uri" => array(
+            "description" => "",
+            "generator" => "user",
+            "default" => "",
+            "max" => "255",
+            "label" => "Flyer",
+            "placeholder" => "http://",
+            "type" => "string",
+            "name" => "flyer_uri"
+        ),
+        "id" => array(
+            "description" => "",
+            "generator" => "db",
+            "incremented" => "True",
+            "required" => "True",
+            "label" => "Unique ID",
+            "unique" => "True",
+            "type" => "id",
+            "name" => "id"
+        ),
+        "date_text" => array(
+            "description" => "2014-11-25 04:34:00 pm",
+            "generator" => "system",
+            "max" => "35",
+            "label" => "Date Full Text",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "type" => "string",
+            "name" => "date_text"
+        )
     );
 
     /**@* {Array} Defines which fields are required for an entry. */
@@ -22,22 +229,15 @@ abstract class EventModel extends BaseModel {
 
 		, "start_time"
 
-		, "created"
-
-		, "ages"
-
 		, "price"
 
 		, "end_time"
 
 		, "date"
 
-		, "id"
-
 	);
 
 	static protected $userSettable = array(
-
 
 		"promocode"
 
@@ -62,6 +262,48 @@ abstract class EventModel extends BaseModel {
 		, "requirements"
 
 		, "flyer_uri"
+
+	);
+
+	static protected $userVisible = array(
+
+		"archived"
+
+		, "promocode"
+
+		, "subtitle"
+
+		, "description"
+
+		, "title"
+
+		, "deleted"
+
+		, "ticket_uri"
+
+		, "start_time"
+
+		, "created"
+
+		, "ages"
+
+		, "price"
+
+		, "canceled"
+
+		, "last_modified"
+
+		, "end_time"
+
+		, "date"
+
+		, "requirements"
+
+		, "flyer_uri"
+
+		, "id"
+
+		, "date_text"
 
 	);
 

@@ -29,7 +29,6 @@
 			"label": "Unique ID",
 			"description": "Exists as a unique identifier for Account objects in both the database and program layer.",
 			"generator": "db",
-			"required": true,
 			"incremented": true
 		},
 		"created": {
@@ -38,8 +37,7 @@
 			"label": "Created",
 			"description": "Time when entry was made in the database.",
 			"placeholder": "2014-11-25 04:34:00 pm",
-			"generator": "db",
-			"required": true
+			"generator": "db"
 		},
 		"username": {
 			"type": "string",
@@ -63,7 +61,8 @@
 			"default": "",
 			"placeholder": "666SatanForPrez",
 			"generator": "user",
-			"required": true
+			"required": true,
+			"restricted": true
 		},
 		"fname": {
 			"type": "string",
@@ -119,7 +118,8 @@
 			"description": "",
 			"default": "",
 			"placeholder": "tron@tronnet.me",
-			"generator": "user"
+			"generator": "user",
+			"required": true
 		},
 		"description": {
 			"type": "string",
@@ -138,7 +138,6 @@
 			"description": "",
 			"generator": "system",
 			"default": "user",
-			"required": true,
 			"options": {
 				"admin": {
 					"type": "string",
@@ -216,7 +215,8 @@
 			"description": "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
 			"default": 0,
 			"placeholder": "2014-11-25 04:34:00 pm",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"last_modified": {
 			"type": "timestamp",
@@ -225,7 +225,8 @@
 			"description": "",
 			"default": "",
 			"placeholder": "2014-11-25 04:34:00 pm",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"activated": {
 			"type": "boolean",
@@ -234,7 +235,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "1",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"suspended": {
 			"type": "boolean",
@@ -243,7 +245,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"banned": {
 			"type": "boolean",
@@ -252,7 +255,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"archived": {
 			"type": "boolean",
@@ -261,7 +265,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		},
 		"deleted": {
 			"type": "boolean",
@@ -270,7 +275,8 @@
 			"description": "",
 			"default": 0,
 			"placeholder": "0",
-			"generator": "system"
+			"generator": "system",
+			"restricted": true
 		}
 	}
 }

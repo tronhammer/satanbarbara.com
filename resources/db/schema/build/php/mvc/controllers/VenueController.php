@@ -3,7 +3,9 @@
 abstract class VenueController {
 	
 	static public function Create() {
-		AJAX::Response("json",  Venue::Create($_POST));
+		$Venue = new Venue($_REQUEST);
+		$Venue->Save();
+		AJAX::Response("json",  array("saved" => $Venue->isPersistent()));
 	}
 
 	static public function Get() {
@@ -12,22 +14,26 @@ abstract class VenueController {
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
-		$db = MySQLConnector::getHandle();
+		if ($_GET["ids"]){
+			$venues = explode(",", $_GET["ids"]);
+		} else {
+			$db = MySQLConnector::getHandle();
+			try {
+				$statement = $db->prepare("SELECT `id` FROM `venues`");
+		
+				$statement->execute();
 
-		try {
-			$statement = $db->prepare("SELECT `id` FROM `venues`");
-	
-			$statement->execute();
-
-			$venues = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-			foreach($venues as $venues){
-				$Venue = new Venue($venues);
-				$return[$Venue->id] = $Venue->GetValues();
+				$venues = $statement->fetchAll(PDO::FETCH_ASSOC);
+			} catch (PDOException $e) {
+				return AJAX::Response("json", array(), 2, $e->getMessage());
 			}
-		} catch (PDOException $e) {
-			return AJAX::Response("json", array(), 2, $e->getMessage());
 		}
+
+		foreach($venues as $VenueID){
+			$Venue = new Venue($VenueID);
+			$return[(string) $Venue->GetID()] = $Venue->GetValues(array("type"=>"visible"));
+		}
+
 
 		AJAX::Response("json", $return);
 	}
@@ -43,7 +49,12 @@ abstract class VenueController {
 	static public function Search() {
 
 	}
+
+
+	static public function Schema() {
+		AJAX::Response("json",  VenueModel::GetSchema());
+	}
 }
 
-AJAX::registerGetMethods("Venue", array("Get", "Search"));
+AJAX::registerGetMethods("Venue", array("Get", "Create", "Search", "Schema"));
 AJAX::registerPostMethods("Venue", array("Create", "Update", "Delete"));

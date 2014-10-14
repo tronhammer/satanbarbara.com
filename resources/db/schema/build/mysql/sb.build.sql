@@ -23,7 +23,7 @@ CREATE TABLE `satanbarbara`.`descriptors` (
 	`description` VARCHAR(4000) NOT NULL,
 	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
 	`deleted` BOOLEAN NOT NULL COMMENT "0",
-	`id` INT(12) NOT NULL AUTO_INCREMENT,
+	`id` INT(12) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 
 
@@ -50,7 +50,7 @@ CREATE TABLE `satanbarbara`.`venues` (
 	`last_modified` TIMESTAMP NOT NULL,
 	`address` VARCHAR(255) NOT NULL,
 	`capacity` INT(12) NOT NULL COMMENT "400",
-	`id` INT(12) NOT NULL AUTO_INCREMENT,
+	`id` INT(12) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 
 
@@ -84,7 +84,7 @@ CREATE TABLE `satanbarbara`.`accounts` (
 	`fname` VARCHAR(128) NOT NULL,
 	`password` VARCHAR(128) NOT NULL COMMENT "Case sensitive password for authenticating the Account object.",
 	`nickname` VARCHAR(64) NOT NULL,
-	`id` INT(12) NOT NULL AUTO_INCREMENT COMMENT "Exists as a unique identifier for Account objects in both the database and program layer.",
+	`id` INT(12) NOT NULL COMMENT "Exists as a unique identifier for Account objects in both the database and program layer.",
 
 
     	UNIQUE INDEX `uid` (`email`, `username`),
@@ -110,7 +110,7 @@ CREATE TABLE `satanbarbara`.`bands` (
 	`last_login` TIMESTAMP NOT NULL,
 	`suspended` BOOLEAN NOT NULL,
 	`active` ENUM("yes", "no") NOT NULL DEFAULT "yes",
-	`id` INT(12) NOT NULL AUTO_INCREMENT,
+	`id` INT(12) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 
 
