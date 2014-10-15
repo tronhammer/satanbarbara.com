@@ -48,6 +48,19 @@ def JSONObjToPHPObj(attrVal, depth):
 
 	return '"'+str(attrVal)+'"'
 
+def JSONObjToJSObj(attrVal, depth):
+	depth = int(depth)+1
+	if type(attrVal) == type({}):
+		tabSpacing = "    "*depth
+		tabCloseSpacing = "    "*(depth-1)
+		return "{\n%s%s\n%s}" % (
+			tabSpacing, 
+			(",\n"+tabSpacing).join( [('"%s": %s' % (attrName, JSONObjToJSObj(attrVal[attrName], depth)) ) for attrName in attrVal]),
+			tabCloseSpacing
+		)
+
+	return '"'+str(attrVal)+'"'
+
 if __name__ == "__main__":
 
 	ll = Logging()
@@ -68,6 +81,7 @@ if __name__ == "__main__":
 	controllerTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".controller.tmpl")
 	modelTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".model.tmpl")
 	objectTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".object.tmpl")
+	JSobjectTemplate = Template( filename=templateDirectory + "/js/angular/js.object.tmpl")
 
 	DatabaseSchema = json.loads(open("Database.schema.json", "r").read());
 
@@ -100,11 +114,14 @@ if __name__ == "__main__":
 
 		tables[ ObjectName ] = ObjectSchema
 
+		ObjectReferences = {}
+
 		if ObjectSchema["meta"]["db"][ db ][ version ].get("junction"):
 			junctions[ObjectName] =  {
 				"listingKey": ObjectSchema["listingKey"], 
 				"mapping": ObjectSchema["meta"]["db"][ db ][ version ]["junction"]
 			}
+			ObjectReferences = ObjectSchema["meta"]["db"][ db ][ version ]["junction"]
 
 		if ObjectSchema["meta"]["db"][ db ][ version ].get("populate"):
 			populates[ ObjectName ] = {
@@ -135,36 +152,72 @@ if __name__ == "__main__":
 
 		ll.p("Rending %s controller file..." % (ObjectName))
 
-		controllerBuild = controllerTemplate.render(
-			ObjectName=ObjectName,
-			listingKey=ObjectSchema["listingKey"]
-		)
+		try:
+			controllerOverrideTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/overrides/"+codelang+".controller."+ObjectName+".tmpl")
+		
+			controllerBuild = controllerOverrideTemplate.render(
+				ObjectName=ObjectName,
+				listingKey=ObjectSchema["listingKey"]
+			)
+		except:
+			controllerBuild = controllerTemplate.render(
+				ObjectName=ObjectName,
+				listingKey=ObjectSchema["listingKey"]
+			)
 
 		builtControllerFile = open("build/"+ codelang +"/"+ framework +"/controllers/"+ObjectName+"Controller.php", "w");
 		builtControllerFile.write(controllerBuild)
 
 		ll.p("Rending %s model file..." % (ObjectName))
 
-		modelBuild = modelTemplate.render(
-			ObjectName=ObjectName,
-			JSONObjToPHPObj=JSONObjToPHPObj,
-			listingKey=ObjectSchema["listingKey"],
-			db=DatabaseSchema,
-			properties=ObjectSchema["properties"]
-		)
+		try:
+			modileOverrideTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/mvc/overrides/"+codelang+".model."+ObjectName+".tmpl")
+		
+			modelBuild = modileOverrideTemplate.render(
+				ObjectName=ObjectName,
+				JSONObjToPHPObj=JSONObjToPHPObj,
+				junctions=ObjectReferences,
+				listingKey=ObjectSchema["listingKey"],
+				db=DatabaseSchema,
+				properties=ObjectSchema["properties"]
+			)
+		except:
+			modelBuild = modelTemplate.render(
+				ObjectName=ObjectName,
+				JSONObjToPHPObj=JSONObjToPHPObj,
+				junctions=ObjectReferences,
+				listingKey=ObjectSchema["listingKey"],
+				db=DatabaseSchema,
+				properties=ObjectSchema["properties"]
+			)
 
 		builtModelFile = open("build/"+ codelang +"/"+ framework +"/models/"+ObjectName+"Model.php", "w");
 		builtModelFile.write(modelBuild)
 
 		ll.p("Rending %s object file..." % (ObjectName))
 
-		objectBuild = objectTemplate.render(
-			ObjectName=ObjectName
-		)
+		try:
+			objectOverrideTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/mvc/overrides/"+codelang+".object."+ObjectName+".tmpl")
+
+			objectBuild = objectOverrideTemplate.render(
+				ObjectName=ObjectName
+			)		
+		except:
+			objectBuild = objectTemplate.render(
+				ObjectName=ObjectName
+			)
 
 		builtObjectFile = open("build/"+ codelang +"/"+ framework +"/objects/"+ObjectName+".php", "w");
 		builtObjectFile.write(objectBuild)
 	
+		JSobjectBuild = JSobjectTemplate.render(
+			ObjectName=ObjectName,
+			JSONObjToJSObj=JSONObjToJSObj,
+			properties=ObjectSchema["properties"]
+		)
+
+		JSbuiltObjectFile = open("build/js/angular/objects/sb."+ObjectName+".js", "w");
+		JSbuiltObjectFile.write(JSobjectBuild)
 
 	for fromName in junctions:
 		junction = junctions[ fromName ]
@@ -244,4 +297,8 @@ if __name__ == "__main__":
 	)
 	open("build/"+ codelang +"/"+ framework +"/objects/BaseObject.php", "w").write(
 		Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".object.base.tmpl").render()
+	)
+
+	open("build/"+ codelang +"/"+ framework +"/controllers/BaseController.php", "w").write(
+		Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".controller.base.tmpl").render()
 	)

@@ -37,7 +37,7 @@ CREATE TABLE `${db["name"]}`.`${listingKey}` (
 ) ENGINE=`${config["engine"]}` DEFAULT CHARSET=`${config["charset"]}` COLLATE=`${config["collate"]}` AUTO_INCREMENT=${config["incrementAmount"]};
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-<%def name="idEntry(property)">INT(${property["max"] if property.get("max") else 12}) NOT NULL${" AUTO_INCREMENT" if property.get("required") else ""}</%def>
+<%def name="idEntry(property)">INT(${property["max"] if property.get("max") else 12}) NOT NULL${" AUTO_INCREMENT" if property.get("incremented") else ""}</%def>
 
 <%def name="stringEntry(property)">VARCHAR(${property["max"] if property.get("max") else 255}) NOT NULL${" DEFAULT \""+property["default"]+"\"" if property.get("default") else ""}</%def>
 

@@ -309,27 +309,54 @@
 
   module.controller("CreateEventController", ["$scope", "$data", "$rest", function($scope, $data, $rest){
     $scope.create = function(){
-      var eventData = {},
-        venueData = {},
+      var eventData = {
+        "target": "Event"
+        },
+        venueData = {
+          "target": "Venue"
+        },
         bands = [];
 
       for (var fieldName in $scope.eventDefinitions){
         if (fieldName.substr(0,1) != "$"){
-          eventData[fieldName] = $("[name='"+fieldName+"']").val();
+          var $field = $("[name='"+fieldName+"']");
+          if ($field.length){
+            eventData[fieldName] = $("[name='"+fieldName+"']").val();
+          }
         }
       }
 
       for (var fieldName in $scope.venueDefinitions){
         if (fieldName.substr(0,1) != "$"){
-          venueData[fieldName] = $("[name='"+fieldName+"']").val();
+          var $field = $("[name='"+fieldName+"']");
+          if ($field.length){
+            venueData[fieldName] = $("[name='"+fieldName+"']").val();
+          }
         }
       }
 
-      bands = $("[name='bandnames']").val().split(",");
+      bands = $("input[name='bandnames']").data("bandIDs");
 
-      
+
+
+      console.log("Time to create this sucker");
+
+      $rest.create(eventData);
+      $rest.create(venueData);
 
     }
+
+    $scope.$on("createdVenue", function(){
+      console.log("Created that venue!");
+    });
+
+    $scope.$on("createdBand", function(){
+      console.log("Created that band!");
+    });
+
+    $scope.$on("createdEvent", function(){
+      console.log("Created that event!");
+    });
 
     $scope.$on("gotObjectSchema", function(e, data){
       var eventAttrs = {},
@@ -364,12 +391,49 @@
     $rest.getObjectSchema({"types": "Event,Band,Venue"})
   }]);
 
-  module.directive("createEventListener", ["$rootScope", function($rootScope) {
+  module.directive("createEventListener", ["$rootScope", "$rest", function($rootScope, $rest) {
     return {
       "link": function($scope, ele, attrs){
         $(ele).bind("click", function(){
-            // createEvent.hide();
-          });
+          // createEvent.hide();
+        });
+
+        $(ele).delegate("input[name='bandnames']", "keyup", function(){
+          var bands = $(this).val()
+
+          if (bands.substr(-1) == ","){
+            var existingBandsList = $(this).data("bands") || [],
+              bandsList = bands.split(","),
+              lastBand = bandsList[ bandsList.length - 2 ].trim();
+
+            if (existingBandsList.indexOf(lastBand) == -1){
+              existingBandsList.push( lastBand );
+              $(this).data("bands", existingBandsList);
+
+              $rest.create({
+                "target": "Band",
+                "name": lastBand
+              });
+            }            
+          }
+        })
+
+        $(ele).delegate("input[name='bandnames']", "blur", function(){
+          var existingBandsList = $(this).data("bands") || [],
+            bandsList = $(this).val().split(","),
+            lastBand = bandsList[ bandsList.length - 1 ].trim();
+
+          if (lastBand.length && existingBandsList.indexOf( lastBand ) == -1){
+              existingBandsList.push( lastBand );
+              $(this).data("bands", existingBandsList);
+
+              $rest.create({
+                "target": "Band",
+                "name": lastBand
+              });
+          }
+
+        });
       }
     }   
   }]);
@@ -468,7 +532,7 @@
         "ajax": {
           "uri": "http://localhost/satanbarbara.com/api/",
           "buildUri": function(data){
-            return this.uri+"?action="+data.action+"&target="+data.target;
+            return this.uri+"?action="+data.action+ (data.target ? "&target="+data.target : "");
           }
         }
       },
@@ -504,40 +568,23 @@
           console.log("double wat");
         });
       },
-      "createEvent": function(data){
+      "create": function(data){
+        var mode = this.modes[ this.mode ],
+          target = data["target"];
+
+        data["action"] = "Create";
+
         $.ajax({
-          "type": "POST", 
-          "dataType": "json", 
-          "url": "http://localhost/satanbarbara.com/api/", 
-          "data": {
-            "action": "Create",
-            "target": "Event",
-            "creator_id": 3,
-            "type_id": 2,
-            "title": "all the wins...!", 
-            "subtitle": "For maor purposes", 
-            "description": "It could be really cool for a test!", 
-            "location": "1234 sterrat lane, santa barbara, CA 93101",
-            "date_text": "October 6th, 2014 @ 7:30pm",
-            "date": "2014-10-06",
-            "start_time": "2014-10-06 19:30:00",
-            "end_time": "2014-10-06 1:00:00",
-            "ages": "21",
-            "venue": "The Crowded Coffin",
-            "venue_id": 1,
-            "venue_type_id": 1,
-            "price": "$18.50",
-            "requirements": "Nothing",
-            "genre_id": 2,
-            "map_uri": "https://maps.google.com/",
-            "ticket_uri": "not sure",
-            "promocode": "",
-            "acts": "[1,2,3]", 
-            "guests": "[1,2,3]",
-            "actstotal": 3,
-            "gueststotal": 100
-          }
-        }).done(function(r){ console.log("done!", arguments); }).fail(function(){ console.log("failed!", arguments); })
+          "url": mode.uri,
+          "dataType": "json",
+          "type": "POST",
+          "data": data
+        }).success(function(response){
+          data.id = response.data.saved;
+          $rootScope.$broadcast("created"+target, data);
+        }).fail(function(){
+          console.log("double wat");
+        });
       }
     };
 
@@ -663,4 +710,9 @@
       }
     };
   });
+
+  window.SB = {
+    "module": module,
+    "app": app
+  };
 })();

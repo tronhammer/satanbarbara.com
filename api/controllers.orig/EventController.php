@@ -1,61 +1,47 @@
 <?php
 
-abstract class EventController {
-	
-	static public function Create() {
-		AJAX::Response("json",  Event::Create($_POST));
-	}
+abstract class EventController extends BaseController{
+	static protected $_target = "Event";
 
 	static public function Get() {
-		$return = array();
+		$Model = static::$_target."Model";
+		$return = array(
+			"events" => array(
+				"all" => array(),
+				"sorts" => array(
+					"date" => array()
+				)
+			)
+		);
 		$start = isset($_GET["start"]) ? $_GET["start"] : 0;
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
-		$db = MySQLConnector::getHandle();
+		if ($_GET["ids"]){
+			$objects = explode(",", $_GET["ids"]);
+		} else {
+			$db = MySQLConnector::getHandle();
+			try {
+				$statement = $db->prepare("SELECT `id` FROM `".$Model::_TABLE."`");
+		
+				$statement->execute();
 
-		try {
-			// $statement = $db->prepare("SELECT `id` FROM `events`");
-			$statement = $db->prepare("SELECT * FROM `events`");
-
-			$statement->execute();
-
-			$events = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-			$return = array(
-				"events" => array(
-					"all" => array(),
-					"sorts" => array(
-						"date" => array()
-					)
-				)
-			);
-
-			foreach($events as $event){
-				$return["events"]["all"][ $event["id"] ] = $event;
-				$return["events"]["sorts"]["date"][$event["date"]][] = $event["id"];
+				$objects = $statement->fetchAll(PDO::FETCH_ASSOC);
+			} catch (PDOException $e) {
+				return AJAX::Response("json", array(), 2, $e->getMessage());
 			}
+		}
 
-
-			// foreach($events as $event){
-			// 	$Event = new Event($account);
-			// 	$return[$Event->id] = $Event->GetValues();
-			// }
-		} catch (PDOException $e) {
-			return AJAX::Response("json", array(), 2, $e->getMessage());
+		foreach($objects as $ObjectID){
+			$Object = new static::$_target($ObjectID);
+			$ObjectData = $Object->GetValues(array("type"=>"visible"));
+			$return["events"]["all"][ $Object->GetID() ] = $ObjectData;
+			$return["events"]["sorts"]["date"][ $ObjectData["date"] ][] = $Object->GetID();
 		}
 
 		AJAX::Response("json", $return);
 	}
-
-	static public function Update() {
-
-	}
-
-	static public function Delete() {
-
-	}
 }
 
-AJAX::registerGetMethods("Event", array("Get", "Search"));
+AJAX::registerGetMethods("Event", array("Get", "Search", "Schema"));
 AJAX::registerPostMethods("Event", array("Create", "Update", "Delete"));

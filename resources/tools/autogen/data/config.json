@@ -1,0 +1,21 @@
+{
+	"paths": {
+		"base": "../../../",
+		"js": {
+			"build": "www/js/build/",
+			"objects": "www/js/objects/",
+			"controllers": "www/js/controllers/",
+			"models": "www/js/models/"
+		},
+		"php": {
+			"build": "api/build/"
+			"objects": "api/objects/",
+			"controllers": "api/controllers/",
+			"models": "api/models/"
+		},
+		"mysql": {
+			"build": "resources/db/build/",
+			"tables": "resources/db/mysql/"
+		}
+	}
+}

@@ -5,7 +5,7 @@
 
 abstract class MySQLConnector {
 
- 	static private $_credentialsPath = "../../../../../mysql/db.credentials.json";
+ 	static private $_credentialsPath = "../../resources/db/mysql/db.credentials.json";
  	static private $_dbh;
 
 	private static function _connect() {

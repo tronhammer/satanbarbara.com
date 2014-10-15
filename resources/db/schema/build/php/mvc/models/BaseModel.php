@@ -199,10 +199,7 @@ abstract class BaseModel extends BaseObject {
 
 		if (is_array($data)){
 			$this->SetValues($data);	
-		}
-
-		
-		error_log( var_export( $this->_data, true));
+		};
 
 		if (self::CheckRequirements($this->_data)){
 			/**
@@ -325,7 +322,7 @@ abstract class BaseModel extends BaseObject {
 			 * @todo  Update this to map the type to a specific validation function name
 			 * @var [type]
 			 */
-			$this->_persistent
+			
 			$attrTypeCheck = static::$attrs[$name];
 			if (!is_callable($attrTypeCheck) || $attrTypeCheck($value)){
 				$ret[$name] = $value;

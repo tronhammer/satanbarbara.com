@@ -329,6 +329,11 @@ abstract class AccountModel extends BaseModel {
 
 	);
 
+    /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
+    static protected $references = array(
+        
+    );
+
 	/**
 	 * Class Methods
 	 */

@@ -1,0 +1,20 @@
+;(function(){
+	"use strict";
+	var module = SB.module;
+
+	module.controller("${ObjectName}sontroller", ["$scope", "$${ObjectName}", function($scope, $data, $${ObjectName}) {
+
+	});
+
+	module.factory("$${ObjectName}", ["$rootScope", "$rest", function($rootScope, $rest) {
+		return {
+			"attrs": ${JSONObjToJSObj(properties, 3)},
+			"set": function(){
+
+			},
+			"get": function(){
+
+			}
+		};
+	});
+})(window.SB);

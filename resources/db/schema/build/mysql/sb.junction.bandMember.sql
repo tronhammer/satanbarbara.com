@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS `bandMember`;
 CREATE TABLE `satanbarbara`.`bandMember` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),

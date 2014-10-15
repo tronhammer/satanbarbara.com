@@ -307,6 +307,15 @@ abstract class EventModel extends BaseModel {
 
 	);
 
+    /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
+    static protected $references = array(
+        "eventBand" => "Band",
+        "eventVenue" => "Venue",
+        "eventCreator" => "Account",
+        "eventGenre" => "Descriptor",
+        "eventAttendee" => "Account"
+    );
+
 	/**
 	 * Class Methods
 	 */

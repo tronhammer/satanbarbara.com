@@ -1,7 +1,7 @@
 <?php
 
-abstract class EventController extends BaseController{
-	static protected $_target = "Event";
+abstract class ${ObjectName}Controller extends BaseController{
+	static protected $_target = "${ObjectName}";
 
 	static public function Get() {
 		$return = array(
@@ -17,21 +17,21 @@ abstract class EventController extends BaseController{
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
 
 		if ($_GET["ids"]){
-			$events = explode(",", $_GET["ids"]);
+			$${listingKey} = explode(",", $_GET["ids"]);
 		} else {
 			$db = MySQLConnector::getHandle();
 			try {
-				$statement = $db->prepare("SELECT `id` FROM `".$EventModel::_TABLE."`");
+				$statement = $db->prepare("SELECT `id` FROM `".$${ObjectName}Model::_TABLE."`");
 		
 				$statement->execute();
 
-				$events = $statement->fetchAll(PDO::FETCH_ASSOC);
+				$${listingKey} = $statement->fetchAll(PDO::FETCH_ASSOC);
 			} catch (PDOException $e) {
 				return AJAX::Response("json", array(), 2, $e->getMessage());
 			}
 		}
 
-		foreach($events as $ObjectID){
+		foreach($${listingKey} as $ObjectID){
 			$Object = new static::$_target($ObjectID);
 			$ObjectData = $Object->GetValues(array("type"=>"visible"));
 			$return["events"]["all"][ $Object->GetID() ] = $ObjectData;
@@ -42,5 +42,5 @@ abstract class EventController extends BaseController{
 	}
 }
 
-AJAX::registerGetMethods("Event", array("Get", "Search", "Schema"));
-AJAX::registerPostMethods("Event", array("Create", "Update", "Delete"));
+AJAX::registerGetMethods("${ObjectName}", array("Get", "Search", "Schema"));
+AJAX::registerPostMethods("${ObjectName}", array("Create", "Update", "Delete"));

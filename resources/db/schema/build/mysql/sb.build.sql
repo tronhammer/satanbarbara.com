@@ -23,7 +23,7 @@ CREATE TABLE `satanbarbara`.`descriptors` (
 	`description` VARCHAR(4000) NOT NULL,
 	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
 	`deleted` BOOLEAN NOT NULL COMMENT "0",
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
 
 
@@ -50,7 +50,7 @@ CREATE TABLE `satanbarbara`.`venues` (
 	`last_modified` TIMESTAMP NOT NULL,
 	`address` VARCHAR(255) NOT NULL,
 	`capacity` INT(12) NOT NULL COMMENT "400",
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
 
 
@@ -84,7 +84,7 @@ CREATE TABLE `satanbarbara`.`accounts` (
 	`fname` VARCHAR(128) NOT NULL,
 	`password` VARCHAR(128) NOT NULL COMMENT "Case sensitive password for authenticating the Account object.",
 	`nickname` VARCHAR(64) NOT NULL,
-	`id` INT(12) NOT NULL COMMENT "Exists as a unique identifier for Account objects in both the database and program layer.",
+	`id` INT(12) NOT NULL AUTO_INCREMENT COMMENT "Exists as a unique identifier for Account objects in both the database and program layer.",
 
 
     	UNIQUE INDEX `uid` (`email`, `username`),
@@ -110,7 +110,7 @@ CREATE TABLE `satanbarbara`.`bands` (
 	`last_login` TIMESTAMP NOT NULL,
 	`suspended` BOOLEAN NOT NULL,
 	`active` ENUM("yes", "no") NOT NULL DEFAULT "yes",
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
 
 
@@ -155,7 +155,7 @@ DROP TABLE IF EXISTS `bandCreator`;
 CREATE TABLE `satanbarbara`.`bandCreator` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),
@@ -173,7 +173,7 @@ DROP TABLE IF EXISTS `bandMember`;
 CREATE TABLE `satanbarbara`.`bandMember` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),
@@ -191,7 +191,7 @@ DROP TABLE IF EXISTS `bandGenre`;
 CREATE TABLE `satanbarbara`.`bandGenre` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `descriptors`(`id`),
@@ -209,7 +209,7 @@ DROP TABLE IF EXISTS `venueOwner`;
 CREATE TABLE `satanbarbara`.`venueOwner` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),
@@ -227,7 +227,7 @@ DROP TABLE IF EXISTS `venueTag`;
 CREATE TABLE `satanbarbara`.`venueTag` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `descriptors`(`id`),
@@ -245,7 +245,7 @@ DROP TABLE IF EXISTS `venueCreator`;
 CREATE TABLE `satanbarbara`.`venueCreator` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),
@@ -263,7 +263,7 @@ DROP TABLE IF EXISTS `eventBand`;
 CREATE TABLE `satanbarbara`.`eventBand` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `bands`(`id`),
@@ -281,7 +281,7 @@ DROP TABLE IF EXISTS `eventVenue`;
 CREATE TABLE `satanbarbara`.`eventVenue` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `venues`(`id`),
@@ -299,7 +299,7 @@ DROP TABLE IF EXISTS `eventCreator`;
 CREATE TABLE `satanbarbara`.`eventCreator` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),
@@ -317,7 +317,7 @@ DROP TABLE IF EXISTS `eventGenre`;
 CREATE TABLE `satanbarbara`.`eventGenre` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `descriptors`(`id`),
@@ -335,7 +335,7 @@ DROP TABLE IF EXISTS `eventAttendee`;
 CREATE TABLE `satanbarbara`.`eventAttendee` (
 	`to` INT(12) NOT NULL,
 	`from` INT(12) NOT NULL,
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`created` TIMESTAMP NOT NULL DEFAULT NOW(),
 
     	FOREIGN KEY (`to`) REFERENCES `accounts`(`id`),

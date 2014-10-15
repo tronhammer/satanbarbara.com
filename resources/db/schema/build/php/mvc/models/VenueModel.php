@@ -227,6 +227,13 @@ abstract class VenueModel extends BaseModel {
 
 	);
 
+    /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
+    static protected $references = array(
+        "venueOwner" => "Account",
+        "venueTag" => "Descriptor",
+        "venueCreator" => "Account"
+    );
+
 	/**
 	 * Class Methods
 	 */

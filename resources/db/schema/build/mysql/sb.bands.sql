@@ -16,7 +16,7 @@ CREATE TABLE `satanbarbara`.`bands` (
 	`last_login` TIMESTAMP NOT NULL,
 	`suspended` BOOLEAN NOT NULL,
 	`active` ENUM("yes", "no") NOT NULL DEFAULT "yes",
-	`id` INT(12) NOT NULL,
+	`id` INT(12) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
 
 

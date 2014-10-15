@@ -213,6 +213,13 @@ abstract class BandModel extends BaseModel {
 
 	);
 
+    /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
+    static protected $references = array(
+        "bandCreator" => "Account",
+        "bandMember" => "Account",
+        "bandGenre" => "Descriptor"
+    );
+
 	/**
 	 * Class Methods
 	 */

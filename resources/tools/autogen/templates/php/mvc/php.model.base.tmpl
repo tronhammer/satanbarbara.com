@@ -322,7 +322,7 @@ abstract class BaseModel extends BaseObject {
 			 * @todo  Update this to map the type to a specific validation function name
 			 * @var [type]
 			 */
-			$this->_persistent
+			
 			$attrTypeCheck = static::$attrs[$name];
 			if (!is_callable($attrTypeCheck) || $attrTypeCheck($value)){
 				$ret[$name] = $value;

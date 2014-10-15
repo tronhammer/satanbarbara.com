@@ -2,14 +2,15 @@
 
 abstract class ObjectAssociation {
 
-	static public MakeAsoc($name, BaseObject $from, BaseObject $to){
+	static public function MakeAssoc($name, BaseObject $from, BaseObject $to){
 		if ($from->IsPersistent() && $to->IsPersistent()){
 			$db = MySQLConnector::getHandle();
 
-			$query = "INSERT INTO `". $name ."` (`from`,`to`,) VALUES (?,?)";
+			$query = "INSERT INTO `". $name ."` (`from`,`to`) VALUES (?,?)";
+			$data = array($from->GetID(), $to->GetID());
 
 			$statement = $db->prepare($query);
-			if (!$statement->execute( array($from->GetID(), $to->GetID()) )) {
+			if (!$statement->execute($data)) {
 				if ($statement->errorCode() == 23000) {
 					throw new Exception("Object name already exists in the database!" . var_export($statement->errorInfo(), true));
 				} else {
@@ -24,6 +25,7 @@ abstract class ObjectAssociation {
 			return $id;
 
 		} else {
-			throw Exception("Both objects must be persistent before making an association!");
+			throw new Exception("Both objects must be persistent before making an association!");
 		}
 	}
+}

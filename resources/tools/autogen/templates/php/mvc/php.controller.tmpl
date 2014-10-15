@@ -1,62 +1,9 @@
 <?php
 
-abstract class ${ObjectName}Controller {
-	
-	static public function Create() {
-		$${ObjectName} = new ${ObjectName}($_REQUEST);
-		$${ObjectName}->Save();
+abstract class ${ObjectName}Controller extends BaseController{
+	static protected $_target = "${ObjectName}";
 
-		
-		AJAX::Response("json",  array("saved" => $${ObjectName}->isPersistent()));
-	}
-
-	static public function Get() {
-		$return = array();
-		$start = isset($_GET["start"]) ? $_GET["start"] : 0;
-		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
-		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
-
-		if ($_GET["ids"]){
-			$${listingKey} = explode(",", $_GET["ids"]);
-		} else {
-			$db = MySQLConnector::getHandle();
-			try {error_log\(var_export\([^\)]*\)\s*\);
-				$statement = $db->prepare("SELECT `id` FROM `${listingKey}`");
-		
-				$statement->execute();
-
-				$${listingKey} = $statement->fetchAll(PDO::FETCH_ASSOC);
-			} catch (PDOException $e) {
-				return AJAX::Response("json", array(), 2, $e->getMessage());
-			}
-		}
-
-		foreach($${listingKey} as $${ObjectName}ID){
-			$${ObjectName} = new ${ObjectName}($${ObjectName}ID);
-			$return[$${ObjectName}->GetID()] = $${ObjectName}->GetValues(array("type"=>"visible"));
-		}
-
-
-		AJAX::Response("json", $return);
-	}
-
-	static public function Update() {
-
-	}
-
-	static public function Delete() {
-
-	}
-
-	static public function Search() {
-
-	}
-
-
-	static public function Schema() {
-		AJAX::Response("json",  ${ObjectName}Model::GetSchema());
-	}
 }
 
-AJAX::registerGetMethods("${ObjectName}", array("Get", "Create", "Search", "Schema"));
+AJAX::registerGetMethods("${ObjectName}", array("Get", "Search", "Schema"));
 AJAX::registerPostMethods("${ObjectName}", array("Create", "Update", "Delete"));
