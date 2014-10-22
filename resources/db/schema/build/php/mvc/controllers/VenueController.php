@@ -1,7 +1,8 @@
 <?php
 
-abstract class VenueController extends BaseController{
+abstract class VenueController extends BaseController {
 	static protected $_target = "Venue";
+	static protected $_key = "venues";
 
 }
 

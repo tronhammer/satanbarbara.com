@@ -33,7 +33,7 @@ abstract class BaseController {
 
 		foreach($objects as $ObjectID){
 			$Object = new static::$_target($ObjectID);
-			$return[$Object->GetID()] = $Object->GetValues(array("type"=>"visible"));
+			$return[static::$_key]["all"][ $Object->GetID() ] = $Object->GetValues(array("type"=>"visible"));
 		}
 
 

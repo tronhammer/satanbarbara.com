@@ -74,13 +74,13 @@ CREATE TABLE `satanbarbara`.`accounts` (
 	`tagline` VARCHAR(128) NOT NULL,
 	`banned` BOOLEAN NOT NULL,
 	`activated` BOOLEAN NOT NULL,
-	`suspended` BOOLEAN NOT NULL,
 	`email` VARCHAR(255) NOT NULL,
 	`lname` VARCHAR(128) NOT NULL,
 	`privilege_level` ENUM("admin", "moderator", "client", "user", "deamon", "root", "proxy") NOT NULL DEFAULT "user",
 	`last_activated` TIMESTAMP NOT NULL COMMENT "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
 	`last_modified` TIMESTAMP NOT NULL,
 	`last_login` TIMESTAMP NOT NULL,
+	`suspended` BOOLEAN NOT NULL,
 	`fname` VARCHAR(128) NOT NULL,
 	`password` VARCHAR(128) NOT NULL COMMENT "Case sensitive password for authenticating the Account object.",
 	`nickname` VARCHAR(64) NOT NULL,
@@ -124,15 +124,15 @@ DROP TABLE IF EXISTS `events`;
 
 CREATE TABLE `satanbarbara`.`events` (
 	`archived` BOOLEAN NOT NULL,
-	`promocode` VARCHAR(64) NOT NULL,
 	`subtitle` VARCHAR(90) NOT NULL,
 	`description` VARCHAR(4000) NOT NULL,
 	`title` VARCHAR(255) NOT NULL,
 	`deleted` BOOLEAN NOT NULL,
 	`ticket_uri` VARCHAR(255) NOT NULL,
 	`start_time` TIMESTAMP NOT NULL,
-	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
+	`promocode` VARCHAR(64) NOT NULL,
 	`ages` ENUM("18", "all", "21", "na") NOT NULL DEFAULT "na",
+	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
 	`price` VARCHAR(255) NOT NULL,
 	`canceled` BOOLEAN NOT NULL,
 	`last_modified` TIMESTAMP NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE `satanbarbara`.`events` (
 	`requirements` VARCHAR(4000) NOT NULL,
 	`flyer_uri` VARCHAR(255) NOT NULL,
 	`id` INT(12) NOT NULL AUTO_INCREMENT,
-	`date_text` VARCHAR(35) NOT NULL COMMENT "2014-11-25 04:34:00 pm",
+	`date_text` VARCHAR(35) NOT NULL COMMENT "2014-11-25",
 
 
 
@@ -353,7 +353,7 @@ LOCK TABLES `satanbarbara`.`descriptors` WRITE;
 UNLOCK TABLES;
 LOCK TABLES `satanbarbara`.`accounts` WRITE;
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
-	INSERT INTO `satanbarbara`.`accounts` (`username`, `archived`, `description`, `last_active`, `created`, `deleted`, `tagline`, `banned`, `activated`, `suspended`, `email`, `lname`, `last_activated`, `last_modified`, `last_login`, `fname`, `password`, `nickname`) VALUES ("tronhammer", "0", "I'm freaken tron man! Get with it.", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "0", "I've eaten uglier women than you for breakfast.", "0", "1", "0", "tron@tronnet.me", "Hammer", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "Tron", "666SatanForPrez", "TRONHAMBURGER");
+	INSERT INTO `satanbarbara`.`accounts` (`username`, `archived`, `description`, `last_active`, `created`, `deleted`, `tagline`, `banned`, `activated`, `email`, `lname`, `last_activated`, `last_modified`, `last_login`, `suspended`, `fname`, `password`, `nickname`) VALUES ("tronhammer", "0", "I'm freaken tron man! Get with it.", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "0", "I've eaten uglier women than you for breakfast.", "0", "1", "tron@tronnet.me", "Hammer", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "0", "Tron", "666SatanForPrez", "TRONHAMBURGER");
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 LOCK TABLES `satanbarbara`.`venues` WRITE;
@@ -363,7 +363,7 @@ LOCK TABLES `satanbarbara`.`venues` WRITE;
 UNLOCK TABLES;
 LOCK TABLES `satanbarbara`.`events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-	INSERT INTO `satanbarbara`.`events` (`archived`, `promocode`, `subtitle`, `description`, `title`, `deleted`, `ticket_uri`, `start_time`, `created`, `price`, `canceled`, `last_modified`, `end_time`, `date`, `requirements`, `flyer_uri`, `date_text`) VALUES ("0", "IKICKASSFORTHELORD", "B-Y-O-Bible", "This is gonna be hot!", "SBCMT Bible Burning", "0", "http://", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "$5", "0", "2014-11-25 04:34:00 pm", "2014-11-25 04:34:00 pm", "2014-12-27", "At least 1 bible.", "http://", "2014-11-25 04:34:00 pm");
+	INSERT INTO `satanbarbara`.`events` (`archived`, `subtitle`, `description`, `title`, `deleted`, `ticket_uri`, `start_time`, `promocode`, `created`, `price`, `canceled`, `last_modified`, `end_time`, `date`, `requirements`, `flyer_uri`, `date_text`) VALUES ("0", "B-Y-O-Bible", "This is gonna be hot!", "SBCMT Bible Burning", "0", "http://", "2014-11-25 04:34:00 pm", "IKICKASSFORTHELORD", "2014-11-25 04:34:00 pm", "$5", "0", "2014-11-25 04:34:00 pm", "2014-11-25 11:34:00 pm", "2014-12-27", "At least 1 bible.", "http://", "2014-11-25");
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 LOCK TABLES `satanbarbara`.`bands` WRITE;

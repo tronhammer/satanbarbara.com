@@ -14,10 +14,10 @@ abstract class DescriptorModel extends BaseModel {
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Archived",
             "restricted" => "True",
+            "label" => "Archived",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "archived"
         ),
         "description" => array(
@@ -26,8 +26,8 @@ abstract class DescriptorModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Description",
-            "placeholder" => "SO awesome!",
             "type" => "string",
+            "placeholder" => "SO awesome!",
             "name" => "description"
         ),
         "created" => array(
@@ -43,10 +43,10 @@ abstract class DescriptorModel extends BaseModel {
             "description" => "0",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Deleted",
             "restricted" => "True",
+            "label" => "Deleted",
             "placeholder" => "",
+            "type" => "boolean",
             "name" => "deleted"
         ),
         "id" => array(
@@ -66,9 +66,9 @@ abstract class DescriptorModel extends BaseModel {
             "max" => "255",
             "required" => "True",
             "label" => "Name",
-            "placeholder" => "awesome",
-            "unique" => "True",
             "type" => "string",
+            "unique" => "True",
+            "placeholder" => "awesome",
             "name" => "name"
         )
     );

@@ -1,147 +1,131 @@
-;(function(){
+;(function(module){
 	"use strict";
-	var module = SB.module;
 
-	module.controller("Accountsontroller", ["$scope", "$Account", function($scope, $data, $Account) {
+	module.factory("$Account", ["$rootScope", function($rootScope) {
+		var Account = function(data){
+			$.extend(this, {
+				"id": null,
+				"persistent": false,
+				"data": {},
+				"cache": {}
+			});
 
-	});
-
-	module.factory("$Account", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
-			"set": function(){
-
-			},
-			"get": function(){
-
-			}
+			this.set(data);
 		};
-	});
-})(window.SB);
 
-	module.factory("$", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
+		$.extend(Account.prototype, {
 			"attrs": {
                 "username": {
                     "description": "Login name for the Account object.",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "32",
+                    "max": 32,
                     "required": "True",
                     "label": "Username",
-                    "placeholder": "tronhammer",
                     "type": "string",
+                    "placeholder": "tronhammer",
                     "name": "username"
                 },
                 "archived": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Archived",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Archived",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "archived"
                 },
                 "description": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "4000",
+                    "max": 4000,
                     "label": "Description",
-                    "placeholder": "I'm freaken tron man! Get with it.",
                     "type": "string",
+                    "placeholder": "I'm freaken tron man! Get with it.",
                     "name": "description"
                 },
                 "last_active": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
+                    "default": 0,
                     "type": "timestamp",
                     "label": "Last active",
                     "placeholder": "2014-11-25 04:34:00 pm",
                     "name": "last_active"
                 },
                 "created": {
-                    "description": "Time when entry was made in the database.",
+                    "name": "created",
                     "generator": "db",
                     "type": "timestamp",
                     "label": "Created",
                     "placeholder": "2014-11-25 04:34:00 pm",
-                    "name": "created"
+                    "description": "Time when entry was made in the database."
                 },
                 "deleted": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Deleted",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Deleted",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "deleted"
                 },
                 "tagline": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "128",
+                    "max": 128,
                     "label": "Tagline",
-                    "placeholder": "I've eaten uglier women than you for breakfast.",
                     "type": "string",
+                    "placeholder": "I've eaten uglier women than you for breakfast.",
                     "name": "tagline"
                 },
                 "banned": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Banned",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Banned",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "banned"
                 },
                 "activated": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
+                    "default": 0,
+                    "restricted": "True",
                     "label": "Activated",
-                    "restricted": "True",
                     "placeholder": "1",
-                    "name": "activated"
-                },
-                "suspended": {
-                    "description": "",
-                    "generator": "system",
-                    "default": "0",
                     "type": "boolean",
-                    "label": "Suspended",
-                    "restricted": "True",
-                    "placeholder": "0",
-                    "name": "suspended"
+                    "name": "activated"
                 },
                 "email": {
                     "description": "",
                     "generator": "user",
-                    "min": "9",
+                    "min": 9,
                     "default": "",
-                    "max": "255",
+                    "max": 255,
                     "required": "True",
                     "label": "Email",
-                    "placeholder": "tron@tronnet.me",
                     "type": "string",
+                    "placeholder": "tron@tronnet.me",
                     "name": "email"
                 },
                 "lname": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "128",
+                    "max": 128,
                     "label": "Last Name",
-                    "placeholder": "Hammer",
                     "type": "string",
+                    "placeholder": "Hammer",
                     "name": "lname"
                 },
                 "privilege_level": {
@@ -152,53 +136,53 @@
                     "type": "option",
                     "options": {
                         "admin": {
-                            "position": "0",
-                            "description": "",
+                            "position": 0,
+                            "label": "Administrator",
                             "type": "string",
-                            "name": "admin",
-                            "label": "Administrator"
+                            "description": "",
+                            "name": "admin"
                         },
                         "moderator": {
-                            "position": "1",
-                            "description": "",
+                            "position": 1,
+                            "label": "Moderator",
                             "type": "string",
-                            "name": "moderator",
-                            "label": "Moderator"
+                            "description": "",
+                            "name": "moderator"
                         },
                         "client": {
-                            "position": "6",
-                            "description": "",
+                            "position": 6,
+                            "label": "Client",
                             "type": "string",
-                            "name": "client",
-                            "label": "Client"
+                            "description": "",
+                            "name": "client"
                         },
                         "user": {
-                            "position": "2",
-                            "description": "",
+                            "position": 2,
+                            "label": "User",
                             "type": "string",
-                            "name": "user",
-                            "label": "User"
+                            "description": "",
+                            "name": "user"
                         },
                         "deamon": {
-                            "position": "5",
-                            "description": "",
+                            "position": 5,
+                            "label": "Deamon",
                             "type": "string",
-                            "name": "deamon",
-                            "label": "Deamon"
+                            "description": "",
+                            "name": "deamon"
                         },
                         "root": {
-                            "position": "4",
-                            "description": "",
+                            "position": 4,
+                            "label": "Root",
                             "type": "string",
-                            "name": "root",
-                            "label": "Root"
+                            "description": "",
+                            "name": "root"
                         },
                         "proxy": {
-                            "position": "3",
-                            "description": "",
+                            "position": 3,
+                            "label": "Not Sure",
                             "type": "string",
-                            "name": "na",
-                            "label": "Not Sure"
+                            "description": "",
+                            "name": "na"
                         }
                     },
                     "name": "privilege_level"
@@ -206,66 +190,76 @@
                 "last_activated": {
                     "description": "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
                     "generator": "system",
-                    "default": "0",
-                    "type": "timestamp",
-                    "label": "Activated",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Activated",
                     "placeholder": "2014-11-25 04:34:00 pm",
+                    "type": "timestamp",
                     "name": "last_activated"
                 },
                 "last_modified": {
                     "description": "",
                     "generator": "system",
                     "default": "",
-                    "type": "timestamp",
-                    "label": "Last modified",
                     "restricted": "True",
+                    "label": "Last modified",
                     "placeholder": "2014-11-25 04:34:00 pm",
+                    "type": "timestamp",
                     "name": "last_modified"
                 },
                 "last_login": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
+                    "default": 0,
                     "type": "timestamp",
                     "label": "Last logged in",
                     "placeholder": "2014-11-25 04:34:00 pm",
                     "name": "last_login"
                 },
+                "suspended": {
+                    "description": "",
+                    "generator": "system",
+                    "default": 0,
+                    "restricted": "True",
+                    "label": "Suspended",
+                    "placeholder": "0",
+                    "type": "boolean",
+                    "name": "suspended"
+                },
                 "fname": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "128",
+                    "max": 128,
                     "required": "True",
                     "label": "First Name",
-                    "placeholder": "Tron",
                     "type": "string",
+                    "placeholder": "Tron",
                     "name": "fname"
                 },
                 "password": {
+                    "type": "string",
                     "description": "Case sensitive password for authenticating the Account object.",
                     "generator": "user",
-                    "min": "6",
+                    "min": 6,
                     "default": "",
-                    "max": "128",
+                    "max": 128,
                     "required": "True",
                     "label": "Password",
-                    "placeholder": "666SatanForPrez",
                     "restricted": "True",
-                    "type": "string",
+                    "placeholder": "666SatanForPrez",
                     "name": "password"
                 },
                 "nickname": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "64",
+                    "max": 64,
                     "label": "Nickname",
-                    "placeholder": "TRONHAMBURGER",
                     "type": "string",
+                    "placeholder": "TRONHAMBURGER",
                     "name": "nickname"
                 },
                 "id": {
@@ -278,12 +272,166 @@
                     "name": "id"
                 }
             },
-			"set": function(){
 
+			"required": [
+			
+					"username"
+			
+					, "email"
+			
+					, "fname"
+			
+					, "password"
+			
+			],
+
+			"userSettable": [
+			
+					"username"
+			
+					, "description"
+			
+					, "tagline"
+			
+					, "email"
+			
+					, "lname"
+			
+					, "fname"
+			
+					, "password"
+			
+					, "nickname"
+			
+			],
+
+			"userVisible": [
+			
+					"username"
+			
+					, "description"
+			
+					, "last_active"
+			
+					, "created"
+			
+					, "tagline"
+			
+					, "email"
+			
+					, "lname"
+			
+					, "privilege_level"
+			
+					, "last_login"
+			
+					, "fname"
+			
+					, "nickname"
+			
+					, "id"
+			
+			],
+
+			"junctions": {
+        
+    },
+
+			"set": function(data){
+				if (!data){
+					return;
+				}
+				
+				if (data.id){
+					this.id = data.id;
+					delete data.id;
+				}
+				console.log("Calling setter for Account")
+				$.extend(this.data, data);
 			},
-			"get": function(){
+			"get": function(name){
+				return name=="id" ? this.id : this.data[name];
+			},
+			"getSettables": function(){
+				if (this.cache.userGenerated){
+					return this.cache.userGenerated;
+				} else {
+					var userGenerated = {};
+	
+					for (var attrName in this.attrs){
+						var attr = this.attrs[attrName];
+						if (attr.generator == "user"){
+							userGenerated[attrName] = attr;
+						}
+					}
+
+					return userGenerated;
+				}
 
 			}
-		};
-	});
-})(windo
+		});
+
+		return Account;
+	}]);
+
+
+	module.service("AccountController", ["$Account", "$rootScope", "$rest", function($Account, $rootScope, $rest) {
+
+		/**
+		 * For debugging purposes only, remove in production.
+		 * @type {[type]}
+		 */
+		window._AccountController = this;
+
+		$.extend(this, {
+			"objects": {},
+			"sorts": {},
+			"ids": [],
+			"wrapper": function(callback){
+				var _this = this;
+				return function(data){
+					callback.call(_this, this, data);
+				};
+			},
+			"save": function(self, data){
+				console.log("saving Account object");
+				var data = self.data;
+
+				data.target = "Account";
+
+				$rest.create(data);
+			},
+			"load": function(){
+		        $rest.getData("Account", {}, [function(data, identifier){
+		        	if (identifier == "loadAccounts" && data.accounts){
+		        		for(var id in data.accounts.all){
+			        		this.objects[id] = this.factory(data.accounts.all[ id ]);
+		        		}
+
+		        		this.sorts = data.accounts.sorts;
+
+		        		$rootScope.$broadcast("loadedNewAccount", this);
+		        	}
+		        	console.log("will with work");
+		        }, "loadAccounts", this]);
+			},
+
+
+			"factory": function(data){
+				console.log("Creating Account object with controller factory!");
+				var Account;
+				if (data && data.id && this.objects[ data.id ]){
+					Account = this.objects[ data.id ];
+				} else {
+					Account = new $Account(data);
+
+					$.extend(Account, {
+						"save": this.wrapper(this.save)
+					});
+				}
+
+				return Account;
+			},
+		});
+	}]);
+})(window.SB.module);

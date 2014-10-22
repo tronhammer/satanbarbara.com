@@ -21,7 +21,7 @@ abstract class EventController extends BaseController{
 		} else {
 			$db = MySQLConnector::getHandle();
 			try {
-				$statement = $db->prepare("SELECT `id` FROM `".$EventModel::_TABLE."`");
+				$statement = $db->prepare("SELECT `id` FROM `".EventModel::_TABLE."`");
 		
 				$statement->execute();
 

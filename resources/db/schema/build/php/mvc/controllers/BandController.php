@@ -1,7 +1,8 @@
 <?php
 
-abstract class BandController extends BaseController{
+abstract class BandController extends BaseController {
 	static protected $_target = "Band";
+	static protected $_key = "bands";
 
 }
 

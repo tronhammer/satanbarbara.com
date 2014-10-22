@@ -1,7 +1,8 @@
 <?php
 
-abstract class AccountController extends BaseController{
+abstract class AccountController extends BaseController {
 	static protected $_target = "Account";
+	static protected $_key = "accounts";
 
 }
 

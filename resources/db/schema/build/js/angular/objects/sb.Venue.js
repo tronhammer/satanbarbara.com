@@ -1,152 +1,146 @@
-;(function(){
+;(function(module){
 	"use strict";
-	var module = SB.module;
 
-	module.controller("Venuesontroller", ["$scope", "$Venue", function($scope, $data, $Venue) {
+	module.factory("$Venue", ["$rootScope", function($rootScope) {
+		var Venue = function(data){
+			$.extend(this, {
+				"id": null,
+				"persistent": false,
+				"data": {},
+				"cache": {}
+			});
 
-	});
-
-	module.factory("$Venue", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
-			"set": function(){
-
-			},
-			"get": function(){
-
-			}
+			this.set(data);
 		};
-	});
-})(window.SB);
 
-	module.factory("$", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
+		$.extend(Venue.prototype, {
 			"attrs": {
                 "city": {
                     "description": "",
                     "generator": "user",
-                    "max": "90",
+                    "max": 90,
                     "required": "True",
                     "label": "City",
-                    "placeholder": "Satan Barbara",
                     "type": "string",
+                    "placeholder": "Satan Barbara",
                     "name": "city"
                 },
                 "archived": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Archived",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Archived",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "archived"
                 },
                 "slogan": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "90",
+                    "max": 90,
                     "label": "Slogan",
-                    "placeholder": "Fuck it",
                     "type": "string",
+                    "placeholder": "Fuck it",
                     "name": "slogan"
                 },
                 "description": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "4000",
+                    "max": 4000,
                     "label": "Description",
-                    "placeholder": "Where you go to get your freak on.",
                     "type": "string",
+                    "placeholder": "Where you go to get your freak on.",
                     "name": "description"
                 },
                 "zip": {
                     "description": "",
                     "generator": "user",
-                    "min": "5",
-                    "max": "12",
+                    "min": 5,
+                    "max": 12,
                     "required": "True",
                     "label": "Postal Code",
-                    "placeholder": "93101",
                     "type": "string",
+                    "placeholder": "93101",
                     "name": "zip"
                 },
                 "created": {
-                    "description": "Time when entry was made.",
+                    "name": "created",
                     "generator": "db",
                     "type": "timestamp",
                     "label": "Created",
                     "placeholder": "2014-11-25 04:34:00 pm",
-                    "name": "created"
+                    "description": "Time when entry was made."
                 },
                 "deleted": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Deleted",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Deleted",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "deleted"
                 },
                 "requirements": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "4000",
+                    "max": 4000,
                     "label": "Requirements",
-                    "placeholder": "At least 1 bible.",
                     "type": "string",
+                    "placeholder": "At least 1 bible.",
                     "name": "requirements"
                 },
                 "uri": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "255",
+                    "max": 255,
                     "label": "Website",
-                    "placeholder": "http://",
                     "type": "string",
+                    "placeholder": "http://",
                     "name": "uri"
                 },
                 "state": {
                     "description": "",
                     "generator": "user",
-                    "max": "2",
+                    "max": 2,
                     "required": "True",
                     "label": "State",
-                    "placeholder": "CA",
                     "type": "string",
+                    "placeholder": "CA",
                     "name": "state"
                 },
                 "last_modified": {
                     "description": "",
                     "generator": "system",
                     "default": "",
-                    "type": "timestamp",
-                    "label": "Last modified",
                     "restricted": "True",
+                    "label": "Last modified",
                     "placeholder": "2014-11-25 04:34:00 pm",
+                    "type": "timestamp",
                     "name": "last_modified"
                 },
                 "address": {
                     "description": "",
                     "generator": "user",
-                    "max": "255",
+                    "max": 255,
                     "required": "True",
                     "label": "Address",
-                    "placeholder": "666 Hell-yeah",
                     "type": "string",
+                    "placeholder": "666 Hell-yeah",
                     "name": "address"
                 },
                 "capacity": {
-                    "description": "400",
+                    "name": "capacity",
                     "generator": "user",
                     "type": "integer",
                     "label": "Capacity",
                     "placeholder": "400",
-                    "name": "capacity"
+                    "description": "400"
                 },
                 "id": {
                     "description": "",
@@ -160,22 +154,208 @@
                 "name": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "255",
+                    "max": 255,
                     "required": "True",
                     "label": "Name",
-                    "placeholder": "CrowdedCoffin",
                     "type": "string",
+                    "placeholder": "CrowdedCoffin",
                     "name": "name"
                 }
             },
-			"set": function(){
 
+			"required": [
+			
+					"city"
+			
+					, "zip"
+			
+					, "state"
+			
+					, "address"
+			
+					, "name"
+			
+			],
+
+			"userSettable": [
+			
+					"city"
+			
+					, "slogan"
+			
+					, "description"
+			
+					, "zip"
+			
+					, "requirements"
+			
+					, "uri"
+			
+					, "state"
+			
+					, "address"
+			
+					, "capacity"
+			
+					, "name"
+			
+			],
+
+			"userVisible": [
+			
+					"city"
+			
+					, "slogan"
+			
+					, "description"
+			
+					, "zip"
+			
+					, "created"
+			
+					, "requirements"
+			
+					, "uri"
+			
+					, "state"
+			
+					, "address"
+			
+					, "capacity"
+			
+					, "id"
+			
+					, "name"
+			
+			],
+
+			"junctions": {
+        "venueOwner": "Account",
+        "venueTag": "Descriptor",
+        "venueCreator": "Account"
+    },
+
+			"set": function(data){
+				if (!data){
+					return;
+				}
+				
+				if (data.id){
+					this.id = data.id;
+					delete data.id;
+				}
+				console.log("Calling setter for Venue")
+				$.extend(this.data, data);
 			},
-			"get": function(){
+			"get": function(name){
+				return name=="id" ? this.id : this.data[name];
+			},
+			"getSettables": function(){
+				if (this.cache.userGenerated){
+					return this.cache.userGenerated;
+				} else {
+					var userGenerated = {};
+	
+					for (var attrName in this.attrs){
+						var attr = this.attrs[attrName];
+						if (attr.generator == "user"){
+							userGenerated[attrName] = attr;
+						}
+					}
+
+					return userGenerated;
+				}
 
 			}
-		};
-	});
-})(windo
+		});
+
+		return Venue;
+	}]);
+
+
+	module.service("VenueController", ["$Venue", "$rootScope", "$rest", function($Venue, $rootScope, $rest) {
+
+		/**
+		 * For debugging purposes only, remove in production.
+		 * @type {[type]}
+		 */
+		window._VenueController = this;
+
+		$.extend(this, {
+			"objects": {},
+			"sorts": {},
+			"ids": [],
+			"wrapper": function(callback){
+				var _this = this;
+				return function(data){
+					callback.call(_this, this, data);
+				};
+			},
+			"save": function(self, data){
+				console.log("saving Venue object");
+				var data = self.data;
+
+				data.target = "Venue";
+
+				$rest.create(data);
+			},
+			"load": function(){
+		        $rest.getData("Venue", {}, [function(data, identifier){
+		        	if (identifier == "loadVenues" && data.venues){
+		        		for(var id in data.venues.all){
+			        		this.objects[id] = this.factory(data.venues.all[ id ]);
+		        		}
+
+		        		this.sorts = data.venues.sorts;
+
+		        		$rootScope.$broadcast("loadedNewVenue", this);
+		        	}
+		        	console.log("will with work");
+		        }, "loadVenues", this]);
+			},
+
+				"venueOwner": function(self, Account){
+					$rest.create({
+						"target": "venueOwner",
+						"from": self.get("id"),
+						"to": Account.get("id")
+					});
+				},
+				"venueTag": function(self, Descriptor){
+					$rest.create({
+						"target": "venueTag",
+						"from": self.get("id"),
+						"to": Descriptor.get("id")
+					});
+				},
+				"venueCreator": function(self, Account){
+					$rest.create({
+						"target": "venueCreator",
+						"from": self.get("id"),
+						"to": Account.get("id")
+					});
+				},
+
+			"factory": function(data){
+				console.log("Creating Venue object with controller factory!");
+				var Venue;
+				if (data && data.id && this.objects[ data.id ]){
+					Venue = this.objects[ data.id ];
+				} else {
+					Venue = new $Venue(data);
+
+					$.extend(Venue, {
+							"venueOwner": this.wrapper(this.venueOwner),
+							"venueTag": this.wrapper(this.venueTag),
+							"venueCreator": this.wrapper(this.venueCreator),
+						"save": this.wrapper(this.save)
+					});
+				}
+
+				return Venue;
+			},
+		});
+	}]);
+})(window.SB.module);

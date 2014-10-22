@@ -35,7 +35,33 @@ class Logging:
 	def p(self, msg):
 		print msg
 
-def JSONObjToPHPObj(attrVal, depth):
+def _decode_list(data):
+    rv = []
+    for item in data:
+        if isinstance(item, unicode):
+            item = item.encode('utf-8')
+        elif isinstance(item, list):
+            item = _decode_list(item)
+        elif isinstance(item, dict):
+            item = _decode_dict(item)
+        rv.append(item)
+    return rv
+
+def _decode_dict(data):
+    rv = {}
+    for key, value in data.iteritems():
+        if isinstance(key, unicode):
+            key = key.encode('utf-8')
+        if isinstance(value, unicode):
+            value = value.encode('utf-8')
+        elif isinstance(value, list):
+            value = _decode_list(value)
+        elif isinstance(value, dict):
+            value = _decode_dict(value)
+        rv[key] = value
+    return rv
+
+def JSONObjToPHPObj(attrVal, depth=1):
 	depth = int(depth)+1
 	if type(attrVal) == type({}):
 		tabSpacing = "    "*depth
@@ -44,11 +70,11 @@ def JSONObjToPHPObj(attrVal, depth):
 			tabSpacing, 
 			(",\n"+tabSpacing).join( [('"%s" => %s' % (attrName, JSONObjToPHPObj(attrVal[attrName], depth)) ) for attrName in attrVal]),
 			tabCloseSpacing
-		)
+		)		
 
 	return '"'+str(attrVal)+'"'
 
-def JSONObjToJSObj(attrVal, depth):
+def JSONObjToJSObj(attrVal, depth=1):
 	depth = int(depth)+1
 	if type(attrVal) == type({}):
 		tabSpacing = "    "*depth
@@ -58,8 +84,18 @@ def JSONObjToJSObj(attrVal, depth):
 			(",\n"+tabSpacing).join( [('"%s": %s' % (attrName, JSONObjToJSObj(attrVal[attrName], depth)) ) for attrName in attrVal]),
 			tabCloseSpacing
 		)
-
-	return '"'+str(attrVal)+'"'
+	elif type(attrVal) == type([]):
+		tabSpacing = "    "*depth
+		tabCloseSpacing = "    "*(depth-1)
+		return "[\n%s%s\n%s]" % (
+			tabSpacing, 
+			(",\n"+tabSpacing).join( [ JSONObjToJSObj(attrItem, depth) for attrItem in attrVal ]),
+			tabCloseSpacing
+		)
+	elif type(attrVal) == type(99):
+		return '%d' % (attrVal)
+	else:
+		return '"%s"' % (attrVal)
 
 if __name__ == "__main__":
 
@@ -70,6 +106,7 @@ if __name__ == "__main__":
 	framework = "mvc"
 	version = "5.5"
 	fullBuild = ""
+	fullJSObjectsBuild = ""
 
 	ll.p("Loading template files...")
 
@@ -83,7 +120,7 @@ if __name__ == "__main__":
 	objectTemplate = Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".object.tmpl")
 	JSobjectTemplate = Template( filename=templateDirectory + "/js/angular/js.object.tmpl")
 
-	DatabaseSchema = json.loads(open("Database.schema.json", "r").read());
+	DatabaseSchema = json.loads(open("Database.schema.json", "r").read(), object_hook=_decode_dict)
 
 	ll.p("Rending database sql...")
 
@@ -109,7 +146,7 @@ if __name__ == "__main__":
 
 	for filename in filenames:
 		ll.p("Reading config file: " + filename)
-		ObjectSchema = json.loads(open(filename, "r").read());
+		ObjectSchema = json.loads(open(filename, "r").read(), object_hook=_decode_dict)
 		ObjectName = ObjectSchema["name"]
 
 		tables[ ObjectName ] = ObjectSchema
@@ -212,12 +249,16 @@ if __name__ == "__main__":
 	
 		JSobjectBuild = JSobjectTemplate.render(
 			ObjectName=ObjectName,
+			listingKey=ObjectSchema["listingKey"],
 			JSONObjToJSObj=JSONObjToJSObj,
+			junctions=ObjectReferences,
 			properties=ObjectSchema["properties"]
 		)
 
 		JSbuiltObjectFile = open("build/js/angular/objects/sb."+ObjectName+".js", "w");
 		JSbuiltObjectFile.write(JSobjectBuild)
+
+		fullJSObjectsBuild += "\n"+JSobjectBuild
 
 	for fromName in junctions:
 		junction = junctions[ fromName ]
@@ -291,6 +332,10 @@ if __name__ == "__main__":
 
 	fullBuildFile = open("build/"+ db +"/sb.build.sql", "w")
 	fullBuildFile.write( fullBuild )
+
+	open("build/js/angular/sb.build.js", "w").write(
+		Template( filename=templateDirectory + "/js/angular/js.build.tmpl").render(objects=tables.keys(), BuiltObjects=fullJSObjectsBuild, JSONObjToJSObj=JSONObjToJSObj)
+	)
 
 	open("build/"+ codelang +"/"+ framework +"/models/BaseModel.php", "w").write(
 		Template( filename=templateDirectory + "/"+codelang+"/"+framework+"/"+codelang+".model.base.tmpl").render()

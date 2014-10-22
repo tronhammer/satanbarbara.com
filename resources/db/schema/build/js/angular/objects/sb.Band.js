@@ -1,128 +1,122 @@
-;(function(){
+;(function(module){
 	"use strict";
-	var module = SB.module;
 
-	module.controller("Bandsontroller", ["$scope", "$Band", function($scope, $data, $Band) {
+	module.factory("$Band", ["$rootScope", function($rootScope) {
+		var Band = function(data){
+			$.extend(this, {
+				"id": null,
+				"persistent": false,
+				"data": {},
+				"cache": {}
+			});
 
-	});
-
-	module.factory("$Band", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
-			"set": function(){
-
-			},
-			"get": function(){
-
-			}
+			this.set(data);
 		};
-	});
-})(window.SB);
 
-	module.factory("$", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
+		$.extend(Band.prototype, {
 			"attrs": {
                 "origin": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "255",
+                    "max": 255,
                     "label": "Origin",
-                    "placeholder": "Satans asshole",
                     "type": "string",
+                    "placeholder": "Satans asshole",
                     "name": "origin"
                 },
                 "archived": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Archived",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Archived",
                     "placeholder": "",
+                    "type": "boolean",
                     "name": "archived"
                 },
                 "description": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "4000",
+                    "max": 4000,
                     "label": "Description",
-                    "placeholder": "The best..fffucken...metAL Band OUT!! there...",
                     "type": "string",
+                    "placeholder": "The best..fffucken...metAL Band OUT!! there...",
                     "name": "description"
                 },
                 "last_active": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
+                    "default": 0,
                     "type": "timestamp",
                     "label": "Last active",
                     "placeholder": "2014-11-25 04:34:00 pm",
                     "name": "last_active"
                 },
                 "created": {
-                    "description": "Time when entry was made.",
+                    "name": "created",
                     "generator": "db",
                     "type": "timestamp",
                     "label": "Created",
                     "placeholder": "2014-11-25 04:34:00 pm",
-                    "name": "created"
+                    "description": "Time when entry was made."
                 },
                 "deleted": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Deleted",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Deleted",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "deleted"
                 },
                 "banned": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Banned",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Banned",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "banned"
                 },
                 "activated": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Activated",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Activated",
                     "placeholder": "1",
+                    "type": "boolean",
                     "name": "activated"
                 },
                 "last_activated": {
                     "description": "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
                     "generator": "system",
-                    "default": "0",
-                    "type": "timestamp",
-                    "label": "Activated",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Activated",
                     "placeholder": "2014-11-25 04:34:00 pm",
+                    "type": "timestamp",
                     "name": "last_activated"
                 },
                 "last_modified": {
                     "description": "",
                     "generator": "system",
                     "default": "",
-                    "type": "timestamp",
-                    "label": "Last modified",
                     "restricted": "True",
+                    "label": "Last modified",
                     "placeholder": "2014-11-25 04:34:00 pm",
+                    "type": "timestamp",
                     "name": "last_modified"
                 },
                 "last_login": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
+                    "default": 0,
                     "type": "timestamp",
                     "label": "Last logged in",
                     "placeholder": "2014-11-25 04:34:00 pm",
@@ -131,11 +125,11 @@
                 "suspended": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Suspended",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Suspended",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "suspended"
                 },
                 "active": {
@@ -146,18 +140,18 @@
                     "type": "option",
                     "options": {
                         "yes": {
-                            "position": "0",
-                            "description": "",
+                            "position": 0,
+                            "label": "Yes",
                             "type": "string",
-                            "name": "yes",
-                            "label": "Yes"
+                            "description": "",
+                            "name": "yes"
                         },
                         "no": {
-                            "position": "1",
-                            "description": "",
+                            "position": 1,
+                            "label": "No",
                             "type": "string",
-                            "name": "no",
-                            "label": "No"
+                            "description": "",
+                            "name": "no"
                         }
                     },
                     "name": "active"
@@ -174,22 +168,180 @@
                 "name": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "255",
+                    "max": 255,
                     "required": "True",
                     "label": "Name",
-                    "placeholder": "Chao Lux",
                     "type": "string",
+                    "placeholder": "Chao Lux",
                     "name": "name"
                 }
             },
-			"set": function(){
 
+			"required": [
+			
+					"name"
+			
+			],
+
+			"userSettable": [
+			
+					"origin"
+			
+					, "description"
+			
+					, "active"
+			
+					, "name"
+			
+			],
+
+			"userVisible": [
+			
+					"origin"
+			
+					, "description"
+			
+					, "last_active"
+			
+					, "created"
+			
+					, "last_login"
+			
+					, "active"
+			
+					, "id"
+			
+					, "name"
+			
+			],
+
+			"junctions": {
+        "bandCreator": "Account",
+        "bandMember": "Account",
+        "bandGenre": "Descriptor"
+    },
+
+			"set": function(data){
+				if (!data){
+					return;
+				}
+				
+				if (data.id){
+					this.id = data.id;
+					delete data.id;
+				}
+				console.log("Calling setter for Band")
+				$.extend(this.data, data);
 			},
-			"get": function(){
+			"get": function(name){
+				return name=="id" ? this.id : this.data[name];
+			},
+			"getSettables": function(){
+				if (this.cache.userGenerated){
+					return this.cache.userGenerated;
+				} else {
+					var userGenerated = {};
+	
+					for (var attrName in this.attrs){
+						var attr = this.attrs[attrName];
+						if (attr.generator == "user"){
+							userGenerated[attrName] = attr;
+						}
+					}
+
+					return userGenerated;
+				}
 
 			}
-		};
-	});
-})(windo
+		});
+
+		return Band;
+	}]);
+
+
+	module.service("BandController", ["$Band", "$rootScope", "$rest", function($Band, $rootScope, $rest) {
+
+		/**
+		 * For debugging purposes only, remove in production.
+		 * @type {[type]}
+		 */
+		window._BandController = this;
+
+		$.extend(this, {
+			"objects": {},
+			"sorts": {},
+			"ids": [],
+			"wrapper": function(callback){
+				var _this = this;
+				return function(data){
+					callback.call(_this, this, data);
+				};
+			},
+			"save": function(self, data){
+				console.log("saving Band object");
+				var data = self.data;
+
+				data.target = "Band";
+
+				$rest.create(data);
+			},
+			"load": function(){
+		        $rest.getData("Band", {}, [function(data, identifier){
+		        	if (identifier == "loadBands" && data.bands){
+		        		for(var id in data.bands.all){
+			        		this.objects[id] = this.factory(data.bands.all[ id ]);
+		        		}
+
+		        		this.sorts = data.bands.sorts;
+
+		        		$rootScope.$broadcast("loadedNewBand", this);
+		        	}
+		        	console.log("will with work");
+		        }, "loadBands", this]);
+			},
+
+				"bandCreator": function(self, Account){
+					$rest.create({
+						"target": "bandCreator",
+						"from": self.get("id"),
+						"to": Account.get("id")
+					});
+				},
+				"bandMember": function(self, Account){
+					$rest.create({
+						"target": "bandMember",
+						"from": self.get("id"),
+						"to": Account.get("id")
+					});
+				},
+				"bandGenre": function(self, Descriptor){
+					$rest.create({
+						"target": "bandGenre",
+						"from": self.get("id"),
+						"to": Descriptor.get("id")
+					});
+				},
+
+			"factory": function(data){
+				console.log("Creating Band object with controller factory!");
+				var Band;
+				if (data && data.id && this.objects[ data.id ]){
+					Band = this.objects[ data.id ];
+				} else {
+					Band = new $Band(data);
+
+					$.extend(Band, {
+							"bandCreator": this.wrapper(this.bandCreator),
+							"bandMember": this.wrapper(this.bandMember),
+							"bandGenre": this.wrapper(this.bandGenre),
+						"save": this.wrapper(this.save)
+					});
+				}
+
+				return Band;
+			},
+		});
+	}]);
+})(window.SB.module);

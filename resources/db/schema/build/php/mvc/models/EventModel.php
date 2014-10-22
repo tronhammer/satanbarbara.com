@@ -19,23 +19,14 @@ abstract class EventModel extends BaseModel {
             "placeholder" => "0",
             "name" => "archived"
         ),
-        "promocode" => array(
-            "description" => "",
-            "generator" => "user",
-            "max" => "64",
-            "label" => "Promocode",
-            "placeholder" => "IKICKASSFORTHELORD",
-            "type" => "string",
-            "name" => "promocode"
-        ),
         "subtitle" => array(
             "description" => "",
             "generator" => "user",
             "default" => "",
             "max" => "90",
             "label" => "Subtitle",
-            "placeholder" => "B-Y-O-Bible",
             "type" => "string",
+            "placeholder" => "B-Y-O-Bible",
             "name" => "subtitle"
         ),
         "description" => array(
@@ -44,8 +35,8 @@ abstract class EventModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Description",
-            "placeholder" => "This is gonna be hot!",
             "type" => "string",
+            "placeholder" => "This is gonna be hot!",
             "name" => "description"
         ),
         "title" => array(
@@ -56,8 +47,8 @@ abstract class EventModel extends BaseModel {
             "max" => "255",
             "required" => "True",
             "label" => "Title",
-            "placeholder" => "SBCMT Bible Burning",
             "type" => "string",
+            "placeholder" => "SBCMT Bible Burning",
             "name" => "title"
         ),
         "deleted" => array(
@@ -75,8 +66,8 @@ abstract class EventModel extends BaseModel {
             "default" => "",
             "max" => "255",
             "label" => "Ticket URL",
-            "placeholder" => "http://",
             "type" => "string",
+            "placeholder" => "http://",
             "name" => "ticket_uri"
         ),
         "start_time" => array(
@@ -88,13 +79,14 @@ abstract class EventModel extends BaseModel {
             "placeholder" => "2014-11-25 04:34:00 pm",
             "name" => "start_time"
         ),
-        "created" => array(
-            "description" => "Time when entry was made.",
-            "generator" => "db",
-            "type" => "timestamp",
-            "label" => "Created",
-            "placeholder" => "2014-11-25 04:34:00 pm",
-            "name" => "created"
+        "promocode" => array(
+            "description" => "",
+            "generator" => "user",
+            "max" => "64",
+            "label" => "Promocode",
+            "placeholder" => "IKICKASSFORTHELORD",
+            "type" => "string",
+            "name" => "promocode"
         ),
         "ages" => array(
             "description" => "",
@@ -105,43 +97,51 @@ abstract class EventModel extends BaseModel {
             "options" => array(
                 "18" => array(
                     "position" => "1",
-                    "description" => "",
+                    "label" => "18+",
                     "type" => "string",
-                    "name" => "18",
-                    "label" => "18+"
+                    "description" => "",
+                    "name" => "18"
                 ),
                 "all" => array(
                     "position" => "0",
-                    "description" => "",
+                    "label" => "All",
                     "type" => "string",
-                    "name" => "all",
-                    "label" => "All"
+                    "description" => "",
+                    "name" => "all"
                 ),
                 "21" => array(
                     "position" => "2",
-                    "description" => "",
+                    "label" => "21+",
                     "type" => "string",
-                    "name" => "21",
-                    "label" => "21+"
+                    "description" => "",
+                    "name" => "21"
                 ),
                 "na" => array(
                     "position" => "35",
-                    "description" => "",
+                    "label" => "Not Sure",
                     "type" => "string",
-                    "name" => "na",
-                    "label" => "Not Sure"
+                    "description" => "",
+                    "name" => "na"
                 )
             ),
             "name" => "ages"
+        ),
+        "created" => array(
+            "name" => "created",
+            "generator" => "db",
+            "type" => "timestamp",
+            "label" => "Created",
+            "placeholder" => "2014-11-25 04:34:00 pm",
+            "description" => "Time when entry was made."
         ),
         "price" => array(
             "description" => "",
             "generator" => "user",
             "default" => "",
-            "type" => "string",
+            "placeholder" => "$5",
             "required" => "True",
             "label" => "Event Price",
-            "placeholder" => "$5",
+            "type" => "string",
             "name" => "price"
         ),
         "canceled" => array(
@@ -168,17 +168,17 @@ abstract class EventModel extends BaseModel {
             "type" => "timestamp",
             "required" => "True",
             "label" => "End Time",
-            "placeholder" => "2014-11-25 04:34:00 pm",
+            "placeholder" => "2014-11-25 11:34:00 pm",
             "name" => "end_time"
         ),
         "date" => array(
             "description" => "",
             "generator" => "user",
             "default" => "",
-            "type" => "date",
+            "placeholder" => "2014-12-27",
             "required" => "True",
             "label" => "Event Date",
-            "placeholder" => "2014-12-27",
+            "type" => "date",
             "name" => "date"
         ),
         "requirements" => array(
@@ -187,8 +187,8 @@ abstract class EventModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Requirements",
-            "placeholder" => "At least 1 bible.",
             "type" => "string",
+            "placeholder" => "At least 1 bible.",
             "name" => "requirements"
         ),
         "flyer_uri" => array(
@@ -197,8 +197,8 @@ abstract class EventModel extends BaseModel {
             "default" => "",
             "max" => "255",
             "label" => "Flyer",
-            "placeholder" => "http://",
             "type" => "string",
+            "placeholder" => "http://",
             "name" => "flyer_uri"
         ),
         "id" => array(
@@ -212,11 +212,11 @@ abstract class EventModel extends BaseModel {
             "name" => "id"
         ),
         "date_text" => array(
-            "description" => "2014-11-25 04:34:00 pm",
+            "description" => "2014-11-25",
             "generator" => "system",
             "max" => "35",
             "label" => "Date Full Text",
-            "placeholder" => "2014-11-25 04:34:00 pm",
+            "placeholder" => "2014-11-25",
             "type" => "string",
             "name" => "date_text"
         )
@@ -239,9 +239,7 @@ abstract class EventModel extends BaseModel {
 
 	static protected $userSettable = array(
 
-		"promocode"
-
-		, "subtitle"
+		"subtitle"
 
 		, "description"
 
@@ -250,6 +248,8 @@ abstract class EventModel extends BaseModel {
 		, "ticket_uri"
 
 		, "start_time"
+
+		, "promocode"
 
 		, "ages"
 
@@ -269,8 +269,6 @@ abstract class EventModel extends BaseModel {
 
 		"archived"
 
-		, "promocode"
-
 		, "subtitle"
 
 		, "description"
@@ -283,9 +281,11 @@ abstract class EventModel extends BaseModel {
 
 		, "start_time"
 
-		, "created"
+		, "promocode"
 
 		, "ages"
+
+		, "created"
 
 		, "price"
 

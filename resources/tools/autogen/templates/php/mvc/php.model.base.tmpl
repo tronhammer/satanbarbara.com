@@ -201,7 +201,7 @@ abstract class BaseModel extends BaseObject {
 			$this->SetValues($data);	
 		};
 
-		if (self::CheckRequirements($this->_data)){
+		if (count( $missingRequiredFields = self::CheckRequirements($this->_data))){
 			/**
 			 * @todo Warn or throw exception that there are missing properties.
 			 */
@@ -346,8 +346,7 @@ abstract class BaseModel extends BaseObject {
 
 	public static function CheckRequirements($data){
 		// If any required fields are missing, fail out.
-		$missingRequiredFields = array_diff( static::$required, array_keys($data));
-		return count($missingRequiredFields);
+		return array_diff( static::$required, array_keys($data));
 	}
 
 	abstract static public function Validate($data);

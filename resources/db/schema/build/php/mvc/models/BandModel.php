@@ -17,18 +17,18 @@ abstract class BandModel extends BaseModel {
             "default" => "",
             "max" => "255",
             "label" => "Origin",
-            "placeholder" => "Satans asshole",
             "type" => "string",
+            "placeholder" => "Satans asshole",
             "name" => "origin"
         ),
         "archived" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Archived",
             "restricted" => "True",
+            "label" => "Archived",
             "placeholder" => "",
+            "type" => "boolean",
             "name" => "archived"
         ),
         "description" => array(
@@ -37,8 +37,8 @@ abstract class BandModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Description",
-            "placeholder" => "The best..fffucken...metAL Band OUT!! there...",
             "type" => "string",
+            "placeholder" => "The best..fffucken...metAL Band OUT!! there...",
             "name" => "description"
         ),
         "last_active" => array(
@@ -51,61 +51,61 @@ abstract class BandModel extends BaseModel {
             "name" => "last_active"
         ),
         "created" => array(
-            "description" => "Time when entry was made.",
+            "name" => "created",
             "generator" => "db",
             "type" => "timestamp",
             "label" => "Created",
             "placeholder" => "2014-11-25 04:34:00 pm",
-            "name" => "created"
+            "description" => "Time when entry was made."
         ),
         "deleted" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Deleted",
             "restricted" => "True",
+            "label" => "Deleted",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "deleted"
         ),
         "banned" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Banned",
             "restricted" => "True",
+            "label" => "Banned",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "banned"
         ),
         "activated" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Activated",
             "restricted" => "True",
+            "label" => "Activated",
             "placeholder" => "1",
+            "type" => "boolean",
             "name" => "activated"
         ),
         "last_activated" => array(
             "description" => "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
             "generator" => "system",
             "default" => "0",
-            "type" => "timestamp",
-            "label" => "Activated",
             "restricted" => "True",
+            "label" => "Activated",
             "placeholder" => "2014-11-25 04:34:00 pm",
+            "type" => "timestamp",
             "name" => "last_activated"
         ),
         "last_modified" => array(
             "description" => "",
             "generator" => "system",
             "default" => "",
-            "type" => "timestamp",
-            "label" => "Last modified",
             "restricted" => "True",
+            "label" => "Last modified",
             "placeholder" => "2014-11-25 04:34:00 pm",
+            "type" => "timestamp",
             "name" => "last_modified"
         ),
         "last_login" => array(
@@ -121,10 +121,10 @@ abstract class BandModel extends BaseModel {
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Suspended",
             "restricted" => "True",
+            "label" => "Suspended",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "suspended"
         ),
         "active" => array(
@@ -136,17 +136,17 @@ abstract class BandModel extends BaseModel {
             "options" => array(
                 "yes" => array(
                     "position" => "0",
-                    "description" => "",
+                    "label" => "Yes",
                     "type" => "string",
-                    "name" => "yes",
-                    "label" => "Yes"
+                    "description" => "",
+                    "name" => "yes"
                 ),
                 "no" => array(
                     "position" => "1",
-                    "description" => "",
+                    "label" => "No",
                     "type" => "string",
-                    "name" => "no",
-                    "label" => "No"
+                    "description" => "",
+                    "name" => "no"
                 )
             ),
             "name" => "active"
@@ -168,8 +168,8 @@ abstract class BandModel extends BaseModel {
             "max" => "255",
             "required" => "True",
             "label" => "Name",
-            "placeholder" => "Chao Lux",
             "type" => "string",
+            "placeholder" => "Chao Lux",
             "name" => "name"
         )
     );

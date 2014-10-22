@@ -1,20 +1,172 @@
-;(function(){
+;(function(module){
 	"use strict";
-	var module = SB.module;
 
-	module.controller("${ObjectName}sontroller", ["$scope", "$${ObjectName}", function($scope, $data, $${ObjectName}) {
+	module.factory("$${ObjectName}", ["$rootScope", function($rootScope) {
+		var ${ObjectName} = function(data){
+			$.extend(this, {
+				"id": null,
+				"persistent": false,
+				"data": {},
+				"cache": {}
+			});
 
-	});
+			this.set(data);
+		};
 
-	module.factory("$${ObjectName}", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
+		$.extend(${ObjectName}.prototype, {
 			"attrs": ${JSONObjToJSObj(properties, 3)},
-			"set": function(){
 
+			"required": [
+			<%
+				first = 1
+			%>
+			%for propName in properties:
+				%if properties[ propName ]["generator"] == "user" and properties[ propName ].get("required"):
+					${", " if first != 1 else ""}"${properties[ propName ]["name"]}"
+			<%
+				first = 0
+			%>
+				%endif
+			%endfor
+			],
+
+			"userSettable": [
+			<%
+				first = 1
+			%>
+			%for propName in properties:
+				%if properties[ propName ]["generator"] == "user":
+					${", " if first != 1 else ""}"${properties[ propName ]["name"]}"
+			<%
+				first = 0
+			%>
+				%endif
+			%endfor
+			],
+
+			"userVisible": [
+			<%
+				first = 1
+			%>
+			%for propName in properties:
+				%if not properties[ propName ].get("restricted"):
+					${", " if first != 1 else ""}"${properties[ propName ]["name"]}"
+			<%
+				first = 0
+			%>
+				%endif
+			%endfor
+			],
+
+			"junctions": ${JSONObjToJSObj(junctions, 1)},
+
+			"set": function(data){
+				if (!data){
+					return;
+				}
+				
+				if (data.id){
+					this.id = data.id;
+					delete data.id;
+				}
+				console.log("Calling setter for ${ObjectName}")
+				$.extend(this.data, data);
 			},
-			"get": function(){
+			"get": function(name){
+				return name=="id" ? this.id : this.data[name];
+			},
+			"getSettables": function(){
+				if (this.cache.userGenerated){
+					return this.cache.userGenerated;
+				} else {
+					var userGenerated = {};
+	
+					for (var attrName in this.attrs){
+						var attr = this.attrs[attrName];
+						if (attr.generator == "user"){
+							userGenerated[attrName] = attr;
+						}
+					}
+
+					return userGenerated;
+				}
 
 			}
-		};
-	});
-})(window.SB);
+		});
+
+		return ${ObjectName};
+	}]);
+
+
+	module.service("${ObjectName}Controller", ["$${ObjectName}", "$rootScope", "$rest", function($${ObjectName}, $rootScope, $rest) {
+
+		/**
+		 * For debugging purposes only, remove in production.
+		 * @type {[type]}
+		 */
+		window._${ObjectName}Controller = this;
+
+		$.extend(this, {
+			"objects": {},
+			"sorts": {},
+			"ids": [],
+			"wrapper": function(callback){
+				var _this = this;
+				return function(data){
+					callback.call(_this, this, data);
+				};
+			},
+			"save": function(self, data){
+				console.log("saving ${ObjectName} object");
+				var data = self.data;
+
+				data.target = "${ObjectName}";
+
+				$rest.create(data);
+			},
+			"load": function(){
+		        $rest.getData("${ObjectName}", {}, [function(data, identifier){
+		        	if (identifier == "load${ObjectName}s" && data.${listingKey}){
+		        		for(var id in data.${listingKey}.all){
+			        		this.objects[id] = this.factory(data.${listingKey}.all[ id ]);
+		        		}
+
+		        		this.sorts = data.${listingKey}.sorts;
+
+		        		$rootScope.$broadcast("loadedNew${ObjectName}", this);
+		        	}
+		        	console.log("will with work");
+		        }, "load${ObjectName}s", this]);
+			},
+
+			%for junctionName in junctions:
+				"${junctionName}": function(self, ${junctions[junctionName]}){
+					$rest.create({
+						"target": "${junctionName}",
+						"from": self.get("id"),
+						"to": ${junctions[junctionName]}.get("id")
+					});
+				},
+			%endfor
+
+			"factory": function(data){
+				console.log("Creating ${ObjectName} object with controller factory!");
+				var ${ObjectName};
+				if (data && data.id && this.objects[ data.id ]){
+					${ObjectName} = this.objects[ data.id ];
+				} else {
+					${ObjectName} = new $${ObjectName}(data);
+
+					$.extend(${ObjectName}, {
+						%for junctionName in junctions:
+							"${junctionName}": this.wrapper(this.${junctionName}),
+						%endfor								
+						"save": this.wrapper(this.save)
+					});
+				}
+
+				return ${ObjectName};
+			},
+		});
+	}]);
+})(window.SB.module);

@@ -1,44 +1,38 @@
-;(function(){
+;(function(module){
 	"use strict";
-	var module = SB.module;
 
-	module.controller("Descriptorsontroller", ["$scope", "$Descriptor", function($scope, $data, $Descriptor) {
+	module.factory("$Descriptor", ["$rootScope", function($rootScope) {
+		var Descriptor = function(data){
+			$.extend(this, {
+				"id": null,
+				"persistent": false,
+				"data": {},
+				"cache": {}
+			});
 
-	});
-
-	module.factory("$Descriptor", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
-			"set": function(){
-
-			},
-			"get": function(){
-
-			}
+			this.set(data);
 		};
-	});
-})(window.SB);
 
-	module.factory("$", ["$rootScope", "$rest", function($rootScope, $rest) {
-		return {
+		$.extend(Descriptor.prototype, {
 			"attrs": {
                 "archived": {
                     "description": "",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Archived",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Archived",
                     "placeholder": "0",
+                    "type": "boolean",
                     "name": "archived"
                 },
                 "description": {
                     "description": "",
                     "generator": "user",
                     "default": "",
-                    "max": "4000",
+                    "max": 4000,
                     "label": "Description",
-                    "placeholder": "SO awesome!",
                     "type": "string",
+                    "placeholder": "SO awesome!",
                     "name": "description"
                 },
                 "created": {
@@ -53,11 +47,11 @@
                 "deleted": {
                     "description": "0",
                     "generator": "system",
-                    "default": "0",
-                    "type": "boolean",
-                    "label": "Deleted",
+                    "default": 0,
                     "restricted": "True",
+                    "label": "Deleted",
                     "placeholder": "",
+                    "type": "boolean",
                     "name": "deleted"
                 },
                 "id": {
@@ -72,23 +66,143 @@
                 "name": {
                     "description": "",
                     "generator": "user",
-                    "min": "3",
+                    "min": 3,
                     "default": "",
-                    "max": "255",
+                    "max": 255,
                     "required": "True",
                     "label": "Name",
-                    "placeholder": "awesome",
-                    "unique": "True",
                     "type": "string",
+                    "unique": "True",
+                    "placeholder": "awesome",
                     "name": "name"
                 }
             },
-			"set": function(){
 
+			"required": [
+			
+					"name"
+			
+			],
+
+			"userSettable": [
+			
+					"description"
+			
+					, "name"
+			
+			],
+
+			"userVisible": [
+			
+					"description"
+			
+					, "created"
+			
+					, "id"
+			
+					, "name"
+			
+			],
+
+			"junctions": {
+        
+    },
+
+			"set": function(data){
+				if (!data){
+					return;
+				}
+				
+				if (data.id){
+					this.id = data.id;
+					delete data.id;
+				}
+				console.log("Calling setter for Descriptor")
+				$.extend(this.data, data);
 			},
-			"get": function(){
+			"get": function(name){
+				return name=="id" ? this.id : this.data[name];
+			},
+			"getSettables": function(){
+				if (this.cache.userGenerated){
+					return this.cache.userGenerated;
+				} else {
+					var userGenerated = {};
+	
+					for (var attrName in this.attrs){
+						var attr = this.attrs[attrName];
+						if (attr.generator == "user"){
+							userGenerated[attrName] = attr;
+						}
+					}
+
+					return userGenerated;
+				}
 
 			}
-		};
-	});
-})(windo
+		});
+
+		return Descriptor;
+	}]);
+
+
+	module.service("DescriptorController", ["$Descriptor", "$rootScope", "$rest", function($Descriptor, $rootScope, $rest) {
+
+		/**
+		 * For debugging purposes only, remove in production.
+		 * @type {[type]}
+		 */
+		window._DescriptorController = this;
+
+		$.extend(this, {
+			"objects": {},
+			"sorts": {},
+			"ids": [],
+			"wrapper": function(callback){
+				var _this = this;
+				return function(data){
+					callback.call(_this, this, data);
+				};
+			},
+			"save": function(self, data){
+				console.log("saving Descriptor object");
+				var data = self.data;
+
+				data.target = "Descriptor";
+
+				$rest.create(data);
+			},
+			"load": function(){
+		        $rest.getData("Descriptor", {}, [function(data, identifier){
+		        	if (identifier == "loadDescriptors" && data.descriptors){
+		        		for(var id in data.descriptors.all){
+			        		this.objects[id] = this.factory(data.descriptors.all[ id ]);
+		        		}
+
+		        		this.sorts = data.descriptors.sorts;
+
+		        		$rootScope.$broadcast("loadedNewDescriptor", this);
+		        	}
+		        	console.log("will with work");
+		        }, "loadDescriptors", this]);
+			},
+
+
+			"factory": function(data){
+				console.log("Creating Descriptor object with controller factory!");
+				var Descriptor;
+				if (data && data.id && this.objects[ data.id ]){
+					Descriptor = this.objects[ data.id ];
+				} else {
+					Descriptor = new $Descriptor(data);
+
+					$.extend(Descriptor, {
+						"save": this.wrapper(this.save)
+					});
+				}
+
+				return Descriptor;
+			},
+		});
+	}]);
+})(window.SB.module);

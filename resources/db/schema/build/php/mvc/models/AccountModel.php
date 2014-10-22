@@ -18,18 +18,18 @@ abstract class AccountModel extends BaseModel {
             "max" => "32",
             "required" => "True",
             "label" => "Username",
-            "placeholder" => "tronhammer",
             "type" => "string",
+            "placeholder" => "tronhammer",
             "name" => "username"
         ),
         "archived" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Archived",
             "restricted" => "True",
+            "label" => "Archived",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "archived"
         ),
         "description" => array(
@@ -38,8 +38,8 @@ abstract class AccountModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Description",
-            "placeholder" => "I'm freaken tron man! Get with it.",
             "type" => "string",
+            "placeholder" => "I'm freaken tron man! Get with it.",
             "name" => "description"
         ),
         "last_active" => array(
@@ -52,21 +52,21 @@ abstract class AccountModel extends BaseModel {
             "name" => "last_active"
         ),
         "created" => array(
-            "description" => "Time when entry was made in the database.",
+            "name" => "created",
             "generator" => "db",
             "type" => "timestamp",
             "label" => "Created",
             "placeholder" => "2014-11-25 04:34:00 pm",
-            "name" => "created"
+            "description" => "Time when entry was made in the database."
         ),
         "deleted" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Deleted",
             "restricted" => "True",
+            "label" => "Deleted",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "deleted"
         ),
         "tagline" => array(
@@ -76,39 +76,29 @@ abstract class AccountModel extends BaseModel {
             "default" => "",
             "max" => "128",
             "label" => "Tagline",
-            "placeholder" => "I've eaten uglier women than you for breakfast.",
             "type" => "string",
+            "placeholder" => "I've eaten uglier women than you for breakfast.",
             "name" => "tagline"
         ),
         "banned" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Banned",
             "restricted" => "True",
+            "label" => "Banned",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "banned"
         ),
         "activated" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
+            "restricted" => "True",
             "label" => "Activated",
-            "restricted" => "True",
             "placeholder" => "1",
-            "name" => "activated"
-        ),
-        "suspended" => array(
-            "description" => "",
-            "generator" => "system",
-            "default" => "0",
             "type" => "boolean",
-            "label" => "Suspended",
-            "restricted" => "True",
-            "placeholder" => "0",
-            "name" => "suspended"
+            "name" => "activated"
         ),
         "email" => array(
             "description" => "",
@@ -118,8 +108,8 @@ abstract class AccountModel extends BaseModel {
             "max" => "255",
             "required" => "True",
             "label" => "Email",
-            "placeholder" => "tron@tronnet.me",
             "type" => "string",
+            "placeholder" => "tron@tronnet.me",
             "name" => "email"
         ),
         "lname" => array(
@@ -129,8 +119,8 @@ abstract class AccountModel extends BaseModel {
             "default" => "",
             "max" => "128",
             "label" => "Last Name",
-            "placeholder" => "Hammer",
             "type" => "string",
+            "placeholder" => "Hammer",
             "name" => "lname"
         ),
         "privilege_level" => array(
@@ -142,52 +132,52 @@ abstract class AccountModel extends BaseModel {
             "options" => array(
                 "admin" => array(
                     "position" => "0",
-                    "description" => "",
+                    "label" => "Administrator",
                     "type" => "string",
-                    "name" => "admin",
-                    "label" => "Administrator"
+                    "description" => "",
+                    "name" => "admin"
                 ),
                 "moderator" => array(
                     "position" => "1",
-                    "description" => "",
+                    "label" => "Moderator",
                     "type" => "string",
-                    "name" => "moderator",
-                    "label" => "Moderator"
+                    "description" => "",
+                    "name" => "moderator"
                 ),
                 "client" => array(
                     "position" => "6",
-                    "description" => "",
+                    "label" => "Client",
                     "type" => "string",
-                    "name" => "client",
-                    "label" => "Client"
+                    "description" => "",
+                    "name" => "client"
                 ),
                 "user" => array(
                     "position" => "2",
-                    "description" => "",
+                    "label" => "User",
                     "type" => "string",
-                    "name" => "user",
-                    "label" => "User"
+                    "description" => "",
+                    "name" => "user"
                 ),
                 "deamon" => array(
                     "position" => "5",
-                    "description" => "",
+                    "label" => "Deamon",
                     "type" => "string",
-                    "name" => "deamon",
-                    "label" => "Deamon"
+                    "description" => "",
+                    "name" => "deamon"
                 ),
                 "root" => array(
                     "position" => "4",
-                    "description" => "",
+                    "label" => "Root",
                     "type" => "string",
-                    "name" => "root",
-                    "label" => "Root"
+                    "description" => "",
+                    "name" => "root"
                 ),
                 "proxy" => array(
                     "position" => "3",
-                    "description" => "",
+                    "label" => "Not Sure",
                     "type" => "string",
-                    "name" => "na",
-                    "label" => "Not Sure"
+                    "description" => "",
+                    "name" => "na"
                 )
             ),
             "name" => "privilege_level"
@@ -196,20 +186,20 @@ abstract class AccountModel extends BaseModel {
             "description" => "Last time the band was reactivated after having been marked as suspended or disbanded/hiatus",
             "generator" => "system",
             "default" => "0",
-            "type" => "timestamp",
-            "label" => "Activated",
             "restricted" => "True",
+            "label" => "Activated",
             "placeholder" => "2014-11-25 04:34:00 pm",
+            "type" => "timestamp",
             "name" => "last_activated"
         ),
         "last_modified" => array(
             "description" => "",
             "generator" => "system",
             "default" => "",
-            "type" => "timestamp",
-            "label" => "Last modified",
             "restricted" => "True",
+            "label" => "Last modified",
             "placeholder" => "2014-11-25 04:34:00 pm",
+            "type" => "timestamp",
             "name" => "last_modified"
         ),
         "last_login" => array(
@@ -221,6 +211,16 @@ abstract class AccountModel extends BaseModel {
             "placeholder" => "2014-11-25 04:34:00 pm",
             "name" => "last_login"
         ),
+        "suspended" => array(
+            "description" => "",
+            "generator" => "system",
+            "default" => "0",
+            "restricted" => "True",
+            "label" => "Suspended",
+            "placeholder" => "0",
+            "type" => "boolean",
+            "name" => "suspended"
+        ),
         "fname" => array(
             "description" => "",
             "generator" => "user",
@@ -229,11 +229,12 @@ abstract class AccountModel extends BaseModel {
             "max" => "128",
             "required" => "True",
             "label" => "First Name",
-            "placeholder" => "Tron",
             "type" => "string",
+            "placeholder" => "Tron",
             "name" => "fname"
         ),
         "password" => array(
+            "type" => "string",
             "description" => "Case sensitive password for authenticating the Account object.",
             "generator" => "user",
             "min" => "6",
@@ -241,9 +242,8 @@ abstract class AccountModel extends BaseModel {
             "max" => "128",
             "required" => "True",
             "label" => "Password",
-            "placeholder" => "666SatanForPrez",
             "restricted" => "True",
-            "type" => "string",
+            "placeholder" => "666SatanForPrez",
             "name" => "password"
         ),
         "nickname" => array(
@@ -253,8 +253,8 @@ abstract class AccountModel extends BaseModel {
             "default" => "",
             "max" => "64",
             "label" => "Nickname",
-            "placeholder" => "TRONHAMBURGER",
             "type" => "string",
+            "placeholder" => "TRONHAMBURGER",
             "name" => "nickname"
         ),
         "id" => array(

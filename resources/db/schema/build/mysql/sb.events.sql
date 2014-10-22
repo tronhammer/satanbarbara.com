@@ -4,15 +4,15 @@ DROP TABLE IF EXISTS `events`;
 
 CREATE TABLE `satanbarbara`.`events` (
 	`archived` BOOLEAN NOT NULL,
-	`promocode` VARCHAR(64) NOT NULL,
 	`subtitle` VARCHAR(90) NOT NULL,
 	`description` VARCHAR(4000) NOT NULL,
 	`title` VARCHAR(255) NOT NULL,
 	`deleted` BOOLEAN NOT NULL,
 	`ticket_uri` VARCHAR(255) NOT NULL,
 	`start_time` TIMESTAMP NOT NULL,
-	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
+	`promocode` VARCHAR(64) NOT NULL,
 	`ages` ENUM("18", "all", "21", "na") NOT NULL DEFAULT "na",
+	`created` TIMESTAMP NOT NULL COMMENT "Time when entry was made.",
 	`price` VARCHAR(255) NOT NULL,
 	`canceled` BOOLEAN NOT NULL,
 	`last_modified` TIMESTAMP NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `satanbarbara`.`events` (
 	`requirements` VARCHAR(4000) NOT NULL,
 	`flyer_uri` VARCHAR(255) NOT NULL,
 	`id` INT(12) NOT NULL AUTO_INCREMENT,
-	`date_text` VARCHAR(35) NOT NULL COMMENT "2014-11-25 04:34:00 pm",
+	`date_text` VARCHAR(35) NOT NULL COMMENT "2014-11-25",
 
 
 

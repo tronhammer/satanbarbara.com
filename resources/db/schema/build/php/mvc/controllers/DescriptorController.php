@@ -1,7 +1,8 @@
 <?php
 
-abstract class DescriptorController extends BaseController{
+abstract class DescriptorController extends BaseController {
 	static protected $_target = "Descriptor";
+	static protected $_key = "descriptors";
 
 }
 

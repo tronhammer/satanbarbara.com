@@ -1,0 +1,25 @@
+;(function(module){
+	"use strict";
+
+	${BuiltObjects}
+	
+	module.service("ObjectsService", [
+		%for ObjectName in objects:
+			"${ObjectName}Controller",
+		%endfor
+
+		"$rest", function(
+		%for ObjectName in objects:
+				${ObjectName}Controller,
+		%endfor
+
+			$rest
+		){
+
+		this.controllers = {
+			%for ObjectName in objects:
+				"${ObjectName}": ${ObjectName}Controller,
+			%endfor
+		};
+	}]);
+})(window.SB.module);

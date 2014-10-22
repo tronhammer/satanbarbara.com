@@ -16,18 +16,18 @@ abstract class VenueModel extends BaseModel {
             "max" => "90",
             "required" => "True",
             "label" => "City",
-            "placeholder" => "Satan Barbara",
             "type" => "string",
+            "placeholder" => "Satan Barbara",
             "name" => "city"
         ),
         "archived" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Archived",
             "restricted" => "True",
+            "label" => "Archived",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "archived"
         ),
         "slogan" => array(
@@ -36,8 +36,8 @@ abstract class VenueModel extends BaseModel {
             "default" => "",
             "max" => "90",
             "label" => "Slogan",
-            "placeholder" => "Fuck it",
             "type" => "string",
+            "placeholder" => "Fuck it",
             "name" => "slogan"
         ),
         "description" => array(
@@ -46,8 +46,8 @@ abstract class VenueModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Description",
-            "placeholder" => "Where you go to get your freak on.",
             "type" => "string",
+            "placeholder" => "Where you go to get your freak on.",
             "name" => "description"
         ),
         "zip" => array(
@@ -57,26 +57,26 @@ abstract class VenueModel extends BaseModel {
             "max" => "12",
             "required" => "True",
             "label" => "Postal Code",
-            "placeholder" => "93101",
             "type" => "string",
+            "placeholder" => "93101",
             "name" => "zip"
         ),
         "created" => array(
-            "description" => "Time when entry was made.",
+            "name" => "created",
             "generator" => "db",
             "type" => "timestamp",
             "label" => "Created",
             "placeholder" => "2014-11-25 04:34:00 pm",
-            "name" => "created"
+            "description" => "Time when entry was made."
         ),
         "deleted" => array(
             "description" => "",
             "generator" => "system",
             "default" => "0",
-            "type" => "boolean",
-            "label" => "Deleted",
             "restricted" => "True",
+            "label" => "Deleted",
             "placeholder" => "0",
+            "type" => "boolean",
             "name" => "deleted"
         ),
         "requirements" => array(
@@ -85,8 +85,8 @@ abstract class VenueModel extends BaseModel {
             "default" => "",
             "max" => "4000",
             "label" => "Requirements",
-            "placeholder" => "At least 1 bible.",
             "type" => "string",
+            "placeholder" => "At least 1 bible.",
             "name" => "requirements"
         ),
         "uri" => array(
@@ -95,8 +95,8 @@ abstract class VenueModel extends BaseModel {
             "default" => "",
             "max" => "255",
             "label" => "Website",
-            "placeholder" => "http://",
             "type" => "string",
+            "placeholder" => "http://",
             "name" => "uri"
         ),
         "state" => array(
@@ -105,18 +105,18 @@ abstract class VenueModel extends BaseModel {
             "max" => "2",
             "required" => "True",
             "label" => "State",
-            "placeholder" => "CA",
             "type" => "string",
+            "placeholder" => "CA",
             "name" => "state"
         ),
         "last_modified" => array(
             "description" => "",
             "generator" => "system",
             "default" => "",
-            "type" => "timestamp",
-            "label" => "Last modified",
             "restricted" => "True",
+            "label" => "Last modified",
             "placeholder" => "2014-11-25 04:34:00 pm",
+            "type" => "timestamp",
             "name" => "last_modified"
         ),
         "address" => array(
@@ -125,17 +125,17 @@ abstract class VenueModel extends BaseModel {
             "max" => "255",
             "required" => "True",
             "label" => "Address",
-            "placeholder" => "666 Hell-yeah",
             "type" => "string",
+            "placeholder" => "666 Hell-yeah",
             "name" => "address"
         ),
         "capacity" => array(
-            "description" => "400",
+            "name" => "capacity",
             "generator" => "user",
             "type" => "integer",
             "label" => "Capacity",
             "placeholder" => "400",
-            "name" => "capacity"
+            "description" => "400"
         ),
         "id" => array(
             "description" => "",
@@ -154,8 +154,8 @@ abstract class VenueModel extends BaseModel {
             "max" => "255",
             "required" => "True",
             "label" => "Name",
-            "placeholder" => "CrowdedCoffin",
             "type" => "string",
+            "placeholder" => "CrowdedCoffin",
             "name" => "name"
         )
     );
