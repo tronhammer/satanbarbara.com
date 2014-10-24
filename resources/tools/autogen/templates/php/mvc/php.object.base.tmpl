@@ -15,6 +15,8 @@ abstract class BaseObject {
     /**@* {Array} A temporary storage of data that will be used to create a new object in the database. */
     protected $_data = array();
 
+    public $assocs;
+
     public function __construct($data = array()) {
 		if (is_array($data)) {
 			if (is_numeric($data["id"])) {

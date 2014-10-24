@@ -9,6 +9,7 @@
 		var Descriptor = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -18,6 +19,9 @@
 		};
 
 		$.extend(Descriptor.prototype, {
+			"target": "Descriptor",
+			"key": "descriptors",
+
 			"attrs": {
                 "archived": {
                     "description": "",
@@ -113,6 +117,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -121,8 +126,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Descriptor")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -177,18 +193,18 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Descriptor", {}, [function(data, identifier){
-		        	if (identifier == "loadDescriptors" && data.descriptors){
+		        $rest.getData({"target": "Descriptor", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadDescriptorObjects" && data.descriptors){
 		        		for(var id in data.descriptors.all){
 			        		this.objects[id] = this.factory(data.descriptors.all[ id ]);
 		        		}
 
 		        		this.sorts = data.descriptors.sorts;
 
-		        		$rootScope.$broadcast("loadedNewDescriptor", this);
+		        		$rootScope.$broadcast("loadedNewDescriptorObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadDescriptors", this]);
+		        }, "loadDescriptorObjects", this]);
 			},
 
 
@@ -203,6 +219,10 @@
 					$.extend(Descriptor, {
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Descriptor;
+					}
 				}
 
 				return Descriptor;
@@ -217,6 +237,7 @@
 		var Venue = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -226,6 +247,9 @@
 		};
 
 		$.extend(Venue.prototype, {
+			"target": "Venue",
+			"key": "venues",
+
 			"attrs": {
                 "city": {
                     "description": "",
@@ -450,6 +474,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -458,8 +483,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Venue")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -514,39 +550,69 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Venue", {}, [function(data, identifier){
-		        	if (identifier == "loadVenues" && data.venues){
+		        $rest.getData({"target": "Venue", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadVenueObjects" && data.venues){
 		        		for(var id in data.venues.all){
 			        		this.objects[id] = this.factory(data.venues.all[ id ]);
 		        		}
 
 		        		this.sorts = data.venues.sorts;
 
-		        		$rootScope.$broadcast("loadedNewVenue", this);
+		        		$rootScope.$broadcast("loadedNewVenueObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadVenues", this]);
+		        }, "loadVenueObjects", this]);
 			},
 
 				"venueOwner": function(self, Account){
 					$rest.create({
-						"target": "venueOwner",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"venueOwner": {
+								"from": {
+									"target": "Venue",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"venueTag": function(self, Descriptor){
 					$rest.create({
-						"target": "venueTag",
-						"from": self.get("id"),
-						"to": Descriptor.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"venueTag": {
+								"from": {
+									"target": "Venue",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Descriptor",
+									"id": Descriptor.get("id")
+								}
+							}
+						}
 					});
 				},
 				"venueCreator": function(self, Account){
 					$rest.create({
-						"target": "venueCreator",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"venueCreator": {
+								"from": {
+									"target": "Venue",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 
@@ -564,6 +630,10 @@
 							"venueCreator": this.wrapper(this.venueCreator),
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Venue;
+					}
 				}
 
 				return Venue;
@@ -578,6 +648,7 @@
 		var Account = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -587,6 +658,9 @@
 		};
 
 		$.extend(Account.prototype, {
+			"target": "Account",
+			"key": "accounts",
+
 			"attrs": {
                 "username": {
                     "description": "Login name for the Account object.",
@@ -911,6 +985,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -919,8 +994,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Account")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -975,18 +1061,18 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Account", {}, [function(data, identifier){
-		        	if (identifier == "loadAccounts" && data.accounts){
+		        $rest.getData({"target": "Account", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadAccountObjects" && data.accounts){
 		        		for(var id in data.accounts.all){
 			        		this.objects[id] = this.factory(data.accounts.all[ id ]);
 		        		}
 
 		        		this.sorts = data.accounts.sorts;
 
-		        		$rootScope.$broadcast("loadedNewAccount", this);
+		        		$rootScope.$broadcast("loadedNewAccountObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadAccounts", this]);
+		        }, "loadAccountObjects", this]);
 			},
 
 
@@ -1001,6 +1087,10 @@
 					$.extend(Account, {
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Account;
+					}
 				}
 
 				return Account;
@@ -1015,6 +1105,7 @@
 		var Band = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -1024,6 +1115,9 @@
 		};
 
 		$.extend(Band.prototype, {
+			"target": "Band",
+			"key": "bands",
+
 			"attrs": {
                 "origin": {
                     "description": "",
@@ -1234,6 +1328,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -1242,8 +1337,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Band")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -1298,39 +1404,69 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Band", {}, [function(data, identifier){
-		        	if (identifier == "loadBands" && data.bands){
+		        $rest.getData({"target": "Band", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadBandObjects" && data.bands){
 		        		for(var id in data.bands.all){
 			        		this.objects[id] = this.factory(data.bands.all[ id ]);
 		        		}
 
 		        		this.sorts = data.bands.sorts;
 
-		        		$rootScope.$broadcast("loadedNewBand", this);
+		        		$rootScope.$broadcast("loadedNewBandObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadBands", this]);
+		        }, "loadBandObjects", this]);
 			},
 
 				"bandCreator": function(self, Account){
 					$rest.create({
-						"target": "bandCreator",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"bandCreator": {
+								"from": {
+									"target": "Band",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"bandMember": function(self, Account){
 					$rest.create({
-						"target": "bandMember",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"bandMember": {
+								"from": {
+									"target": "Band",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"bandGenre": function(self, Descriptor){
 					$rest.create({
-						"target": "bandGenre",
-						"from": self.get("id"),
-						"to": Descriptor.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"bandGenre": {
+								"from": {
+									"target": "Band",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Descriptor",
+									"id": Descriptor.get("id")
+								}
+							}
+						}
 					});
 				},
 
@@ -1348,6 +1484,10 @@
 							"bandGenre": this.wrapper(this.bandGenre),
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Band;
+					}
 				}
 
 				return Band;
@@ -1362,6 +1502,7 @@
 		var Event = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -1371,6 +1512,9 @@
 		};
 
 		$.extend(Event.prototype, {
+			"target": "Event",
+			"key": "events",
+
 			"attrs": {
                 "archived": {
                     "description": "",
@@ -1677,6 +1821,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -1685,8 +1830,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Event")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -1741,53 +1897,103 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Event", {}, [function(data, identifier){
-		        	if (identifier == "loadEvents" && data.events){
+		        $rest.getData({"target": "Event", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadEventObjects" && data.events){
 		        		for(var id in data.events.all){
 			        		this.objects[id] = this.factory(data.events.all[ id ]);
 		        		}
 
 		        		this.sorts = data.events.sorts;
 
-		        		$rootScope.$broadcast("loadedNewEvent", this);
+		        		$rootScope.$broadcast("loadedNewEventObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadEvents", this]);
+		        }, "loadEventObjects", this]);
 			},
 
 				"eventBand": function(self, Band){
 					$rest.create({
-						"target": "eventBand",
-						"from": self.get("id"),
-						"to": Band.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventBand": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Band",
+									"id": Band.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventVenue": function(self, Venue){
 					$rest.create({
-						"target": "eventVenue",
-						"from": self.get("id"),
-						"to": Venue.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventVenue": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Venue",
+									"id": Venue.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventCreator": function(self, Account){
 					$rest.create({
-						"target": "eventCreator",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventCreator": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventGenre": function(self, Descriptor){
 					$rest.create({
-						"target": "eventGenre",
-						"from": self.get("id"),
-						"to": Descriptor.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventGenre": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Descriptor",
+									"id": Descriptor.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventAttendee": function(self, Account){
 					$rest.create({
-						"target": "eventAttendee",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventAttendee": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 
@@ -1807,6 +2013,10 @@
 							"eventAttendee": this.wrapper(this.eventAttendee),
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Event;
+					}
 				}
 
 				return Event;
@@ -1839,5 +2049,36 @@
 				"Event": EventController,
 				"Band": BandController,
 		};
+
+		this.buildAssocs = function(Obj, assocNames){
+			var assocs = Obj.associations,
+				assocObjects = {};
+
+			if (typeof assocNames == "string" && assocNames in  assocs){
+				assocNames = [assocNames];
+			} else if (!(assocNames instanceof Array)){
+				assocNames = assocs;
+			} 
+
+			for (var assocName in assocNames){
+				var assoc = assocs[ assocName ],
+					controller = this.controllers[ assoc.target ],
+					key = assoc.key,
+					ids = assoc.ids,
+					objs = assocObjects[ key ] = {};
+
+				for (var id in ids){
+					objs[id] = controller.factory({"id": id});
+				}
+
+				if (ids.length){
+					console.log("HOly shit this one has assocs! ", Obj);
+				}
+			}
+
+			$.extend(Obj, assocObjects);
+
+			return assocObjects;
+		}
 	}]);
 })(window.SB.module);

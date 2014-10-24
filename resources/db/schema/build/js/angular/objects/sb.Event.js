@@ -5,6 +5,7 @@
 		var Event = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -14,6 +15,9 @@
 		};
 
 		$.extend(Event.prototype, {
+			"target": "Event",
+			"key": "events",
+
 			"attrs": {
                 "archived": {
                     "description": "",
@@ -320,6 +324,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -328,8 +333,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Event")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -384,53 +400,103 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Event", {}, [function(data, identifier){
-		        	if (identifier == "loadEvents" && data.events){
+		        $rest.getData({"target": "Event", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadEventObjects" && data.events){
 		        		for(var id in data.events.all){
 			        		this.objects[id] = this.factory(data.events.all[ id ]);
 		        		}
 
 		        		this.sorts = data.events.sorts;
 
-		        		$rootScope.$broadcast("loadedNewEvent", this);
+		        		$rootScope.$broadcast("loadedNewEventObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadEvents", this]);
+		        }, "loadEventObjects", this]);
 			},
 
 				"eventBand": function(self, Band){
 					$rest.create({
-						"target": "eventBand",
-						"from": self.get("id"),
-						"to": Band.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventBand": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Band",
+									"id": Band.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventVenue": function(self, Venue){
 					$rest.create({
-						"target": "eventVenue",
-						"from": self.get("id"),
-						"to": Venue.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventVenue": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Venue",
+									"id": Venue.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventCreator": function(self, Account){
 					$rest.create({
-						"target": "eventCreator",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventCreator": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventGenre": function(self, Descriptor){
 					$rest.create({
-						"target": "eventGenre",
-						"from": self.get("id"),
-						"to": Descriptor.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventGenre": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Descriptor",
+									"id": Descriptor.get("id")
+								}
+							}
+						}
 					});
 				},
 				"eventAttendee": function(self, Account){
 					$rest.create({
-						"target": "eventAttendee",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"eventAttendee": {
+								"from": {
+									"target": "Event",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 
@@ -450,6 +516,10 @@
 							"eventAttendee": this.wrapper(this.eventAttendee),
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Event;
+					}
 				}
 
 				return Event;

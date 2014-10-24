@@ -5,6 +5,7 @@
 		var Descriptor = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -14,6 +15,9 @@
 		};
 
 		$.extend(Descriptor.prototype, {
+			"target": "Descriptor",
+			"key": "descriptors",
+
 			"attrs": {
                 "archived": {
                     "description": "",
@@ -109,6 +113,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -117,8 +122,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Descriptor")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -173,18 +189,18 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Descriptor", {}, [function(data, identifier){
-		        	if (identifier == "loadDescriptors" && data.descriptors){
+		        $rest.getData({"target": "Descriptor", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadDescriptorObjects" && data.descriptors){
 		        		for(var id in data.descriptors.all){
 			        		this.objects[id] = this.factory(data.descriptors.all[ id ]);
 		        		}
 
 		        		this.sorts = data.descriptors.sorts;
 
-		        		$rootScope.$broadcast("loadedNewDescriptor", this);
+		        		$rootScope.$broadcast("loadedNewDescriptorObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadDescriptors", this]);
+		        }, "loadDescriptorObjects", this]);
 			},
 
 
@@ -199,6 +215,10 @@
 					$.extend(Descriptor, {
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Descriptor;
+					}
 				}
 
 				return Descriptor;

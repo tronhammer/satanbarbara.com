@@ -5,6 +5,7 @@
 		var Venue = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -14,6 +15,9 @@
 		};
 
 		$.extend(Venue.prototype, {
+			"target": "Venue",
+			"key": "venues",
+
 			"attrs": {
                 "city": {
                     "description": "",
@@ -238,6 +242,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -246,8 +251,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Venue")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -302,39 +318,69 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Venue", {}, [function(data, identifier){
-		        	if (identifier == "loadVenues" && data.venues){
+		        $rest.getData({"target": "Venue", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadVenueObjects" && data.venues){
 		        		for(var id in data.venues.all){
 			        		this.objects[id] = this.factory(data.venues.all[ id ]);
 		        		}
 
 		        		this.sorts = data.venues.sorts;
 
-		        		$rootScope.$broadcast("loadedNewVenue", this);
+		        		$rootScope.$broadcast("loadedNewVenueObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadVenues", this]);
+		        }, "loadVenueObjects", this]);
 			},
 
 				"venueOwner": function(self, Account){
 					$rest.create({
-						"target": "venueOwner",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"venueOwner": {
+								"from": {
+									"target": "Venue",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"venueTag": function(self, Descriptor){
 					$rest.create({
-						"target": "venueTag",
-						"from": self.get("id"),
-						"to": Descriptor.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"venueTag": {
+								"from": {
+									"target": "Venue",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Descriptor",
+									"id": Descriptor.get("id")
+								}
+							}
+						}
 					});
 				},
 				"venueCreator": function(self, Account){
 					$rest.create({
-						"target": "venueCreator",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"venueCreator": {
+								"from": {
+									"target": "Venue",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 
@@ -352,6 +398,10 @@
 							"venueCreator": this.wrapper(this.venueCreator),
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Venue;
+					}
 				}
 
 				return Venue;

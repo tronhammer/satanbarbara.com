@@ -15,6 +15,7 @@ abstract class BaseController {
 		$start = isset($_GET["start"]) ? $_GET["start"] : 0;
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
+		$getAssocs = isset($_GET["assocs"]) ? $_GET["assocs"] : 0;
 
 		if ($_GET["ids"]){
 			$objects = explode(",", $_GET["ids"]);
@@ -34,6 +35,9 @@ abstract class BaseController {
 		foreach($objects as $ObjectID){
 			$Object = new static::$_target($ObjectID);
 			$return[static::$_key]["all"][ $Object->GetID() ] = $Object->GetValues(array("type"=>"visible"));
+			if ($getAssocs){
+				$return[static::$_key]["all"][ $Object->GetID() ]["assocs"] = ObjectAssociation::GetAssocs($Object);
+			}
 		}
 
 

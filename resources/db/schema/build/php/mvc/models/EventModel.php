@@ -308,7 +308,7 @@ abstract class EventModel extends BaseModel {
 	);
 
     /**@* {Array} Used as a means of validating and sanitizing object properties before they reach the database. */
-    static protected $references = array(
+    static public $references = array(
         "eventBand" => "Band",
         "eventVenue" => "Venue",
         "eventCreator" => "Account",
@@ -316,9 +316,6 @@ abstract class EventModel extends BaseModel {
         "eventAttendee" => "Account"
     );
 
-	/**
-	 * Class Methods
-	 */
 	static public function Create($data) {
 		$data["created"] = date("Y-m-d h:i:s A");
 		

@@ -133,6 +133,27 @@
 		opacity: 0;
 		position: absolute;
 		padding: 10px;
+		width: 100%;
+		overflow: scroll;
+		height: 90%;
+	}
+
+	.sb-calendar-event{
+		background: rgba(0,90,90,0.7) !important;
+		display: block;
+		border-top: 1px solid rgba(0,50,50,0.9);
+		border-radius: 3px;
+		border-bottom: 1px solid rgba(0,150,150,0.9);
+		border-right: 1px solid rgba(0,150,150,0.9);
+		border-left: 1px solid rgba(0,50,50,0.9);
+		width: 95%;
+		margin-left: 10px;
+		margin-top: 10px;
+	}
+
+	.sb-calendar-event-info-item{
+		border-top: 1px solid rgba(0,110,110,0.5);
+		border-bottom: 1px solid rgba(0,190,190,0.5);
 	}
 
 	.sb-calendar-sidebar-day-events{
@@ -265,9 +286,17 @@
 					<div class="symbol">{{day.title}}</div>
 					<div class="details">{{day.description}}</div>
 					<ons-list class="sb-calendar-day-events">
-					<ons-list-header>Header Text</ons-list-header>
+					<ons-list-header>{{day.prettyDate}}</ons-list-header>
 					<ons-list-item class="sb-calendar-event" ng-repeat="event in day.events">
-						<div class="sb-calendar-event-title">{{event.data.title}}</div>
+						<div class="sb-calendar-event-title sb-calendar-event-info-item">{{event.data.title}}</div>
+						<div class="sb-calendar-event-acts sb-calendar-event-info-item">
+							<header>Acts:</header>
+							<span ng-repeat="band in event.bands">{{band.get("name")}}</span>
+						</div>
+						<div class="sb-calendar-event-description sb-calendar-event-info-item">
+							<header>Description:</header>
+							<p>{{event.get("description")}}</p>
+						</div>
 					</ons-list-item>
 					</ons-list>
 				</div>
@@ -278,10 +307,14 @@
 			<ons-col class="sb-calendar-col" width="{{profiles[ profile ].infobox.width}}">
 			<div class="sb-calendar-sidebar-day-events sb-highlight-container" animate-infobar>
 				<div class="sb-calendar-sidebar-event-day">
-				<ons-list class="sb-calendar-sidebar-day-event" ng-repeat="day in month.events">
-					<ons-list-header>{{day[0].date_text}}</ons-list-header>
-					<ons-list-item class="sb-calendar-sidebar-event" ng-repeat="event in day">
-					<div class="sb-calendar-sidebar-event-title">{{event.data.title}}</div>
+				<ons-list class="sb-calendar-sidebar-day-event" ng-repeat="dayEvents in month.events">
+					<ons-list-header>{{dayEvents.prettyDate}}</ons-list-header>
+					<ons-list-item class="sb-calendar-sidebar-event" ng-repeat="event in dayEvents">
+						<div class="sb-calendar-sidebar-event-title sb-calendar-event-info-item">{{event.data.title}}</div>
+						<div class="sb-calendar-sidebar-event-acts sb-calendar-event-info-item">
+							<header>Acts:</header>
+							<span ng-repeat="band in event.bands">{{band.get("name")}}</span>
+						</div>
 					</ons-list-item>
 				</ons-list>
 				</div>
@@ -323,7 +356,7 @@
                 <ons-col width="30%" class="sb-modal-create-new-event-primary-details">
                     <ons-row>
                         <ons-col width="100%">
-                            <sb-field-string field="bandNames"></sb-field-string>
+                            <sb-field-string field="acts"></sb-field-string>
                         </ons-col>
                     </ons-row>
                     <ons-row>

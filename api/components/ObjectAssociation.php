@@ -28,4 +28,47 @@ abstract class ObjectAssociation {
 			throw new Exception("Both objects must be persistent before making an association!");
 		}
 	}
+
+
+	/**
+	 * Class Methods
+	 */
+	static public function GetAssocs($Object, $referenceNames="*") {
+		$db = MySQLConnector::getHandle();
+		$references = array();
+		$retreived = array();
+
+		if ($referenceNames == "*"){
+			$references = $Object::$references;
+		} else if (is_array($referenceNames)){
+			foreach($referenceNames as $referenceName){
+				$references[$referenceName] = $Object::$references[$referenceName];
+			}
+		} else if (is_string($referenceNames)){
+			$references[$referenceNames] = $Object::$references[$referenceName];
+		}
+
+		try {
+			foreach($references as $referenceName=>$referenceObjectName){
+				$retreived[$referenceName] = array(
+					"target" => $referenceObjectName,
+					"key" => $referenceObjectName::_TABLE,
+					"ids" => array()
+				);
+
+				$statement = $db->prepare("SELECT `".$referenceName."`.`to` FROM `".$referenceName."` WHERE `".$referenceName."`.`from` = ?");
+				
+				$statement->execute(array($Object->GetID()));
+
+				$resultSets = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+				foreach($resultSets as $result){
+					$retreived[$referenceName]["ids"][] = $result["to"];
+				}
+			}
+		} catch (PDOException $e) {
+			return AJAX::Response("json", array(), 2, $e->getMessage());
+		}
+		return $retreived;
+	}
 }

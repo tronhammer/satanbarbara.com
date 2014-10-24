@@ -2,6 +2,7 @@
 
 abstract class EventController extends BaseController{
 	static protected $_target = "Event";
+	static protected $_key = "events";
 
 	static public function Get() {
 		$return = array(
@@ -15,6 +16,7 @@ abstract class EventController extends BaseController{
 		$start = isset($_GET["start"]) ? $_GET["start"] : 0;
 		$end = isset($_GET["end"]) ? $_GET["end"] : 0;
 		$limit = isset($_GET["limit"]) ? $_GET["limit"] : 0;
+		$getAssocs = isset($_GET["assocs"]) ? $_GET["assocs"] : 0;
 
 		if ($_GET["ids"]){
 			$events = explode(",", $_GET["ids"]);
@@ -32,10 +34,13 @@ abstract class EventController extends BaseController{
 		}
 
 		foreach($events as $ObjectID){
-			$Object = new static::$_target($ObjectID);
+			$Object = new self::$_target($ObjectID);
 			$ObjectData = $Object->GetValues(array("type"=>"visible"));
-			$return["events"]["all"][ $Object->GetID() ] = $ObjectData;
-			$return["events"]["sorts"]["date"][ $ObjectData["date"] ][] = $Object->GetID();
+			$return[self::$_key]["all"][ $Object->GetID() ] = $ObjectData;
+			$return[self::$_key]["sorts"]["date"][ $ObjectData["date"] ][] = $Object->GetID();
+			if ($getAssocs){
+				$return[self::$_key]["all"][ $Object->GetID() ]["assocs"] = ObjectAssociation::GetAssocs($Object);
+			}
 		}
 
 		AJAX::Response("json", $return);

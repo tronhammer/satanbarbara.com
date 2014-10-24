@@ -5,6 +5,7 @@
 		var Account = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -14,6 +15,9 @@
 		};
 
 		$.extend(Account.prototype, {
+			"target": "Account",
+			"key": "accounts",
+
 			"attrs": {
                 "username": {
                     "description": "Login name for the Account object.",
@@ -338,6 +342,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -346,8 +351,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Account")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -402,18 +418,18 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Account", {}, [function(data, identifier){
-		        	if (identifier == "loadAccounts" && data.accounts){
+		        $rest.getData({"target": "Account", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadAccountObjects" && data.accounts){
 		        		for(var id in data.accounts.all){
 			        		this.objects[id] = this.factory(data.accounts.all[ id ]);
 		        		}
 
 		        		this.sorts = data.accounts.sorts;
 
-		        		$rootScope.$broadcast("loadedNewAccount", this);
+		        		$rootScope.$broadcast("loadedNewAccountObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadAccounts", this]);
+		        }, "loadAccountObjects", this]);
 			},
 
 
@@ -428,6 +444,10 @@
 					$.extend(Account, {
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Account;
+					}
 				}
 
 				return Account;

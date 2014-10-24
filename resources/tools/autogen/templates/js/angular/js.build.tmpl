@@ -21,5 +21,36 @@
 				"${ObjectName}": ${ObjectName}Controller,
 			%endfor
 		};
+
+		this.buildAssocs = function(Obj, assocNames){
+			var assocs = Obj.associations,
+				assocObjects = {};
+
+			if (typeof assocNames == "string" && assocNames in  assocs){
+				assocNames = [assocNames];
+			} else if (!(assocNames instanceof Array)){
+				assocNames = assocs;
+			} 
+
+			for (var assocName in assocNames){
+				var assoc = assocs[ assocName ],
+					controller = this.controllers[ assoc.target ],
+					key = assoc.key,
+					ids = assoc.ids,
+					objs = assocObjects[ key ] = {};
+
+				for (var id in ids){
+					objs[id] = controller.factory({"id": id});
+				}
+
+				if (ids.length){
+					console.log("HOly shit this one has assocs! ", Obj);
+				}
+			}
+
+			$.extend(Obj, assocObjects);
+
+			return assocObjects;
+		}
 	}]);
 })(window.SB.module);

@@ -18,7 +18,7 @@
 					"width": "100%"
 				},
 				"infobox": {
-					"width": "100%",
+					"width": "100%"
 				}
 			}
 		};
@@ -288,22 +288,21 @@
 				});
 		});
 
-		$scope.$on("loadedNewEvents", function(){
+		$scope.$on("loadedNewEventObjects", function(){
 			$scope.setupCalendarEvents();
 		});
 
 		$scope.setupCalendarEvents = function(){
-			var eventsController = ObjectsService.controllers.Event;
-
-			$scope.events = eventsController.objects;
-			
-			var events = eventsController.objects,
+			var eventsController = ObjectsService.controllers.Event,
+				events = eventsController.objects,
 				orderByDate = eventsController.sorts.date,
 				month = $scope.month,
 				monthId = moment(month.date).month();
 
+			$scope.events = eventsController.objects;
 			month.events = {};
 
+			window._month = month;
 			/**
 			 * prePos is used to determine the first row buffer offset
 			 */
@@ -319,9 +318,14 @@
 					day =  month.days[fullDate];
 
 				day.number = eventIds.length;
+
 				month.events[fullDate] = day.events = eventIds.map(function(id){
-					return events[ id ];
+					var Obj = events[ id ];
+					var assocs = ObjectsService.buildAssocs(Obj);
+					return Obj;
 				});
+
+				month.events[fullDate].prettyDate = day.prettyDate = cleanDate.format("ll");
 			}
 
 			// window._CalController = $scope;
@@ -333,10 +337,11 @@
 	}]);
 
 	module.controller("CreateEventController", ["$scope", "$data", "ObjectsService", function($scope, $data, ObjectsService, $Event, $Venue, $Band){
+		$scope.bands = [];
+
 		$scope.create = function(){
 			var eventData = {},
-				venueData = {},
-				bands = [];
+				venueData = {};
 
 			for (var fieldName in $scope.eventDefinitions){
 				if (fieldName.substr(0,1) != "$"){
@@ -355,10 +360,6 @@
 					}
 				}
 			}
-
-			bands = $("input[name='bandnames']").data("bandIDs");
-
-			$scope.bands = bands;
 
 			eventData["start_time"] = eventData["date"]+" "+eventData["start_time"];
 			eventData["end_time"] = eventData["date"]+" "+eventData["end_time"];
@@ -397,8 +398,10 @@
 					$scope.Event.eventVenue( $scope.Venue );
 				}
 
-				if ($scope.safeToBind["eventBand"]["bandIsCreated"]){
-
+				if ($scope.bands.length){
+					$.each($scope.bands, function(){
+						$scope.Event.eventBand( this );
+					})
 				}
 			}
 			console.log("Created that event!");
@@ -416,7 +419,8 @@
 			console.log("Created that venue!");
 		});
 
-		$scope.$on("createdBand", function(){
+		$scope.$on("createdBand", function(e, data){
+			$scope.bands.push( ObjectsService.controllers["Band"].factory(data) );
 			console.log("Created that band!");
 		});
 
@@ -425,56 +429,56 @@
 
 		$scope.eventDefinitions = $scope.Event.getSettables();
 		$scope.venueDefinitions = $scope.Venue.getSettables();
-		$scope.bandNames = {
+		$scope.acts = {
 			"type": "string",
-			"name": "bandnames",
-			"label": "Bands",
+			"name": "acts",
+			"label": "Acts",
 			"placeholder": "Death, Entombed, Edge Of Sanity",
 			"required": true
 		};
 	}]);
 
 
-	module.directive("createEventListener", ["$rootScope", "$rest", function($rootScope, $rest) {
+	module.directive("createEventListener", ["$rootScope", "ObjectsService", function($rootScope, ObjectsService) {
 		return {
 			"link": function($scope, ele, attrs){
 				$(ele).bind("click", function(){
 					// createEvent.hide();
 				});
 
-				$(ele).delegate("input[name='bandnames']", "keyup", function(){
+				$(ele).delegate("input[name='acts']", "keyup", function(){
 					var bands = $(this).val()
 
 					if (bands.substr(-1) == ","){
-						var existingBandsList = $(this).data("bands") || [],
+						var existingBandsList = $(this).data("acts") || [],
 							bandsList = bands.split(","),
 							lastBand = bandsList[ bandsList.length - 2 ].trim();
 
 						if (existingBandsList.indexOf(lastBand) == -1){
 							existingBandsList.push( lastBand );
-							$(this).data("bands", existingBandsList);
+							$(this).data("acts", existingBandsList);
 
-							$rest.create({
-								"target": "Band",
+							var Band = ObjectsService.controllers["Band"].factory({
 								"name": lastBand
 							});
+							Band.save();
 						}						
 					}
 				})
 
-				$(ele).delegate("input[name='bandnames']", "blur", function(){
-					var existingBandsList = $(this).data("bands") || [],
+				$(ele).delegate("input[name='acts']", "blur", function(){
+					var existingBandsList = $(this).data("acts") || [],
 						bandsList = $(this).val().split(","),
 						lastBand = bandsList[ bandsList.length - 1 ].trim();
 
 					if (lastBand.length && existingBandsList.indexOf( lastBand ) == -1){
 							existingBandsList.push( lastBand );
-							$(this).data("bands", existingBandsList);
+							$(this).data("acts", existingBandsList);
 
-							$rest.create({
-								"target": "Band",
+							var Band = ObjectsService.controllers["Band"].factory({
 								"name": lastBand
 							});
+							Band.save();
 					}
 
 				});
@@ -605,9 +609,12 @@
 
 				return token;
 			},
-			"getData": function(target, data, listener){
+			"getData": function(data, listener){
 				var mode = this.modes[ this.mode ],
+					target = data["target"],
 					token = null;
+
+				delete data["target"];
 
 				if (listener){
 					if (!(listener instanceof Array)){
@@ -650,11 +657,13 @@
 					console.log("double wat");
 				});
 			},
-			"create": function(data){
+			"create": function(data, listener){
 				var mode = this.modes[ this.mode ],
 					target = data["target"];
 
 				data["action"] = "Create";
+
+				// delete data["target"];
 
 				$.ajax({
 					"url": mode.uri,

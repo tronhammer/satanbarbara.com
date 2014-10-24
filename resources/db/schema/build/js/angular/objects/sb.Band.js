@@ -5,6 +5,7 @@
 		var Band = function(data){
 			$.extend(this, {
 				"id": null,
+				"associations": {},
 				"persistent": false,
 				"data": {},
 				"cache": {}
@@ -14,6 +15,9 @@
 		};
 
 		$.extend(Band.prototype, {
+			"target": "Band",
+			"key": "bands",
+
 			"attrs": {
                 "origin": {
                     "description": "",
@@ -224,6 +228,7 @@
     },
 
 			"set": function(data){
+				var _this = this;
 				if (!data){
 					return;
 				}
@@ -232,8 +237,19 @@
 					this.id = data.id;
 					delete data.id;
 				}
+
+				if (data.assocs){
+					this["associations"] = data.assocs;
+					delete data.assocs;
+				}
+				
 				console.log("Calling setter for Band")
-				$.extend(this.data, data);
+
+				$.each(data, function(key, val){
+					if (_this.userSettable.indexOf( key ) !== -1){
+						_this.data[ key ] = val;
+					}
+				});
 			},
 			"get": function(name){
 				return name=="id" ? this.id : this.data[name];
@@ -288,39 +304,69 @@
 				$rest.create(data);
 			},
 			"load": function(){
-		        $rest.getData("Band", {}, [function(data, identifier){
-		        	if (identifier == "loadBands" && data.bands){
+		        $rest.getData({"target": "Band", "assocs": 1}, [function(data, identifier){
+		        	if (identifier == "loadBandObjects" && data.bands){
 		        		for(var id in data.bands.all){
 			        		this.objects[id] = this.factory(data.bands.all[ id ]);
 		        		}
 
 		        		this.sorts = data.bands.sorts;
 
-		        		$rootScope.$broadcast("loadedNewBand", this);
+		        		$rootScope.$broadcast("loadedNewBandObjects", this);
 		        	}
 		        	console.log("will with work");
-		        }, "loadBands", this]);
+		        }, "loadBandObjects", this]);
 			},
 
 				"bandCreator": function(self, Account){
 					$rest.create({
-						"target": "bandCreator",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"bandCreator": {
+								"from": {
+									"target": "Band",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"bandMember": function(self, Account){
 					$rest.create({
-						"target": "bandMember",
-						"from": self.get("id"),
-						"to": Account.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"bandMember": {
+								"from": {
+									"target": "Band",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Account",
+									"id": Account.get("id")
+								}
+							}
+						}
 					});
 				},
 				"bandGenre": function(self, Descriptor){
 					$rest.create({
-						"target": "bandGenre",
-						"from": self.get("id"),
-						"to": Descriptor.get("id")
+						"target": "ObjectAssociations",
+						"associations": {
+							"bandGenre": {
+								"from": {
+									"target": "Band",
+									"id": self.get("id")
+								},
+								"to": {
+									"target": "Descriptor",
+									"id": Descriptor.get("id")
+								}
+							}
+						}
 					});
 				},
 
@@ -338,6 +384,10 @@
 							"bandGenre": this.wrapper(this.bandGenre),
 						"save": this.wrapper(this.save)
 					});
+
+					if (data && data.id){
+						this.objects[ data.id ] = Band;
+					}
 				}
 
 				return Band;

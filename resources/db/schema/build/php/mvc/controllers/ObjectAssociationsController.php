@@ -26,5 +26,5 @@ abstract class ObjectAssociationsController {
 	}
 }
 
-AJAX::registerGetMethods("ObjectAssociations", array("Get", "Search"));
+AJAX::registerGetMethods("ObjectAssociations", array("Get", "Search", "Create"));
 AJAX::registerPostMethods("ObjectAssociations", array("Create", "Delete"));
