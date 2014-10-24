@@ -580,7 +580,7 @@
 					}
 				},
 				"ajax": {
-					"uri": "http://localhost/satanbarbara.com/api/",
+					"uri": "http://api.satanbarbara.com/",
 					"buildUri": function(data){
 						return this.uri+"?action="+data.action+ (data.target ? "&target="+data.target : "");
 					}
